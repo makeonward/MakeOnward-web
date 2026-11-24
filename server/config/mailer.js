@@ -88,7 +88,7 @@ export const sendInquiryEmail = async ({ name, business, email, phone, country, 
   const fromEmail = process.env.ZOHO_EMAIL;
 
   const mailOptions = {
-    from: `"Pixie Digital Creatives" <${fromEmail}>`,
+    from: `"MakeOnward" <${fromEmail}>`,
     to: toEmail,
     ...(email ? { replyTo: email } : {}),
     subject: `🔔 New Inquiry from ${oneLine(name)} — ${oneLine(service || "General")}`,
@@ -96,15 +96,15 @@ export const sendInquiryEmail = async ({ name, business, email, phone, country, 
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #000000; padding: 40px 20px;">
   <tr>
     <td align="center">
-      <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #060608; border-radius: 16px; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; text-align: left; border: 1px solid #222; margin: 0 auto;">
+      <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #0b0b0c; border-radius: 16px; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; text-align: left; border: 1px solid #222; margin: 0 auto;">
         <tr>
-          <td style="background: linear-gradient(135deg, #0d0d12 0%, #1a1a2e 100%); background-color: #1a1a2e; padding: 32px 28px 20px;">
+          <td style="background: linear-gradient(135deg, #0b0b0c 0%, #2a1609 100%); background-color: #141415; padding: 32px 28px 20px;">
             <h1 style="font-size: 22px; margin: 0 0 4px; color: #ffffff;">📩 New Client Inquiry</h1>
-            <p style="font-size: 13px; color: #71717a; margin: 0;">Pixie Digital Creatives — Studio CMS</p>
+            <p style="font-size: 13px; color: #71717a; margin: 0;">MakeOnward — Studio CMS</p>
           </td>
         </tr>
         <tr>
-          <td style="padding: 28px; background-color: #060608;">
+          <td style="padding: 28px; background-color: #0b0b0c;">
             <table width="100%" cellpadding="0" cellspacing="0" border="0">
               <tr>
                 <td style="padding: 10px 0; color: #71717a; font-size: 13px; width: 120px; vertical-align: top;">Name</td>
@@ -116,11 +116,11 @@ export const sendInquiryEmail = async ({ name, business, email, phone, country, 
               </tr>` : ""}
               ${safe.email ? `<tr>
                 <td style="padding: 10px 0; color: #71717a; font-size: 13px; vertical-align: top;">Email</td>
-                <td style="padding: 10px 0; color: #d4d4d8; font-size: 14px;"><a href="mailto:${safe.email}" style="color: #a8bff5; text-decoration: underline;">${safe.email}</a></td>
+                <td style="padding: 10px 0; color: #d4d4d8; font-size: 14px;"><a href="mailto:${safe.email}" style="color: #ff8a33; text-decoration: underline;">${safe.email}</a></td>
               </tr>` : ""}
               ${safe.phone ? `<tr>
                 <td style="padding: 10px 0; color: #71717a; font-size: 13px; vertical-align: top;">Phone</td>
-                <td style="padding: 10px 0; color: #d4d4d8; font-size: 14px;"><a href="tel:${safe.phone.replace(/[^0-9+]/g, "")}" style="color: #a8bff5; text-decoration: underline;">${safe.phone}</a></td>
+                <td style="padding: 10px 0; color: #d4d4d8; font-size: 14px;"><a href="tel:${safe.phone.replace(/[^0-9+]/g, "")}" style="color: #ff8a33; text-decoration: underline;">${safe.phone}</a></td>
               </tr>` : ""}
               <tr>
                 <td style="padding: 10px 0; color: #71717a; font-size: 13px; vertical-align: top;">Country</td>
@@ -142,8 +142,8 @@ export const sendInquiryEmail = async ({ name, business, email, phone, country, 
           </td>
         </tr>
         <tr>
-          <td style="padding: 16px 28px; border-top: 1px solid #1a1a2e; text-align: center; background-color: #060608;">
-            <p style="font-size: 11px; color: #52525b; margin: 0;">Sent via Pixie Digital Creatives Studio CMS</p>
+          <td style="padding: 16px 28px; border-top: 1px solid #2a2928; text-align: center; background-color: #0b0b0c;">
+            <p style="font-size: 11px; color: #52525b; margin: 0;">Sent via MakeOnward Studio CMS</p>
           </td>
         </tr>
       </table>
@@ -174,31 +174,31 @@ export const sendAutoReplyEmail = async ({ name, email, service }) => {
   const fromEmail = process.env.ZOHO_EMAIL;
 
   const mailOptions = {
-    from: `"Pixie Digital Creatives" <${fromEmail}>`,
+    from: `"MakeOnward" <${fromEmail}>`,
     to: email,
     subject: `We've received your inquiry!`,
     html: `
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #000000; padding: 40px 20px;">
   <tr>
     <td align="center">
-      <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #060608; border-radius: 16px; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; text-align: left; border: 1px solid #222; margin: 0 auto;">
+      <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #0b0b0c; border-radius: 16px; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; text-align: left; border: 1px solid #222; margin: 0 auto;">
         <tr>
-          <td style="background: linear-gradient(135deg, #0d0d12 0%, #1a1a2e 100%); background-color: #1a1a2e; padding: 32px 28px 20px;">
+          <td style="background: linear-gradient(135deg, #0b0b0c 0%, #2a1609 100%); background-color: #141415; padding: 32px 28px 20px;">
             <h1 style="font-size: 22px; margin: 0 0 4px; color: #ffffff;">✨ Inquiry Received</h1>
-            <p style="font-size: 13px; color: #71717a; margin: 0;">Pixie Digital Creatives</p>
+            <p style="font-size: 13px; color: #71717a; margin: 0;">MakeOnward</p>
           </td>
         </tr>
         <tr>
-          <td style="padding: 28px; background-color: #060608;">
+          <td style="padding: 28px; background-color: #0b0b0c;">
             <p style="color: #ffffff; font-size: 15px; line-height: 1.6; margin-top: 0;">Hi ${safe.name},</p>
-            <p style="color: #d4d4d8; font-size: 15px; line-height: 1.6;">Thank you for reaching out to Pixie Digital Creatives! We have received your inquiry regarding <strong>${safe.service}</strong> and will get back to you shortly.</p>
+            <p style="color: #d4d4d8; font-size: 15px; line-height: 1.6;">Thank you for reaching out to MakeOnward! We have received your inquiry regarding <strong>${safe.service}</strong> and will get back to you shortly.</p>
             <p style="color: #d4d4d8; font-size: 15px; line-height: 1.6;">In the meantime, feel free to check out our recent work or reply directly to this email if you have any immediate questions.</p>
-            <p style="color: #d4d4d8; font-size: 15px; line-height: 1.6; margin-bottom: 0; margin-top: 24px;">Best regards,<br>The Pixie Digital Team</p>
+            <p style="color: #d4d4d8; font-size: 15px; line-height: 1.6; margin-bottom: 0; margin-top: 24px;">Best regards,<br>The MakeOnward Team</p>
           </td>
         </tr>
         <tr>
-          <td style="padding: 16px 28px; border-top: 1px solid #1a1a2e; text-align: center; background-color: #060608;">
-            <p style="font-size: 11px; color: #52525b; margin: 0;">© Pixie Digital Creatives</p>
+          <td style="padding: 16px 28px; border-top: 1px solid #2a2928; text-align: center; background-color: #0b0b0c;">
+            <p style="font-size: 11px; color: #52525b; margin: 0;">© MakeOnward</p>
           </td>
         </tr>
       </table>

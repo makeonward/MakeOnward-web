@@ -22,17 +22,17 @@ export const companyFaqs = ({ team = [], projects = [] } = {}) => {
 
   return [
     {
-      q: "What is Pixie Digital Creatives?",
-      a: `Pixie Digital Creatives (PDC) is a remote digital studio working with clients worldwide. ${BRAND.description} Our services are ${joinAnd(SERVICE_PAGES.map((s) => s.term))}.`,
+      q: "What is MakeOnward?",
+      a: `MakeOnward is a remote digital studio working with clients worldwide. ${BRAND.description} Our services are ${joinAnd(SERVICE_PAGES.map((s) => s.term))}.`,
       links: [{ to: "/services", label: "All services" }],
     },
     founders.length > 0 && {
-      q: "Who founded Pixie Digital Creatives?",
-      a: `The founders of Pixie Digital Creatives are ${joinAnd(founders.map((f) => `${f.name} (${f.role})`))}.`,
+      q: "Who founded MakeOnward?",
+      a: `The founders of MakeOnward are ${joinAnd(founders.map((f) => `${f.name} (${f.role})`))}.`,
       links: [{ to: "/about", label: "Meet the team" }],
     },
     {
-      q: "Where is Pixie Digital Creatives based?",
+      q: "Where is MakeOnward based?",
       a: `We are a remote digital studio and work with clients worldwide, so there is no public office address. You can reach us by email at ${BRAND.email} or by phone on ${BRAND.phone}.`,
     },
     {
@@ -40,7 +40,7 @@ export const companyFaqs = ({ team = [], projects = [] } = {}) => {
       a: "Yes. We work remotely with businesses worldwide. Prices on our website are in Indian rupees (INR); if you are outside India, ask for a quote in your currency.",
     },
     {
-      q: "What services does Pixie Digital Creatives offer?",
+      q: "What services does MakeOnward offer?",
       a: `${joinAnd(SERVICE_PAGES.map((s) => s.name))}, plus CRM setup, content creation and video production and editing. Each service has its own page with what is included, prices and common questions.`,
       links: [{ to: "/services", label: "Our services" }, { to: "/pricing", label: "Pricing" }],
     },
@@ -55,7 +55,7 @@ export const companyFaqs = ({ team = [], projects = [] } = {}) => {
       links: [{ to: "/portfolio", label: "See the portfolio" }],
     },
     {
-      q: "How do I start a project with Pixie Digital Creatives?",
+      q: "How do I start a project with MakeOnward?",
       a: "Tell us what you are planning through the contact page, by email or by phone. We reply within 24 hours, then start with a discovery conversation about your goals before we propose a scope and a quote.",
       links: [{ to: "/contact", label: "Contact us" }, { to: "/process", label: "How a project runs" }],
     },
@@ -65,7 +65,7 @@ export const companyFaqs = ({ team = [], projects = [] } = {}) => {
       links: [{ to: "/pricing", label: "See pricing" }, { to: "/blog/website-cost-in-india", label: "Website cost guide" }],
     },
     {
-      q: "How can I contact Pixie Digital Creatives?",
+      q: "How can I contact MakeOnward?",
       a: `By email at ${BRAND.email}, by phone on ${BRAND.phone}, through the contact form on our website, or on ${joinAnd(socials)}.`,
       links: [{ to: "/contact", label: "Contact page" }],
     },

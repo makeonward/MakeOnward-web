@@ -6,7 +6,7 @@
 //   Plans) as a sentence and a table, right under the heading.
 import { PROCESS_PHASES } from "./siteCopy.js";
 
-const AUTHOR = "Pixie Digital Creatives";
+const AUTHOR = "MakeOnward";
 
 export const POSTS = [
   {
@@ -193,7 +193,7 @@ export const POSTS = [
     author: AUTHOR,
     kicker: "Website project guide",
     lead:
-      "A website project goes more smoothly when everyone knows what happens next. These are the seven steps we follow at Pixie Digital Creatives for every website and app, with what each step delivers.",
+      "A website project goes more smoothly when everyone knows what happens next. These are the seven steps we follow at MakeOnward for every website and app, with what each step delivers.",
     services: ["website-development", "app-development"],
     sections: [
       ...PROCESS_PHASES.map((phase, i) => ({
@@ -283,7 +283,7 @@ export const POSTS = [
       {
         h2: "A note on these prices",
         p: [
-          "The prices in this guide are Pixie Digital Creatives' current prices in INR, taken from our pricing page; they are not a survey of the market. Every project is scoped with you before you receive a final quote. If you are outside India, you can ask for a quote in your currency.",
+          "The prices in this guide are MakeOnward' current prices in INR, taken from our pricing page; they are not a survey of the market. Every project is scoped with you before you receive a final quote. If you are outside India, you can ask for a quote in your currency.",
         ],
       },
     ],

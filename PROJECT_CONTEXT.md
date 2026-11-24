@@ -1,11 +1,11 @@
-# PDC WEB — Project context (handoff)
+# MakeOnward (formerly Pixie Digital Creatives / PDC WEB) — Project context (handoff)
 
 Paste this into a new chat so the assistant understands the project. Last updated 2026-10-08.
 
 ---
 
 ## 1. What this is
-Marketing website + admin CMS for **Pixie Digital Creatives (PDC)**, a creative/technology agency
+Marketing website + admin CMS for **MakeOnward** (formerly Pixie Digital Creatives), a creative/technology agency
 (websites, apps, CRM, video/content, social, SEO/GEO/AEO, Meta ads).
 
 - **Location:** `D:\PDC WEB` (Windows). **Not a git repo** — there is no undo history, so back up before big changes.
@@ -25,6 +25,10 @@ Marketing website + admin CMS for **Pixie Digital Creatives (PDC)**, a creative/
 
 ## 3. Current design (implemented on the live site)
 Based on a reference design: "Brands That Inspire Growth", silk wave ribbons, handwritten notes, Poppins font.
+**REBRAND to MakeOnward, 2026-11-24 (supersedes the plum rebrand below):** Onyx #0B0B0C, Onward Orange #FF6A00, Stone #D9D4CD, Ivory #F7F5EF.
+Masters: `makeOnward-*.png/.ico` in the repo root. Web files in `public/brand/`: `lockup-dark.png`, `lockup-light.png`, `mark-400.png`, `mark-1200.webp`, favicons, `og-image.png`.
+Domain is now makeonward.com (bare) and Instagram @makeonward. Not changed (no new values given): email addresses, LinkedIn, X, Facebook, `pdc_*` storage keys, Render/Cloudinary names. `rebrand()` / `withCompanyDefaults()` in `src/data/initialData.js` swap the old name in text still saved in the database.
+
 **Rebrand 2026-11-01 (replaces the blue/silver one of 2026-10-30):** ribbon `PDC` logo in cream/champagne with lilac shading
 and a rose glow on deep plum (`public/PDC1`, a PNG without extension, 1900x828, plum background baked in). The whole palette
 follows it: plum / rose / champagne / lilac. Two themes: **light (default)** = cream canvas with a plum version of the logo,

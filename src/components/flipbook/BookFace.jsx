@@ -21,7 +21,7 @@ const Cover = ({ book, page }) => {
       <div className="fb-cover fb-cover--rich">
         <span className="fb-cover__glow fb-cover__glow--a" />
         <span className="fb-cover__glow fb-cover__glow--b" />
-        <img className="fb-cover__logo" src={logos.lockup} alt="Pixie Digital Creatives" draggable={false} />
+        <img className="fb-cover__logo" src={logos.lockup} alt="MakeOnward" draggable={false} />
         <div className="fb-cover__body">
           {page.eyebrow && <span className="fb-cover__eyebrow-pill">{page.eyebrow}</span>}
           <h2 className="fb-cover__headline">
@@ -49,9 +49,9 @@ const Cover = ({ book, page }) => {
     <div className="fb-cover">
       <span className="fb-cover__glow fb-cover__glow--a" />
       <span className="fb-cover__glow fb-cover__glow--b" />
-      <img className="fb-cover__logo" src={logos.lockup} alt="Pixie Digital Creatives" draggable={false} />
+      <img className="fb-cover__logo" src={logos.lockup} alt="MakeOnward" draggable={false} />
       <div className="fb-cover__body">
-        <span className="fb-cover__eyebrow">{page.eyebrow || companyInfo?.name || "Pixie Digital Creatives"}</span>
+        <span className="fb-cover__eyebrow">{page.eyebrow || companyInfo?.name || "MakeOnward"}</span>
         <h2 className="fb-cover__title">{page.title || book.title}</h2>
         {(page.tagline || companyInfo?.tagline) && (
           <p className="fb-cover__tag">{page.tagline || companyInfo.tagline}</p>
@@ -66,7 +66,7 @@ const Cover = ({ book, page }) => {
 const BackCover = ({ page }) => {
   const { companyInfo } = useCms();
   const logos = useLogos();
-  const website = page?.website || companyInfo?.website || "pixiedigitalcreatives.com";
+  const website = page?.website || companyInfo?.website || "makeonward.com";
   const tagline = page?.tagline || companyInfo?.tagline || "Turning ideas into digital experiences.";
 
   if (page?.title) {
@@ -74,7 +74,7 @@ const BackCover = ({ page }) => {
       <div className="fb-cover fb-cover--back fb-cover--closing">
         <span className="fb-cover__glow fb-cover__glow--a" />
         <span className="fb-cover__glow fb-cover__glow--b" />
-        <img className="fb-cover__mark" src={logos.mark} alt="PDC" draggable={false} />
+        <img className="fb-cover__mark" src={logos.mark} alt="MakeOnward" draggable={false} />
         <h2 className="fb-cover__closing">{page.title}</h2>
         {page.text && <p className="fb-cover__text">{page.text}</p>}
         <div className="fb-cover__contact">
@@ -90,7 +90,7 @@ const BackCover = ({ page }) => {
     <div className="fb-cover fb-cover--back">
       <span className="fb-cover__glow fb-cover__glow--a" />
       <span className="fb-cover__glow fb-cover__glow--b" />
-      <img className="fb-cover__mark" src={logos.mark} alt="PDC" draggable={false} />
+      <img className="fb-cover__mark" src={logos.mark} alt="MakeOnward" draggable={false} />
       {tagline && <p className="fb-cover__tag">{tagline}</p>}
       <div className="fb-cover__site-badge">
         <a href={siteUrl(website)} target="_blank" rel="noreferrer">{website}</a>
@@ -102,9 +102,9 @@ const BackCover = ({ page }) => {
 // Running footer of the inside pages
 const PageFoot = ({ number }) => (
   <footer className="fb-cards__foot">
-    <span>Pixie Digital Creatives</span>
+    <span>MakeOnward</span>
     <span>
-      pixiedigitalcreatives.com <b>{pad(number)}</b>
+      makeonward.com <b>{pad(number)}</b>
     </span>
   </footer>
 );
@@ -117,7 +117,7 @@ const PageHead = ({ page, subtitle = page.subtitle }) => (
   </header>
 );
 
-// 01 — About Pixie: overview, approach, who we work with, positioning, promise, values
+// 01 — About MakeOnward: overview, approach, who we work with, positioning, promise, values
 const ProfileAboutPage = ({ page, number }) => (
   <div className="fb-cards fb-pabout">
     <PageHead page={page} />
@@ -281,7 +281,7 @@ const ProfileProcessPage = ({ page, number }) => (
 // 05 — Let's Work Together: inside paper page for contact & getting started
 const ProfileContactPage = ({ page, number }) => {
   const { companyInfo } = useCms();
-  const website = page.website || companyInfo?.website || "pixiedigitalcreatives.com";
+  const website = page.website || companyInfo?.website || "makeonward.com";
   const email = page.email || companyInfo?.email || "info@pixiedigitalcreatives.com";
   const phone = page.phone || companyInfo?.phone || "+91 96086 84177";
 

@@ -36,18 +36,18 @@ const statSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const companySchema = new mongoose.Schema({
-  name: { type: String, default: "Pixie Digital Creatives" },
-  shortName: { type: String, default: "PDC" },
+  name: { type: String, default: "MakeOnward" },
+  shortName: { type: String, default: "MakeOnward" },
   email: { type: String, default: "info@pixiedigitalcreatives.com" },
   phone: { type: String, default: "+91 96086 84177" },
   address: { type: String, default: "Digital Studio Worldwide & Remote" },
-  website: { type: String, default: "pixiedigitalcreatives.com" },
+  website: { type: String, default: "makeonward.com" },
   tagline: { type: String, default: "Creative. Strategic. Impactful." },
   description: { type: String, default: "We help businesses turn ideas into premium digital experiences through thoughtful design, modern development, and custom digital solutions." },
   services: { type: String, default: "Website Development • App Development • CRM • Social Media • SEO • Ads" },
   digitalPresence: { type: String, default: "Serving businesses through digital-first solutions" },
   socials: {
-    instagram: { type: String, default: "https://www.instagram.com/pixiedigitalcreatives/" },
+    instagram: { type: String, default: "https://www.instagram.com/makeonward/" },
     linkedin: { type: String, default: "https://www.linkedin.com/company/pixiedigitalcreatives" },
     twitter: { type: String, default: "https://x.com/pixiedigital" },
     facebook: { type: String, default: "https://www.facebook.com/share/17iSpzyfRY/" },

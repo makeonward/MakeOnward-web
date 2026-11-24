@@ -156,7 +156,7 @@ const AboutHero = ({ openContact }) => {
   const tagline = (companyInfo?.tagline || "Creative. Strategic. Impactful.").replace(/\.$/, "");
 
   return (
-    <section className="ab-hero" id="top" ref={ref} aria-label="About Pixie Digital Creatives">
+    <section className="ab-hero" id="top" ref={ref} aria-label="About MakeOnward">
       <motion.div className="ab-hero__bg" style={fx({ y: glowY })} aria-hidden="true">
         <span className="pg-glow pg-glow--a" />
         <span className="pg-glow pg-glow--b" />
@@ -166,7 +166,7 @@ const AboutHero = ({ openContact }) => {
       <motion.div className="ab-hero__waves" style={fx({ y: waveY })} aria-hidden="true">
         {ready && <SilkWaves lines={desktop ? 13 : 7} delay={0.4} y0={640} y1={330} lineOpacity={0.5} />}
       </motion.div>
-      <motion.span className="ab-hero__ghost" style={fx({ x: ghostX })} aria-hidden="true">PDC</motion.span>
+      <motion.span className="ab-hero__ghost" style={fx({ x: ghostX })} aria-hidden="true">makeOnward</motion.span>
 
       <div className="ab-hero__inner">
         <motion.div className="ab-hero__copy" style={fx({ y: copyY, opacity: copyO })}>

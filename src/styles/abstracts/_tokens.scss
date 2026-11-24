@@ -1,4 +1,4 @@
-// PDC design tokens — single source of truth.
+// MakeOnward design tokens — single source of truth.
 // Every colour is a CSS custom property so the whole site can switch between the
 // dark and light themes at runtime (values live in index.scss under [data-theme]).
 
@@ -14,7 +14,7 @@ $ink: var(--surface);       // raised surface (cards)
 $ink-2: var(--surface-2);   // hovered surface
 $white: var(--fg);          // primary type
 
-// Accents: peach (primary), pink, purple
+// Accents: Onward Orange (primary), lighter orange, Stone
 $accent: var(--accent);
 $gold: var(--accent);
 $blue: var(--accent);

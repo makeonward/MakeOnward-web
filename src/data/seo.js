@@ -12,15 +12,15 @@ import { SERVICE_PAGES } from "./servicePages.js";
 import { INDUSTRIES } from "./industries.js";
 import { POSTS } from "./blog.js";
 
-export const SITE_URL = "https://www.pixiedigitalcreatives.com";
-export const SITE_NAME = "Pixie Digital Creatives";
+export const SITE_URL = "https://makeonward.com";
+export const SITE_NAME = "MakeOnward";
 export const OG_IMAGE = "/brand/og-image.png";
 export const LOGO = "/brand/favicon-192.png";
 
 const MAIN_PAGES = [
   {
     path: "/",
-    title: "Website & App Development Agency | Pixie Digital Creatives",
+    title: "Website & App Development Agency | MakeOnward",
     description:
       "Digital agency for premium website development, app development and social media handling. We design, build and grow websites and apps for ambitious brands.",
     kicker: "Digital agency for premium websites & apps",
@@ -31,7 +31,7 @@ const MAIN_PAGES = [
   },
   {
     path: "/services",
-    title: "Website & App Development Services | Pixie Digital Creatives",
+    title: "Website & App Development Services | MakeOnward",
     description:
       "Website development, application development, CRM, social media handling, content, video, SEO and ads: every digital service your business needs, from one team.",
     kicker: "Website development, apps & social media handling",
@@ -43,7 +43,7 @@ const MAIN_PAGES = [
   },
   {
     path: "/pricing",
-    title: "Website & App Development Pricing | Pixie Digital Creatives",
+    title: "Website & App Development Pricing | MakeOnward",
     description:
       "Starting prices in INR for website development, app development, SEO, social media handling and video. Every project is scoped with you before you get a quote.",
     kicker: "Website & app development pricing",
@@ -54,9 +54,9 @@ const MAIN_PAGES = [
   },
   {
     path: "/portfolio",
-    title: "Portfolio: Premium Websites & Apps | Pixie Digital Creatives",
+    title: "Portfolio: Premium Websites & Apps | MakeOnward",
     description:
-      "Premium websites, web applications and brands designed and built by Pixie Digital Creatives. See our recent website development and app projects.",
+      "Premium websites, web applications and brands designed and built by MakeOnward. See our recent website development and app projects.",
     kicker: "Premium websites & apps we've built",
     h1: "Work that speaks for itself.",
     lead: "A selection of the premium websites, web applications and digital products we have designed and built.",
@@ -64,18 +64,18 @@ const MAIN_PAGES = [
   },
   {
     path: "/about",
-    title: "About Our Digital Agency | Pixie Digital Creatives",
+    title: "About Our Digital Agency | MakeOnward",
     description:
-      "Pixie Digital Creatives is a boutique digital agency helping founders and businesses turn ideas into premium websites, apps and digital experiences.",
+      "MakeOnward is a boutique digital agency helping founders and businesses turn ideas into premium websites, apps and digital experiences.",
     kicker: "About our digital agency",
     h1: "A small studio that makes things on purpose.",
     lead:
-      "Pixie Digital Creatives is a boutique digital agency and creative technology studio helping ambitious founders, businesses and creators turn bold ideas into premium websites, apps and high-impact digital experiences.",
+      "MakeOnward is a boutique digital agency and creative technology studio helping ambitious founders, businesses and creators turn bold ideas into premium websites, apps and high-impact digital experiences.",
     crumb: "About",
   },
   {
     path: "/process",
-    title: "Our Website Development Process | Pixie Digital Creatives",
+    title: "Our Website Development Process | MakeOnward",
     description:
       "How we run website and app development projects: seven clear steps from the first call to launch day, each with its own deliverables.",
     kicker: "Our website & app development process",
@@ -86,9 +86,9 @@ const MAIN_PAGES = [
   },
   {
     path: "/contact",
-    title: "Start Your Website or App Project | Pixie Digital Creatives",
+    title: "Start Your Website or App Project | MakeOnward",
     description:
-      "Planning a website, app or social media project? Tell us what you are building and the Pixie Digital Creatives team will reply within 24 hours.",
+      "Planning a website, app or social media project? Tell us what you are building and the MakeOnward team will reply within 24 hours.",
     kicker: "Start your website or app project",
     h1: "Tell us what you're building.",
     lead:
@@ -97,26 +97,26 @@ const MAIN_PAGES = [
   },
   {
     path: "/brochure",
-    title: "Brochure | Pixie Digital Creatives",
+    title: "Brochure | MakeOnward",
     description:
-      "The Pixie Digital Creatives brochure: our website development, app development, social media and growth services in a page-turning book.",
+      "The MakeOnward brochure: our website development, app development, social media and growth services in a page-turning book.",
     h1: "Brochure",
     lead: "Our website development, app development, social media and growth services, in a page-turning book.",
     crumb: "Brochure",
   },
   {
     path: "/company-profile",
-    title: "Company Profile | Pixie Digital Creatives",
+    title: "Company Profile | MakeOnward",
     description:
-      "The Pixie Digital Creatives company profile: who we are, our website, app and social media services, our process and pricing, in a page-turning book.",
+      "The MakeOnward company profile: who we are, our website, app and social media services, our process and pricing, in a page-turning book.",
     h1: "Company Profile",
     lead: "Who we are, our website, app and social media services, our process and pricing, in a page-turning book.",
     crumb: "Company Profile",
   },
   {
     path: "/admin",
-    title: "CMS Admin | Pixie Digital Creatives",
-    description: "Content management for the Pixie Digital Creatives website.",
+    title: "CMS Admin | MakeOnward",
+    description: "Content management for the MakeOnward website.",
     h1: "CMS Studio Access",
     lead: "Sign in with your administrator credentials to continue.",
     noindex: true,
@@ -126,7 +126,7 @@ const MAIN_PAGES = [
 // Any path the site does not have: the app shows its 404 page, and search engines are told not to index it.
 export const NOT_FOUND = {
   path: null,
-  title: "Page Not Found | Pixie Digital Creatives",
+  title: "Page Not Found | MakeOnward",
   description: "The link may be old, or the page has moved.",
   noindex: true,
 };
@@ -143,8 +143,8 @@ const CONTENT_PAGES = [
     kicker: s.kicker, h1: s.h1, lead: s.lead, crumb: s.name, parent: SERVICES_CRUMB,
   })),
   {
-    path: "/industries", kind: "industries", title: "Industries We Build For | Pixie Digital Creatives",
-    description: "Website and app development for restaurants and cafés, e-commerce brands, fitness businesses and creators, each backed by real Pixie Digital Creatives projects.",
+    path: "/industries", kind: "industries", title: "Industries We Build For | MakeOnward",
+    description: "Website and app development for restaurants and cafés, e-commerce brands, fitness businesses and creators, each backed by real MakeOnward projects.",
     kicker: "Industries", h1: "Built for the way your industry works.",
     lead: "Every industry needs something different from its website. These are the industries we have designed and built for, with the real projects behind them.",
     crumb: "Industries",
@@ -154,15 +154,15 @@ const CONTENT_PAGES = [
     kicker: i.kicker, h1: i.h1, lead: i.lead, crumb: i.name, parent: INDUSTRIES_CRUMB,
   })),
   {
-    path: "/blog", kind: "blog", title: "Blog: Websites, SEO & AI Search Guides | Pixie Digital Creatives",
-    description: "Practical guides on website development, SEO, AEO and GEO from Pixie Digital Creatives: comparisons, checklists and how-to articles for growing businesses.",
+    path: "/blog", kind: "blog", title: "Blog: Websites, SEO & AI Search Guides | MakeOnward",
+    description: "Practical guides on website development, SEO, AEO and GEO from MakeOnward: comparisons, checklists and how-to articles for growing businesses.",
     kicker: "Blog", h1: "Guides for building and growing online.",
     lead: "Practical articles on website development, SEO, AEO and GEO: what they are, how they compare and what to do first.",
     crumb: "Blog",
   },
   {
-    path: "/faq", kind: "faq", title: "Frequently Asked Questions | Pixie Digital Creatives",
-    description: "Answers about Pixie Digital Creatives: who we are, who founded the studio, where we work, our services, industries, previous work, prices and how to start.",
+    path: "/faq", kind: "faq", title: "Frequently Asked Questions | MakeOnward",
+    description: "Answers about MakeOnward: who we are, who founded the studio, where we work, our services, industries, previous work, prices and how to start.",
     kicker: "Frequently asked questions", h1: "Questions about working with us.",
     lead: "Short, straight answers about who we are, how we work and how to start a project. Questions about a single service are answered on that service's page.",
     crumb: "FAQ",
@@ -170,7 +170,7 @@ const CONTENT_PAGES = [
   ...POSTS.map((p) => ({
     path: `/blog/${p.slug}`, kind: "post", slug: p.slug, description: p.description,
     // brand suffix only when it still fits in a search result
-    title: `${p.title} | Pixie Digital Creatives`.length <= 65 ? `${p.title} | Pixie Digital Creatives` : p.title,
+    title: `${p.title} | MakeOnward`.length <= 65 ? `${p.title} | MakeOnward` : p.title,
     kicker: p.kicker, h1: p.title, lead: p.lead, crumb: p.title, parent: BLOG_CRUMB,
   })),
 ];

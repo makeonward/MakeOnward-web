@@ -17,19 +17,19 @@ import { INDUSTRIES, industryPage } from "../src/data/industries.js";
 import { POSTS, blogPost, readingMinutes, postWords } from "../src/data/blog.js";
 import { DEFAULT_PRICING, categoryRange, priceText } from "../src/data/pricing.js";
 import { companyFaqs } from "../src/data/faq.js";
-import { defaultServices } from "../src/data/initialData.js";
+import { defaultServices, rebrand } from "../src/data/initialData.js";
 import { CHAPTER_BLURB } from "../src/sections/ServicesStory/data.js";
 import { caseStudyMeta, projectServiceSlug, projectSlug, projectStatus } from "../src/data/projects.js";
 
 const dist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../dist");
 const template = readFileSync(path.join(dist, "index.html"), "utf8");
-const CMS_URL = process.env.CMS_URL || `${SITE_URL}/api/cms/all`;
+const CMS_URL = process.env.CMS_URL || "https://pdc-app-vm0t.onrender.com/api/cms/all"; // the API itself (as in vercel.json), so builds work before a domain is live
 
 // ---- CMS ------------------------------------------------------------------------------------------
 const loadCms = async () => {
   try {
     const res = await fetch(CMS_URL, { signal: AbortSignal.timeout(45000) });
-    const data = await res.json();
+    const data = rebrand(await res.json());
     if (!data.success) throw new Error("no success flag");
     return data;
   } catch (err) {
@@ -232,7 +232,7 @@ const caseContent = (project) => {
 const faqs = companyFaqs({ team, projects });
 const faqContent = (page) =>
   h1(page) + `<p>${esc(page.lead)}</p>` +
-  section("Questions about Pixie Digital Creatives", qa(faqs)) +
+  section("Questions about MakeOnward", qa(faqs)) +
   section("Questions about a specific service", ul(SERVICE_PAGES.map((s) => `${a(`/services/${s.slug}#faq`, `${s.name} questions`)}: ${s.faqs.length} questions answered, including "${esc(s.faqs[0].q)}"`)));
 
 const notFoundContent = () =>

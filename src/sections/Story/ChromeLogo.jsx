@@ -7,7 +7,7 @@ import { EASE } from "../../animations/variants";
 const SPRING = { stiffness: 90, damping: 18, mass: 0.7 };
 
 /**
- * The chrome PDC mark as a living object: tilts in 3D toward the cursor, floats,
+ * The MakeOnward mark as a living object: tilts in 3D toward the cursor, floats,
  * catches a travelling light sheen (masked to the logo's own shape) and sits on a soft reflection.
  */
 const ChromeLogo = ({ ready = true, className = "", style }) => {
@@ -47,7 +47,7 @@ const ChromeLogo = ({ ready = true, className = "", style }) => {
           animate={reduce ? undefined : { y: [0, -14, 0] }}
           transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut" }}
         >
-          <img src={logos.hero} alt="Pixie Digital Creatives" className="chrome-logo__img" draggable="false" />
+          <img src={logos.hero} alt="MakeOnward" className="chrome-logo__img" draggable="false" />
           <span className="chrome-logo__sheen" aria-hidden="true" />
         </motion.div>
         <img src={logos.hero} alt="" className="chrome-logo__reflection" aria-hidden="true" draggable="false" />

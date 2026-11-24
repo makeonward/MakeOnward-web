@@ -32,7 +32,7 @@ export const findProject = (projects, slug) => projects.find((p) => projectSlug(
 
 // Title and description for a case study, shared by the page (in the browser) and the build step.
 export const caseStudyMeta = (project) => {
-  const full = `${project.title} Case Study | Pixie Digital Creatives`;
+  const full = `${project.title} Case Study | MakeOnward`;
   const desc = `${project.title}: ${project.type || project.category}. ${project.description || ""}`.replace(/\s+/g, " ").trim();
   return {
     path: `/work/${projectSlug(project.title)}`,

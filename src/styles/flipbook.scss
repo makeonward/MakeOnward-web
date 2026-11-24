@@ -4,25 +4,25 @@
 // theme, a soft warm off-white in the dark theme (less glare next to the dark stage).
 :root,
 [data-theme='light'] {
-  --paper: #fffaf5;
-  --paper-back: #f6eee7;
-  --paper-edge: #e0d0c6;
-  --paper-ink: #250222;
-  --paper-ink-2: #8c7085;
-  --paper-shade: #3a0d34;
-  --paper-accent: #7a1f6c;
-  --paper-accent-2: #9a6e4f;
+  --paper: #fdfcf9;
+  --paper-back: #f7f5ef;
+  --paper-edge: #d9d4cd;
+  --paper-ink: #0b0b0c;
+  --paper-ink-2: #6f6a63;
+  --paper-shade: #0b0b0c;
+  --paper-accent: #bf4a00;
+  --paper-accent-2: #6b655e;
 }
 
 [data-theme='dark'] {
-  --paper: #f7efe8;
-  --paper-back: #eadfd6;
-  --paper-edge: #c4adb0;
-  --paper-ink: #250222;
-  --paper-ink-2: #86697d;
-  --paper-shade: #1a0118;
-  --paper-accent: #7a1f6c;
-  --paper-accent-2: #9a6e4f;
+  --paper: #f7f5ef;
+  --paper-back: #e9e5de;
+  --paper-edge: #bdb7af;
+  --paper-ink: #0b0b0c;
+  --paper-ink-2: #6f6a63;
+  --paper-shade: #0b0b0c;
+  --paper-accent: #bf4a00;
+  --paper-accent-2: #6b655e;
 }
 
 .flipbook {
@@ -284,7 +284,7 @@
 
   &__logo {
     position: relative;
-    width: 50cqw;
+    width: 58cqw;
     height: auto;
   }
 
@@ -399,7 +399,7 @@
 .fb-cover--rich {
   padding: 9cqw 8cqw 7cqw;
 
-  .fb-cover__logo { width: 42cqw; }
+  .fb-cover__logo { width: 52cqw; }
   .fb-cover__body { gap: 3.6cqw; }
 }
 
@@ -862,7 +862,7 @@
   }
 }
 
-// ---- Company Profile: 01 About Pixie -----------------------------------------------------------
+// ---- Company Profile: 01 About MakeOnward -----------------------------------------------------------
 .fb-pabout {
   display: flex;
   flex-direction: column;

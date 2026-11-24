@@ -29,7 +29,7 @@ const ContactPage = () => {
 
   const rawPhone = companyInfo?.phone || "+91 96086 84177";
   const phoneList = rawPhone.split(",").map((p) => p.trim()).filter(Boolean);
-  const rawWebsite = companyInfo?.website || "pixiedigitalcreatives.com";
+  const rawWebsite = companyInfo?.website || "makeonward.com";
   const websiteUrl = rawWebsite.startsWith("http") ? rawWebsite : `https://${rawWebsite}`;
   const websiteDisplay = rawWebsite.replace(/^https?:\/\//i, "").replace(/\/$/, "");
   const servicesDisplay = companyInfo?.services || "Website Development • App Development • CRM • Social Media • SEO • Ads";
@@ -192,7 +192,7 @@ const ContactPage = () => {
                 <div className="info-socials-block">
                   <span className="socials-lbl">FOLLOW THE STUDIO</span>
                   <div className="socials-links-row">
-                    <a href={companyInfo?.socials?.instagram || "https://www.instagram.com/pixiedigitalcreatives/"} target="_blank" rel="noreferrer" title="Instagram">
+                    <a href={companyInfo?.socials?.instagram || "https://www.instagram.com/makeonward/"} target="_blank" rel="noreferrer" title="Instagram">
                       <FaInstagram />
                     </a>
                     <a href={companyInfo?.socials?.linkedin || "https://www.linkedin.com/company/pixiedigitalcreatives"} target="_blank" rel="noreferrer" title="LinkedIn">
@@ -215,7 +215,7 @@ const ContactPage = () => {
                     <div className="success-icon"><RiCheckLine /></div>
                     <h3 className="success-heading">Inquiry received</h3>
                     <p className="success-sub">
-                      Thank you for contacting Pixie Digital Creatives. We'll analyze your requirements and reach out with a tailored roadmap within 24 hours.
+                      Thank you for contacting MakeOnward. We'll analyze your requirements and reach out with a tailored roadmap within 24 hours.
                     </p>
                   </div>
                 ) : (

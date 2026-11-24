@@ -522,7 +522,7 @@ const Admin = () => {
       <div className="admin-lock-screen">
         <div className="lock-card glass-panel">
           <div className="lock-header">
-            <img src={logos.lockup} alt="PDC Logo" className="lock-logo" />
+            <img src={logos.lockup} alt="MakeOnward logo" className="lock-logo" />
             <h2 className="lock-title">CMS Studio Access</h2>
             <p className="lock-sub">Sign in with your administrator credentials to continue.</p>
           </div>
@@ -589,7 +589,7 @@ const Admin = () => {
       <div className="admin-lock-screen">
         <div className="lock-card glass-panel">
           <div className="lock-header">
-            <img src={logos.lockup} alt="PDC Logo" className="lock-logo" />
+            <img src={logos.lockup} alt="MakeOnward logo" className="lock-logo" />
             <h2 className="lock-title">Set your own password</h2>
             <p className="lock-sub">
               You signed in as {me.email} with a temporary password. Choose your own password to continue.
@@ -635,9 +635,9 @@ const Admin = () => {
               <RiArrowLeftLine /> View Website
             </Link>
             <div className="admin-title-wrap">
-              <img src={logos.mark} alt="PDC Logo" className="admin-logo" />
+              <img src={logos.mark} alt="MakeOnward logo" className="admin-logo" />
               <div className="admin-title-text">
-                <h1>Pixie Digital Creatives</h1>
+                <h1>MakeOnward</h1>
                 <span className="cms-badge">STUDIO CMS PANEL</span>
               </div>
             </div>
@@ -1077,7 +1077,7 @@ const Admin = () => {
                       type="text"
                       value={company.website || ""}
                       onChange={(e) => editCompany({ website: e.target.value })}
-                      placeholder="pixiedigitalcreatives.com"
+                      placeholder="makeonward.com"
                     />
                   </div>
                 </div>

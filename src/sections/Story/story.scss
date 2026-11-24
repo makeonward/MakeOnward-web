@@ -7,49 +7,49 @@
 
 :root,
 [data-theme='light'] {
-  --spot: rgba(122, 31, 108, 0.08);
-  --cta-bg: linear-gradient(110deg, #f6e2ec 0%, #f8efe6 55%, #f1dfd1 100%);
+  --spot: rgba(255, 106, 0, 0.08);
+  --cta-bg: linear-gradient(110deg, #ffe3cc 0%, #f7f5ef 55%, #e9e4dc 100%);
   --cta-glow: rgba(255, 255, 255, 0.85);
-  --arrow-bg: #250222;
+  --arrow-bg: #0b0b0c;
   --arrow-fg: #ffffff;
-  --card-shadow: 0 22px 48px -28px rgba(74, 26, 62, 0.28);
+  --card-shadow: 0 22px 48px -28px rgba(11, 11, 12, 0.28);
   --glow-strength: 0.75;
 }
 
 [data-theme='dark'] {
-  --spot: rgba(232, 169, 200, 0.1);
-  --cta-bg: linear-gradient(110deg, #1a0118 0%, #4a0d42 55%, #2d0529 100%);
-  --cta-glow: rgba(194, 90, 154, 0.38);
+  --spot: rgba(255, 106, 0, 0.1);
+  --cta-bg: linear-gradient(110deg, #0b0b0c 0%, #3d1a03 55%, #141415 100%);
+  --cta-glow: rgba(255, 106, 0, 0.38);
   --arrow-bg: rgba(255, 255, 255, 0.08);
   --arrow-fg: #ffffff;
   --card-shadow: 0 30px 60px -36px rgba(0, 0, 0, 0.8);
   --glow-strength: 0.55;
 }
 
-// Icon-tile tones (stats + service cards): plum, rose, champagne, lilac
+// Icon-tile tones (stats + service cards): orange, onyx, stone
 [data-theme='dark'] {
-  .st-tone-0 { --tone-bg: linear-gradient(140deg, #8a2a7a, #5a1150); --tone-fg: #fff; }
-  .st-tone-1 { --tone-bg: linear-gradient(140deg, #c25a9a, #8a2f6a); --tone-fg: #fff; }
-  .st-tone-2 { --tone-bg: linear-gradient(140deg, #c9a07a, #8f6a4c); --tone-fg: #fff; }
-  .st-tone-3 { --tone-bg: linear-gradient(140deg, #6e1d61, #3a0833); --tone-fg: #fff; }
-  .st-tone-4 { --tone-bg: linear-gradient(140deg, #d06aa6, #94306e); --tone-fg: #fff; }
-  .st-tone-5 { --tone-bg: linear-gradient(140deg, #b07aaa, #6e3f6a); --tone-fg: #fff; }
-  .st-stats .st-tone-0 { --tone-bg: #3d0d37; --tone-fg: #f0cfae; }
-  .st-stats .st-tone-1 { --tone-bg: #3a1236; --tone-fg: #e8a9c8; }
-  .st-stats .st-tone-2 { --tone-bg: #44103d; --tone-fg: #f3d7bd; }
-  .st-stats .st-tone-3 { --tone-bg: #3a1236; --tone-fg: #e8a9c8; }
+  .st-tone-0 { --tone-bg: linear-gradient(140deg, #ff6a00, #d95400); --tone-fg: #0b0b0c; }
+  .st-tone-1 { --tone-bg: linear-gradient(140deg, #2e2d2f, #1b1b1d); --tone-fg: #ff8a33; }
+  .st-tone-2 { --tone-bg: linear-gradient(140deg, #d9d4cd, #a8a198); --tone-fg: #0b0b0c; }
+  .st-tone-3 { --tone-bg: linear-gradient(140deg, #b84700, #7a2e00); --tone-fg: #f7f5ef; }
+  .st-tone-4 { --tone-bg: linear-gradient(140deg, #f7f5ef, #d9d4cd); --tone-fg: #0b0b0c; }
+  .st-tone-5 { --tone-bg: linear-gradient(140deg, #ffa05c, #ff7a1a); --tone-fg: #0b0b0c; }
+  .st-stats .st-tone-0 { --tone-bg: #2a1609; --tone-fg: #ff8a33; }
+  .st-stats .st-tone-1 { --tone-bg: #1e1e21; --tone-fg: #f7f5ef; }
+  .st-stats .st-tone-2 { --tone-bg: #252427; --tone-fg: #d9d4cd; }
+  .st-stats .st-tone-3 { --tone-bg: #1e1e21; --tone-fg: #f7f5ef; }
 }
 [data-theme='light'] {
-  .st-tone-0 { --tone-bg: #f5e6f0; --tone-fg: #7a1f6c; }
-  .st-tone-1 { --tone-bg: #fae8ef; --tone-fg: #a8407a; }
-  .st-tone-2 { --tone-bg: #f6ece1; --tone-fg: #8a6040; }
-  .st-tone-3 { --tone-bg: #f5e6f0; --tone-fg: #7a1f6c; }
-  .st-tone-4 { --tone-bg: #fae8ef; --tone-fg: #a8407a; }
-  .st-tone-5 { --tone-bg: #f6ece1; --tone-fg: #8a6040; }
-  .st-stats .st-tone-0 { --tone-bg: #f5e6f0; --tone-fg: #7a1f6c; }
-  .st-stats .st-tone-1 { --tone-bg: #f6ece1; --tone-fg: #8a6040; }
-  .st-stats .st-tone-2 { --tone-bg: #fae8ef; --tone-fg: #a8407a; }
-  .st-stats .st-tone-3 { --tone-bg: #f5e6f0; --tone-fg: #7a1f6c; }
+  .st-tone-0 { --tone-bg: #ffe8d6; --tone-fg: #bf4a00; }
+  .st-tone-1 { --tone-bg: #e9e5de; --tone-fg: #0b0b0c; }
+  .st-tone-2 { --tone-bg: #eeeae2; --tone-fg: #5c5751; }
+  .st-tone-3 { --tone-bg: #ffe8d6; --tone-fg: #bf4a00; }
+  .st-tone-4 { --tone-bg: #e9e5de; --tone-fg: #0b0b0c; }
+  .st-tone-5 { --tone-bg: #eeeae2; --tone-fg: #5c5751; }
+  .st-stats .st-tone-0 { --tone-bg: #ffe8d6; --tone-fg: #bf4a00; }
+  .st-stats .st-tone-1 { --tone-bg: #eeeae2; --tone-fg: #5c5751; }
+  .st-stats .st-tone-2 { --tone-bg: #e9e5de; --tone-fg: #0b0b0c; }
+  .st-stats .st-tone-3 { --tone-bg: #ffe8d6; --tone-fg: #bf4a00; }
 }
 
 .home-wrapper { background: $black; }
@@ -340,7 +340,7 @@
 // Chrome logo
 .chrome-logo {
   position: relative;
-  width: min(640px, 92%); // the PDC-only logo is wider and shorter than the full lockup
+  width: min(560px, 84%);
   margin-right: 8%;
 
   &__glow {
@@ -363,8 +363,8 @@
   &__sheen {
     position: absolute;
     inset: 0;
-    -webkit-mask: url('/brand/secondary-1200.webp') center / contain no-repeat;
-    mask: url('/brand/secondary-1200.webp') center / contain no-repeat;
+    -webkit-mask: url('/brand/mark-1200.webp') center / contain no-repeat;
+    mask: url('/brand/mark-1200.webp') center / contain no-repeat;
     background: linear-gradient(110deg, transparent 38%, rgba(255, 255, 255, 0.85) 50%, transparent 62%);
     background-size: 260% 100%;
     mix-blend-mode: screen;
@@ -416,7 +416,7 @@
     transform: rotate(-12deg);
   }
 
-  @include down($bp-lg) { right: 2%; top: -22%; font-size: 1.3rem; }
+  @include down($bp-lg) { left: 2%; right: auto; top: -6%; font-size: 1.3rem; &__arrow { display: none; } }
 }
 
 .st-scroll {

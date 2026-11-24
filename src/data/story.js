@@ -1,4 +1,4 @@
-// Copy for the scroll story. Only describes what PDC offers — no metrics, clients or claims.
+// Copy for the scroll story. Only describes what MakeOnward offers — no metrics, clients or claims.
 import { genImage } from "./images";
 
 export const heroCopy = {

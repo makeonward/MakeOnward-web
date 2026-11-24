@@ -12,7 +12,7 @@
   will-change: transform;
 
   &__mark {
-    @include display(clamp(5rem, 18vw, 18rem));
+    @include display(clamp(2.75rem, 13vw, 15rem));
     color: $white;
     line-height: 0.8;
   }

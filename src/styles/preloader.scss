@@ -27,10 +27,10 @@
   }
 
   &__word {
-    @include display(clamp(7rem, 26vw, 30rem));
+    @include display(clamp(3rem, 14.5vw, 17rem));
     display: flex;
     gap: 0.02em;
-    line-height: 0.82;
+    line-height: 1;
   }
 
   &__mask {

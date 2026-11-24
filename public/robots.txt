@@ -1,4 +1,4 @@
-# Pixie Digital Creatives: crawler policy (owner-approved, 1 Nov 2026)
+# MakeOnward: crawler policy (owner-approved, 1 Nov 2026)
 
 # Search engines and AI search tools: allowed. They fetch pages to show and cite them in results
 # and AI answers (ChatGPT Search, Perplexity, Claude, Google, Bing / Copilot, Apple, DuckDuckGo).
@@ -35,4 +35,4 @@ Allow: /
 Disallow: /admin
 Disallow: /api/
 
-Sitemap: https://www.pixiedigitalcreatives.com/sitemap.xml
+Sitemap: https://makeonward.com/sitemap.xml

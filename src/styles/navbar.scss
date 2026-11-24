@@ -30,7 +30,7 @@ $bp-nav: $bp-lg;
     border-bottom-color: $white-08;
 
     .navbar-container { height: 72px; }
-    .logo-stack { height: 40px; }
+    .logo-stack { height: 26px; }
     .logo-img--primary { opacity: 0; }
     .logo-img--secondary { opacity: 1; }
   }
@@ -59,17 +59,19 @@ $bp-nav: $bp-lg;
 .logo-link { display: inline-flex; }
 
 // Two logos share one slot: the full primary logo at the top of the page, and the compact
-// secondary (PDC only) once the bar shrinks on scroll. Shown as supplied: no filter, tint or recolour.
+// orange mark once the bar shrinks on scroll. Shown as supplied: no filter, tint or recolour.
 .logo-stack {
   position: relative;
   display: inline-flex;
   align-items: center;
-  height: 54px;
+  height: 28px;
   transition: height $dur-base $ease-out;
+  @include down($bp-md) { height: 22px; }
 }
 .logo-img {
   display: block;
   width: auto;
+  max-width: none;
   transition: opacity $dur-base linear;
 
   &--primary { height: 100%; }
@@ -77,7 +79,7 @@ $bp-nav: $bp-lg;
     position: absolute;
     left: 0;
     top: 50%;
-    height: 72%;
+    height: 100%;
     translate: 0 -50%;
     opacity: 0;
   }

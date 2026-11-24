@@ -60,6 +60,7 @@ app.use(
         origin.includes("localhost") ||
         origin.includes("127.0.0.1") ||
         origin.endsWith(".netlify.app") ||
+        /^https:\/\/(www\.)?makeonward\.com$/.test(origin) ||
         origin.includes("pixiedigitalcreatives.com")
       ) {
         return callback(null, true);
@@ -114,7 +115,7 @@ app.use("/api/contact", contactLimiter, contactRoutes);
 app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
-    studio: "Pixie Digital Creatives",
+    studio: "MakeOnward",
     database: "MongoDB Atlas",
     mailer: "Zoho SMTP",
     timestamp: new Date().toISOString(),
@@ -128,7 +129,7 @@ app.use((req, res) => {
 
 app.listen(PORT, () => {
   console.log(`\n======================================================`);
-  console.log(`🚀 PDC Backend running on port ${PORT}`);
+  console.log(`🚀 MakeOnward Backend running on port ${PORT}`);
   console.log(`🔒 Security: Helmet + Rate Limiter + bcrypt + JWT`);
   console.log(`🍃 Database: MongoDB Atlas`);
   console.log(`📧 Mailer: Zoho SMTP`);

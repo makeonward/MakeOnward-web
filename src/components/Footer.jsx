@@ -32,7 +32,7 @@ const Footer = () => {
   const { companyInfo } = useCms();
   const logos = useLogos();
   const socials = [
-    { label: "Instagram", Icon: FaInstagram, href: companyInfo?.socials?.instagram || "https://www.instagram.com/pixiedigitalcreatives/" },
+    { label: "Instagram", Icon: FaInstagram, href: companyInfo?.socials?.instagram || "https://www.instagram.com/makeonward/" },
     { label: "LinkedIn", Icon: FaLinkedinIn, href: companyInfo?.socials?.linkedin || "https://www.linkedin.com/company/pixiedigitalcreatives" },
     { label: "X", Icon: FaXTwitter, href: companyInfo?.socials?.twitter || "https://x.com/pixiedigital" },
     { label: "Facebook", Icon: FaFacebookF, href: companyInfo?.socials?.facebook || "https://www.facebook.com/share/17iSpzyfRY/" },
@@ -44,8 +44,8 @@ const Footer = () => {
       <motion.div className="footer-container" initial="hidden" whileInView="show" viewport={VIEWPORT}>
         <div className="footer-grid">
           <motion.div className="footer-col brand-col" variants={col} custom={0}>
-            <Link to="/" className="footer-logo-link" aria-label="Pixie Digital Creatives — home">
-              <img src={logos.lockup} alt="Pixie Digital Creatives" className="footer-logo" />
+            <Link to="/" className="footer-logo-link" aria-label="MakeOnward — home">
+              <img src={logos.lockup} alt="MakeOnward" className="footer-logo" />
             </Link>
             <p className="footer-statement">
               Creative solutions for modern brands.
@@ -90,7 +90,7 @@ const Footer = () => {
         </div>
 
         <div className="footer-bottom">
-          <p>© {new Date().getFullYear()} Pixie Digital Creatives. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} MakeOnward. All rights reserved.</p>
           <div className="footer-legal">
             <Link to="/about">Privacy Policy</Link>
             <Link to="/about">Terms &amp; Conditions</Link>

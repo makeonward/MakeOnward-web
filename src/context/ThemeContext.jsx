@@ -2,9 +2,9 @@ import React, { createContext, useCallback, useContext, useEffect, useState } fr
 import { flushSync } from "react-dom";
 
 const ThemeContext = createContext(null);
-// v3: dark (plum) became the default; the theme is saved on every visit, so older saved values are ignored.
+// v3: dark became the default; the theme is saved on every visit, so older saved values are ignored.
 const STORAGE_KEY = "pdc-theme-v3";
-const META = { dark: "#230220", light: "#faf4ee" };
+const META = { dark: "#0b0b0c", light: "#f7f5ef" };
 
 // index.html already set data-theme before first paint; start from that.
 const initialTheme = () => {
@@ -65,19 +65,11 @@ export const useTheme = () => {
   return ctx;
 };
 
-// Logo files per theme: a plum version for the light theme, the cream logo as supplied for the dark one.
+// Logo files per theme: the primary lockup (Ivory type) on dark, the secondary (Onyx type) on light.
+// The orange mark works on both.
+const MARK = { mark: "/brand/mark-400.png", hero: "/brand/mark-1200.webp", ring: "/brand/mark-400.png" };
 const LOGOS = {
-  light: {
-    lockup: "/brand/primary-480.png",
-    mark: "/brand/secondary-400.png",
-    hero: "/brand/secondary-1200.webp",
-    ring: "/brand/mark-256.png",
-  },
-  dark: {
-    lockup: "/brand/primary-480-dark.png",
-    mark: "/brand/secondary-400-dark.png",
-    hero: "/brand/secondary-1200-dark.webp",
-    ring: "/brand/mark-256-dark.png",
-  },
+  light: { lockup: "/brand/lockup-light.png", ...MARK },
+  dark: { lockup: "/brand/lockup-dark.png", ...MARK },
 };
 export const useLogos = () => LOGOS[useTheme().theme];

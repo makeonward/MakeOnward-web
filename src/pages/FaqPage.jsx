@@ -17,7 +17,7 @@ const FaqPage = () => {
     <ContentShell>
       <ContentHero crumbs={[{ name: "Home", path: "/" }, { name: "FAQ" }]} kicker={page.kicker} title={page.h1} lead={page.lead} />
 
-      <Section id="company" eyebrow="About us" title="Questions about Pixie Digital Creatives">
+      <Section id="company" eyebrow="About us" title="Questions about MakeOnward">
         <QaList items={faqs} />
       </Section>
 

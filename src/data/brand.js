@@ -7,7 +7,7 @@ import { defaultCompanyInfo } from "./initialData.js";
 export const BRAND = {
   name: defaultCompanyInfo.name,
   shortName: defaultCompanyInfo.shortName,
-  url: "https://www.pixiedigitalcreatives.com",
+  url: "https://makeonward.com",
   description: defaultCompanyInfo.description,
   tagline: defaultCompanyInfo.tagline,
   email: defaultCompanyInfo.email,

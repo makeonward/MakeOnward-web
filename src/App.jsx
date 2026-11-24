@@ -94,7 +94,7 @@ const AnimatedRoutes = () => {
         animate={curtain}
         aria-hidden="true"
       >
-        <span className="route-curtain__mark">PDC</span>
+        <span className="route-curtain__mark">makeOnward</span>
       </motion.div>
     </>
   );

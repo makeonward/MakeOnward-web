@@ -1,4 +1,4 @@
-// Default Initial Data for Pixie Digital Creatives
+// Default Initial Data for MakeOnward
 // Fully editable and manageable via the CMS Admin Panel
 
 export const defaultServices = [
@@ -170,19 +170,33 @@ export const defaultServices = [
 ];
 
 export const defaultCompanyInfo = {
-  name: "Pixie Digital Creatives",
-  shortName: "PDC",
+  name: "MakeOnward",
+  shortName: "MakeOnward",
   tagline: "Creative. Strategic. Impactful.",
   description: "We help businesses turn ideas into premium digital experiences through thoughtful design, modern development, and custom digital solutions.",
   email: "info@pixiedigitalcreatives.com",
   phone: "+91 96086 84177",
-  website: "pixiedigitalcreatives.com",
+  website: "makeonward.com",
   services: "Website Development • App Development • CRM • Social Media • SEO • Ads",
   digitalPresence: "Serving businesses through digital-first solutions",
   socials: {
-    instagram: "https://www.instagram.com/pixiedigitalcreatives/",
+    instagram: "https://www.instagram.com/makeonward/",
     linkedin: "https://www.linkedin.com/company/pixiedigitalcreatives",
     twitter: "https://x.com/pixiedigital",
     facebook: "https://www.facebook.com/share/17iSpzyfRY/"
   }
+};
+
+// Text saved in the database before the rebrand (e.g. team bios) still names the old studio.
+export const rebrand = (data) => JSON.parse(JSON.stringify(data).replaceAll("Pixie Digital Creatives", "MakeOnward"));
+
+// Company info as the site uses it: saved values over the defaults. Records saved before the
+// MakeOnward rebrand still hold the old studio name; show the new one until they are re-saved.
+export const withCompanyDefaults = (saved) => {
+  const info = { ...defaultCompanyInfo, ...saved, socials: { ...defaultCompanyInfo.socials, ...(saved?.socials || {}) } };
+  if (/pixie/i.test(info.name)) info.name = defaultCompanyInfo.name;
+  if (/^pdc$/i.test(info.shortName)) info.shortName = defaultCompanyInfo.shortName;
+  if (/pixiedigital/i.test(info.website)) info.website = defaultCompanyInfo.website;
+  if (/pixiedigital/i.test(info.socials.instagram)) info.socials.instagram = defaultCompanyInfo.socials.instagram;
+  return info;
 };

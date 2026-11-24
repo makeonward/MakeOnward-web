@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { defaultServices, defaultCompanyInfo } from "../data/initialData";
+import { defaultServices, defaultCompanyInfo, rebrand, withCompanyDefaults } from "../data/initialData";
 import { DEFAULT_PRICING, DEFAULT_BUDGET_RANGES } from "../data/pricing";
 
 const CmsContext = createContext(null);
@@ -92,14 +92,7 @@ export const CmsProvider = ({ children }) => {
     try {
       const saved = localStorage.getItem(STORAGE_KEYS.COMPANY);
       const parsed = saved ? JSON.parse(saved) : defaultCompanyInfo;
-      return {
-        ...defaultCompanyInfo,
-        ...parsed,
-        socials: {
-          ...defaultCompanyInfo.socials,
-          ...(parsed?.socials || {}),
-        },
-      };
+      return withCompanyDefaults(parsed);
     } catch {
       return defaultCompanyInfo;
     }
@@ -130,7 +123,7 @@ export const CmsProvider = ({ children }) => {
       try {
         const res = await fetch("/api/cms/all");
         if (res.ok) {
-          const data = await res.json();
+          const data = rebrand(await res.json());
           if (data.success) {
             const fromDb = toPricingDoc(data.pricing);
             setPricing(fromDb || DEFAULT_PRICING_DOC);
@@ -144,14 +137,7 @@ export const CmsProvider = ({ children }) => {
             setTeamMembers(normalizeList(data.team));
             setStats(normalizeList(data.stats));
             if (data.company && Object.keys(data.company).length > 0) {
-              setCompanyInfo({
-                ...defaultCompanyInfo,
-                ...data.company,
-                socials: {
-                  ...defaultCompanyInfo.socials,
-                  ...(data.company.socials || {}),
-                },
-              });
+              setCompanyInfo(withCompanyDefaults(data.company));
             }
             setIsBackendConnected(true);
           }
@@ -428,11 +414,7 @@ export const CmsProvider = ({ children }) => {
         /* not JSON (e.g. a proxy error page) */
       }
       if (res.ok && data?.success) {
-        setCompanyInfo({
-          ...defaultCompanyInfo,
-          ...data.company,
-          socials: { ...defaultCompanyInfo.socials, ...(data.company?.socials || {}) },
-        });
+        setCompanyInfo(withCompanyDefaults(data.company));
         return { ok: true };
       }
       if (res.status === 401 || res.status === 403) {
@@ -503,7 +485,7 @@ export const CmsProvider = ({ children }) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `pdc-cms-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `makeonward-cms-backup-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -517,14 +499,7 @@ export const CmsProvider = ({ children }) => {
       if (data.services) setServices(data.services);
       if (data.testimonials) setTestimonials(data.testimonials);
       if (data.company) {
-        setCompanyInfo({
-          ...defaultCompanyInfo,
-          ...data.company,
-          socials: {
-            ...defaultCompanyInfo.socials,
-            ...(data.company.socials || {}),
-          },
-        });
+        setCompanyInfo(withCompanyDefaults(data.company));
       }
       return { success: true };
     } catch (err) {

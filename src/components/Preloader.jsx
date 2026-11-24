@@ -56,17 +56,17 @@ const Preloader = ({ onFinish }) => {
       transition={{ duration: reduce ? 0.2 : 0.8, ease: EASE_IN_OUT }}
       onAnimationComplete={() => leaving && finish()}
       role="status"
-      aria-label="Loading Pixie Digital Creatives"
+      aria-label="Loading MakeOnward"
     >
       <div className="preloader__inner">
-        <span className="preloader__meta">Pixie Digital Creatives</span>
+        <span className="preloader__meta">MakeOnward</span>
         <div className="preloader__word" aria-hidden="true">
-          {["P", "D", "C"].map((ch, i) => (
-            <span className="preloader__mask" key={ch}>
+          {[..."makeOnward"].map((ch, i) => (
+            <span className="preloader__mask" key={i}>
               <motion.span
                 initial={{ y: "105%" }}
                 animate={{ y: "0%" }}
-                transition={{ duration: 0.9, ease: EASE, delay: reduce ? 0 : 0.08 * i }}
+                transition={{ duration: 0.9, ease: EASE, delay: reduce ? 0 : 0.04 * i }}
               >
                 {ch}
               </motion.span>

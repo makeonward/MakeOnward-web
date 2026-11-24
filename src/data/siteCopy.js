@@ -56,7 +56,7 @@ export const PILLARS_COPY = [
 // About page: the sentence that lights up word by word (accent words in the gradient) and the line under it.
 export const MANIFESTO = {
   text:
-    "Pixie Digital Creatives started with a simple idea: design and engineering should be planned together, so what looks good also works properly and keeps the business growing.",
+    "MakeOnward started with a simple idea: design and engineering should be planned together, so what looks good also works properly and keeps the business growing.",
   accent: ["planned", "together"],
   sub: "We care about how a site looks and how it performs in equal measure.",
 };

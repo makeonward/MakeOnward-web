@@ -21,15 +21,15 @@ export const SERVICE_PAGES = [
     slug: "website-development",
     name: "Website Development",
     term: "website development",
-    title: "Website Development Agency | Pixie Digital Creatives",
+    title: "Website Development Agency | MakeOnward",
     description:
-      "Website development: premium websites, WordPress, e-commerce stores and full-stack web platforms, designed and built by one team at Pixie Digital Creatives.",
+      "Website development: premium websites, WordPress, e-commerce stores and full-stack web platforms, designed and built by one team at MakeOnward.",
     kicker: "Website development agency",
     h1: "Websites designed to be experienced, and built to perform.",
     lead:
       "Custom website development for businesses that want a premium website: designed around your brand, responsive on every screen and built on clean, fast code. From a focused business site to an online store or a custom platform, one team handles design, development and launch.",
     summary:
-      "Website development is the work of planning, designing, building and launching a website. At Pixie Digital Creatives it covers custom-designed websites, WordPress websites, e-commerce stores and full-stack web platforms, with a content management system (CMS) wherever your team needs to edit content.",
+      "Website development is the work of planning, designing, building and launching a website. At MakeOnward it covers custom-designed websites, WordPress websites, e-commerce stores and full-stack web platforms, with a content management system (CMS) wherever your team needs to edit content.",
     audience: [
       "Businesses that need their first professional website",
       "Brands replacing a dated or template website with a premium one",
@@ -89,15 +89,15 @@ export const SERVICE_PAGES = [
     slug: "app-development",
     name: "App Development",
     term: "app development",
-    title: "App Development for Android, iOS & Web | Pixie Digital Creatives",
+    title: "App Development for Android, iOS & Web | MakeOnward",
     description:
-      "Application development for Android, iOS and the web: MVPs, booking and e-commerce apps and the APIs and databases behind them, by Pixie Digital Creatives.",
+      "Application development for Android, iOS and the web: MVPs, booking and e-commerce apps and the APIs and databases behind them, by MakeOnward.",
     kicker: "Application development",
     h1: "Apps built around how your users actually work.",
     lead:
       "Application development for Android, iOS and the web: from a first version (MVP) to a booking app or a full mobile shopping experience. We plan the product with you, design the interface and build the front end, back end and database as one system.",
     summary:
-      "Application development is the process of planning, designing, building and launching software people use on their phones or in a browser. Pixie Digital Creatives builds web applications and mobile apps for Android and iOS, together with the APIs, databases and business systems (such as CRMs) behind them.",
+      "Application development is the process of planning, designing, building and launching software people use on their phones or in a browser. MakeOnward builds web applications and mobile apps for Android and iOS, together with the APIs, databases and business systems (such as CRMs) behind them.",
     audience: [
       "Founders testing an idea with a first version (MVP)",
       "Service businesses that take bookings or appointments",
@@ -151,7 +151,7 @@ export const SERVICE_PAGES = [
     slug: "social-media-marketing",
     name: "Social Media Marketing",
     term: "social media marketing",
-    title: "Social Media Marketing & Handling | Pixie Digital Creatives",
+    title: "Social Media Marketing & Handling | MakeOnward",
     description:
       "Social media marketing and handling: platform strategy, content planning, daily posting, reels and Meta Ads, from one platform to full-service management.",
     kicker: "Social media marketing & handling",
@@ -159,7 +159,7 @@ export const SERVICE_PAGES = [
     lead:
       "Social media marketing and social media handling for brands that want consistent, on-brand channels: platform strategy, content planning, day-to-day posting and community upkeep, plus paid campaigns on Facebook and Instagram when you want to reach more of the right people.",
     summary:
-      "Social media marketing is using platforms such as Instagram and Facebook to build a brand and reach customers. Social media handling is the day-to-day part: planning, creating and posting content and looking after the community. Pixie Digital Creatives does both, and runs paid social campaigns.",
+      "Social media marketing is using platforms such as Instagram and Facebook to build a brand and reach customers. Social media handling is the day-to-day part: planning, creating and posting content and looking after the community. MakeOnward does both, and runs paid social campaigns.",
     audience: [
       "Businesses that don't have time to post consistently",
       "Brands starting on a new platform or relaunching their channels",
@@ -217,7 +217,7 @@ export const SERVICE_PAGES = [
     slug: "model-influencer-marketing",
     name: "Model & Influencer Marketing",
     term: "model and influencer marketing",
-    title: "Model & Influencer Marketing | Pixie Digital Creatives",
+    title: "Model & Influencer Marketing | MakeOnward",
     description:
       "Model and influencer collaborations for brand shoots and social campaigns: half-day and full-day options, combined with video shoots, edits and social media.",
     kicker: "Model & influencer marketing",
@@ -225,7 +225,7 @@ export const SERVICE_PAGES = [
     lead:
       "We arrange collaborations with models and influencers for brand shoots and social campaigns, as a half-day or a full-day collaboration, and can combine them with our video shoots, editing and social media handling.",
     summary:
-      "Influencer marketing means working with creators who have an engaged audience to promote a brand; a model collaboration brings a professional face to your photos and videos. Pixie Digital Creatives arranges these collaborations for shoots and campaigns. Final pricing depends on the creator, deliverables, usage rights and campaign requirements.",
+      "Influencer marketing means working with creators who have an engaged audience to promote a brand; a model collaboration brings a professional face to your photos and videos. MakeOnward arranges these collaborations for shoots and campaigns. Final pricing depends on the creator, deliverables, usage rights and campaign requirements.",
     audience: [
       "Brands planning a photo or video shoot",
       "Product launches that need creator content",
@@ -277,7 +277,7 @@ export const SERVICE_PAGES = [
     slug: "seo",
     name: "SEO",
     term: "SEO",
-    title: "SEO Services & Local SEO | Pixie Digital Creatives",
+    title: "SEO Services & Local SEO | MakeOnward",
     description:
       "SEO services: technical SEO, on-page optimisation, content for search and local SEO, from starter plans to high-competition and multi-location sites.",
     kicker: "SEO services",
@@ -350,7 +350,7 @@ export const SERVICE_PAGES = [
     slug: "aeo",
     name: "AEO",
     term: "AEO",
-    title: "AEO: Answer Engine Optimisation | Pixie Digital Creatives",
+    title: "AEO: Answer Engine Optimisation | MakeOnward",
     description:
       "Answer engine optimisation (AEO): question-led content and answer-ready structure, so search engines and assistants can show your content as the direct answer.",
     kicker: "AEO: answer engine optimisation",
@@ -411,7 +411,7 @@ export const SERVICE_PAGES = [
     slug: "geo",
     name: "GEO",
     term: "GEO",
-    title: "GEO: Generative Engine Optimisation | Pixie Digital Creatives",
+    title: "GEO: Generative Engine Optimisation | MakeOnward",
     description:
       "Generative engine optimisation (GEO): help ChatGPT Search, Google AI Overviews, Gemini, Perplexity and Copilot find, understand and cite your business.",
     kicker: "GEO: generative engine optimisation",

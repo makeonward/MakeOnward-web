@@ -8,9 +8,9 @@ export const INDUSTRIES = [
     slug: "restaurants-cafes",
     name: "Restaurants & Cafés",
     who: "restaurants and cafés",
-    title: "Restaurant & Café Website Development | Pixie Digital Creatives",
+    title: "Restaurant & Café Website Development | MakeOnward",
     description:
-      "Premium restaurant and café websites: menus, atmosphere and mobile-first design, plus social media content that brings guests in. By Pixie Digital Creatives.",
+      "Premium restaurant and café websites: menus, atmosphere and mobile-first design, plus social media content that brings guests in. By MakeOnward.",
     kicker: "Websites for restaurants & cafés",
     h1: "Let guests taste the experience before they arrive.",
     lead:
@@ -33,9 +33,9 @@ export const INDUSTRIES = [
     slug: "ecommerce",
     name: "E-commerce & D2C Brands",
     who: "e-commerce and D2C brands",
-    title: "E-commerce Website Development | Pixie Digital Creatives",
+    title: "E-commerce Website Development | MakeOnward",
     description:
-      "E-commerce website and app development for online stores and D2C brands: product discovery, premium storytelling and mobile shopping. Pixie Digital Creatives.",
+      "E-commerce website and app development for online stores and D2C brands: product discovery, premium storytelling and mobile shopping. MakeOnward.",
     kicker: "E-commerce website development",
     h1: "Online stores that feel as premium as your products.",
     lead:
@@ -58,9 +58,9 @@ export const INDUSTRIES = [
     slug: "fitness-wellness",
     name: "Fitness & Wellness",
     who: "gyms and fitness brands",
-    title: "Websites for Gyms & Fitness Brands | Pixie Digital Creatives",
+    title: "Websites for Gyms & Fitness Brands | MakeOnward",
     description:
-      "Premium websites for gyms, fitness studios and wellness brands: bold design, programmes and memberships, and booking apps, by Pixie Digital Creatives.",
+      "Premium websites for gyms, fitness studios and wellness brands: bold design, programmes and memberships, and booking apps, by MakeOnward.",
     kicker: "Websites for gyms & fitness brands",
     h1: "A website with the same energy as your training floor.",
     lead:
@@ -83,9 +83,9 @@ export const INDUSTRIES = [
     slug: "creators-authors",
     name: "Creators, Authors & Artists",
     who: "creators, authors and artists",
-    title: "Websites for Authors & Creators | Pixie Digital Creatives",
+    title: "Websites for Authors & Creators | MakeOnward",
     description:
-      "Editorial websites for authors, poets, artists and creators: biographies, works, books and creative journeys, beautifully presented by Pixie Digital Creatives.",
+      "Editorial websites for authors, poets, artists and creators: biographies, works, books and creative journeys, beautifully presented by MakeOnward.",
     kicker: "Websites for creators, authors & artists",
     h1: "A digital home for your work and your story.",
     lead:

@@ -159,9 +159,9 @@ const Navbar = () => {
       >
         <div className="navbar-container">
           <div className="navbar-logo">
-            <Link to="/" className="logo-link" aria-label="Pixie Digital Creatives — home">
+            <Link to="/" className="logo-link" aria-label="MakeOnward — home">
               <span className="logo-stack">
-                <img src={logos.lockup} alt="Pixie Digital Creatives" className="logo-img logo-img--primary" />
+                <img src={logos.lockup} alt="MakeOnward" className="logo-img logo-img--primary" />
                 <img src={logos.mark} alt="" aria-hidden="true" className="logo-img logo-img--secondary" />
               </span>
             </Link>
@@ -418,7 +418,7 @@ const Navbar = () => {
               <div className="mobile-menu__contact">
                 <a href={`mailto:${email}`}>{email}</a>
                 <div className="socials">
-                  <a href={companyInfo?.socials?.instagram || "https://www.instagram.com/pixiedigitalcreatives/"} target="_blank" rel="noreferrer" aria-label="Instagram"><FaInstagram /></a>
+                  <a href={companyInfo?.socials?.instagram || "https://www.instagram.com/makeonward/"} target="_blank" rel="noreferrer" aria-label="Instagram"><FaInstagram /></a>
                   <a href={companyInfo?.socials?.linkedin || "https://www.linkedin.com/company/pixiedigitalcreatives"} target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedinIn /></a>
                   <a href={companyInfo?.socials?.twitter || "https://x.com/pixiedigital"} target="_blank" rel="noreferrer" aria-label="X"><FaXTwitter /></a>
                 </div>

@@ -93,7 +93,7 @@ const ContactModal = () => {
             </div>
             <h3 className="success-title">Inquiry Received</h3>
             <p className="success-desc">
-              Thank you for reaching out to Pixie Digital Creatives. We'll analyze your requirements and get back to you with a tailored estimate in {selectedCountry.currencyCode} within 24 hours.
+              Thank you for reaching out to MakeOnward. We'll analyze your requirements and get back to you with a tailored estimate in {selectedCountry.currencyCode} within 24 hours.
             </p>
           </div>
         ) : (

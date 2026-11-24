@@ -43,7 +43,7 @@ const PriceTable = ({ category }) => {
     <>
       {range && (
         <p className="cp-article__answer">
-          At Pixie Digital Creatives, {category.title.toLowerCase()} currently costs from {range.from} to {range.to}, depending on the type of project:
+          At MakeOnward, {category.title.toLowerCase()} currently costs from {range.from} to {range.to}, depending on the type of project:
         </p>
       )}
       <div className="cp-table-wrap">

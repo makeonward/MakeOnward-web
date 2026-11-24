@@ -76,7 +76,7 @@ export const BOOKS = {
       {
         type: "back",
         tagline: "Your business deserves to be seen.",
-        website: "pixiedigitalcreatives.com",
+        website: "makeonward.com",
       },
     ],
   },
@@ -91,14 +91,14 @@ export const BOOKS = {
         type: "cover",
       },
 
-      // Page 2: 01 — About Pixie
+      // Page 2: 01 — About MakeOnward
       {
         type: "profile-about",
-        kicker: "01 — ABOUT PIXIE",
+        kicker: "01 — ABOUT MAKEONWARD",
         title: "A creative and technology partner for businesses.",
         subtitle: "A modern digital agency engineered for measurable business impact.",
         overview:
-          "Pixie Digital Creatives helps businesses strengthen their digital presence through website development, application development, search visibility, social media support, and creative production. Our approach combines clear communication, practical solutions, and design-led execution.",
+          "MakeOnward helps businesses strengthen their digital presence through website development, application development, search visibility, social media support, and creative production. Our approach combines clear communication, practical solutions, and design-led execution.",
         approach: [
           { title: "Understand", text: "We understand your business model, competitive landscape, audience, and commercial goals before proposing code or design." },
           { title: "Recommend", text: "We recommend a suitable digital solution based on project scope, matching your budget without forced retainers." },
@@ -274,10 +274,10 @@ export const BOOKS = {
         kicker: "05 — LET’S WORK TOGETHER",
         title: "Have a project in mind?",
         subtitle: "Start with a conversation.",
-        text: "Whether you need a website, mobile application, search visibility, social media support, or a creative campaign, Pixie Digital Creatives can help you define a practical next step.",
+        text: "Whether you need a website, mobile application, search visibility, social media support, or a creative campaign, MakeOnward can help you define a practical next step.",
         actionNote: "Use the contact form on our website to discuss your project or request a custom proposal.",
         channels: [
-          { label: "Website", value: "pixiedigitalcreatives.com", href: "https://pixiedigitalcreatives.com" },
+          { label: "Website", value: "makeonward.com", href: "https://makeonward.com" },
           { label: "Enquiries", value: "info@pixiedigitalcreatives.com", href: "mailto:info@pixiedigitalcreatives.com" },
           { label: "Direct Call", value: "+91 96086 84177", href: "tel:+919608684177" },
         ],
@@ -319,7 +319,7 @@ export const BOOKS = {
       {
         type: "back",
         tagline: "Turning ideas into digital experiences.",
-        website: "pixiedigitalcreatives.com",
+        website: "makeonward.com",
       },
     ],
   },

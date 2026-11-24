@@ -24,7 +24,7 @@ const CaseStudyPage = () => {
     project
       ? caseStudyMeta(project)
       : loaded
-        ? { title: "Project not found | Pixie Digital Creatives", description: "This project could not be found.", noindex: true }
+        ? { title: "Project not found | MakeOnward", description: "This project could not be found.", noindex: true }
         : null
   );
 
