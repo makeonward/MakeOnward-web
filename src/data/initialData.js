@@ -174,7 +174,7 @@ export const defaultCompanyInfo = {
   shortName: "MakeOnward",
   tagline: "Creative. Strategic. Impactful.",
   description: "We help businesses turn ideas into premium digital experiences through thoughtful design, modern development, and custom digital solutions.",
-  email: "info@pixiedigitalcreatives.com",
+  email: "info@makeonward.com",
   phone: "+91 96086 84177",
   website: "makeonward.com",
   services: "Website Development • App Development • CRM • Social Media • SEO • Ads",
@@ -188,7 +188,11 @@ export const defaultCompanyInfo = {
 };
 
 // Text saved in the database before the rebrand (e.g. team bios) still names the old studio.
-export const rebrand = (data) => JSON.parse(JSON.stringify(data).replaceAll("Pixie Digital Creatives", "MakeOnward"));
+export const rebrand = (data) => JSON.parse(
+  JSON.stringify(data)
+    .replaceAll("Pixie Digital Creatives", "MakeOnward")
+    .replaceAll("info@pixiedigitalcreatives.com", "info@makeonward.com")
+);
 
 // Company info as the site uses it: saved values over the defaults. Records saved before the
 // MakeOnward rebrand still hold the old studio name; show the new one until they are re-saved.
@@ -196,6 +200,7 @@ export const withCompanyDefaults = (saved) => {
   const info = { ...defaultCompanyInfo, ...saved, socials: { ...defaultCompanyInfo.socials, ...(saved?.socials || {}) } };
   if (/pixie/i.test(info.name)) info.name = defaultCompanyInfo.name;
   if (/^pdc$/i.test(info.shortName)) info.shortName = defaultCompanyInfo.shortName;
+  if (/^info@pixiedigital/i.test(info.email)) info.email = defaultCompanyInfo.email;
   if (/pixiedigital/i.test(info.website)) info.website = defaultCompanyInfo.website;
   if (/pixiedigital/i.test(info.socials.instagram)) info.socials.instagram = defaultCompanyInfo.socials.instagram;
   return info;

@@ -3,55 +3,33 @@ import nodemailer from "nodemailer";
 let transporter = null;
 
 export const initMailer = () => {
-  const zohoEmail = process.env.ZOHO_EMAIL;
-  const zohoPassword = process.env.ZOHO_APP_PASSWORD;
+  const { SMTP_HOST, SMTP_USER, SMTP_PASSWORD } = process.env;
+  const host = SMTP_HOST || "mx.polpomail.com";
+  const port = Number(process.env.SMTP_PORT) || 465;
 
-  if (!zohoEmail || !zohoPassword) {
-    console.log("⚠️  Zoho Mail not configured — email delivery disabled.");
+  if (!SMTP_USER || !SMTP_PASSWORD) {
+    console.log("⚠️  SMTP not configured (SMTP_USER / SMTP_PASSWORD) — email delivery disabled.");
     return;
   }
 
-  // Detect Indian datacenter vs global
-  const isIndian = zohoEmail.endsWith(".in") || true; // Default to Indian datacenter for pixiedigitalcreatives.com
-  const smtpHost = isIndian ? "smtp.zoho.in" : "smtp.zoho.com";
-
   transporter = nodemailer.createTransport({
-    host: smtpHost,
-    port: 465,
-    secure: true, // SSL
-    auth: {
-      user: zohoEmail,
-      pass: zohoPassword,
-    },
+    host,
+    port,
+    secure: port === 465, // 465 = SSL; other ports must upgrade with STARTTLS
+    requireTLS: port !== 465,
+    auth: { user: SMTP_USER, pass: SMTP_PASSWORD },
+    // Fail fast if the host blocks SMTP, so the contact form does not hang
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 20000,
   });
 
-  // Verify connection
+  // Verify connection (a failure here is only logged; each send tries again)
   transporter.verify((error) => {
     if (error) {
-      console.error("❌ Zoho SMTP connection failed:", error.message);
-      // Try global datacenter as fallback
-      if (isIndian) {
-        console.log("🔄 Retrying with smtp.zoho.com...");
-        transporter = nodemailer.createTransport({
-          host: "smtp.zoho.com",
-          port: 465,
-          secure: true,
-          auth: {
-            user: zohoEmail,
-            pass: zohoPassword,
-          },
-        });
-        transporter.verify((err2) => {
-          if (err2) {
-            console.error("❌ Zoho SMTP global also failed:", err2.message);
-            transporter = null;
-          } else {
-            console.log("✅ Zoho Mail connected (global datacenter).");
-          }
-        });
-      }
+      console.error(`❌ SMTP connection failed (${host}:${port}):`, error.message);
     } else {
-      console.log("✅ Zoho Mail SMTP connected successfully.");
+      console.log(`✅ SMTP connected (${host}:${port}).`);
     }
   });
 };
@@ -84,8 +62,8 @@ export const sendInquiryEmail = async ({ name, business, email, phone, country, 
     message: esc(message),
   };
 
-  const toEmail = process.env.CONTACT_RECEIVE_EMAIL || process.env.ZOHO_EMAIL;
-  const fromEmail = process.env.ZOHO_EMAIL;
+  const toEmail = process.env.CONTACT_RECEIVE_EMAIL || process.env.SMTP_FROM || process.env.SMTP_USER;
+  const fromEmail = process.env.SMTP_FROM || process.env.SMTP_USER; // SMTP_FROM can be an alias
 
   const mailOptions = {
     from: `"MakeOnward" <${fromEmail}>`,
@@ -171,7 +149,7 @@ export const sendAutoReplyEmail = async ({ name, email, service }) => {
     service: esc(service || "General"),
   };
 
-  const fromEmail = process.env.ZOHO_EMAIL;
+  const fromEmail = process.env.SMTP_FROM || process.env.SMTP_USER; // SMTP_FROM can be an alias
 
   const mailOptions = {
     from: `"MakeOnward" <${fromEmail}>`,

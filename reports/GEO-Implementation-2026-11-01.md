@@ -1,7 +1,7 @@
 # GEO Implementation Report: pixiedigitalcreatives.com
 **Date:** 1 Nov 2026 · Builds on the audit in `GEO-Audit-2026-11-01.md` · Status: built and validated locally, **not deployed yet**
 
-> GEO makes the site easier for AI search tools to find, understand and cite. It does not guarantee that ChatGPT, Google AI Overviews, Gemini, Perplexity or Copilot will recommend Pixie Digital Creatives.
+> GEO makes the site easier for AI search tools to find, understand and cite. It does not guarantee that ChatGPT, Google AI Overviews, Gemini, Perplexity or Copilot will recommend MakeOnward.
 
 ## 1. Audit summary
 3 critical, 5 high, 4 medium, 2 low findings. Full report: `reports/GEO-Audit-2026-11-01.md`. The critical ones: most content invisible to AI crawlers, no page per service, no URLs for projects.
@@ -82,7 +82,7 @@ To repeat after deploying: Google **Rich Results Test** and **validator.schema.o
 ## 6. GEO monitoring strategy
 | What | How | How often |
 |---|---|---|
-| AI answers | Ask ChatGPT (search on), Perplexity, Gemini, Copilot and Google (AI Overview) a fixed list of prompts, e.g. "website development agency for restaurants", "what is GEO", "Pixie Digital Creatives". Record: mentioned? cited URL? description accurate? | Monthly |
+| AI answers | Ask ChatGPT (search on), Perplexity, Gemini, Copilot and Google (AI Overview) a fixed list of prompts, e.g. "website development agency for restaurants", "what is GEO", "MakeOnward". Record: mentioned? cited URL? description accurate? | Monthly |
 | AI referrals | GA4 traffic from chatgpt.com, perplexity.ai, gemini.google.com, copilot.microsoft.com | Monthly |
 | Search | Search Console: indexed pages (target 33), queries, clicks, impressions per new page | Weekly for the first month, then monthly |
 | Crawl health | Rich Results Test on 3 sample pages; check `/robots.txt`, `/sitemap.xml`, `/llms.txt` return text/XML | After every major deploy |

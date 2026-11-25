@@ -57,7 +57,7 @@ router.post("/", requireAuth, upload.single("image"), async (req, res) => {
               cloud_name: cloudName,
               api_key: apiKey,
               api_secret: apiSecret,
-              folder: "pixie_digital_creatives",
+              folder: "makeonward",
               resource_type: "image",
               transformation: [{ quality: "auto", fetch_format: "auto" }],
             },

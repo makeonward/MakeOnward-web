@@ -95,7 +95,7 @@ New questions: Which technology is best for a business website? · How does mobi
 | Price (table) | Website cost in India | Price guide, short answer |
 | Comparison (table) | SEO vs AEO vs GEO; WordPress vs custom | Guides |
 | List / how-to | How to plan a website project; improve online visibility | Guides |
-| Brand (voice) | Who founded Pixie Digital Creatives? | /faq |
+| Brand (voice) | Who founded MakeOnward? | /faq |
 
 Rules kept: no invented clients, results, statistics, timelines, awards or reviews; "we can't guarantee" where true. **Please review** the drafted parts that describe how PDC works: the `steps` for social media, influencer, SEO, AEO and GEO; the `deliverables`; and the `audience`/`benefits` lines (`src/data/servicePages.js`).
 

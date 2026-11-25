@@ -63,7 +63,7 @@ router.post("/", async (req, res) => {
       ip: req.ip,
     });
 
-    // 2. Send email via Zoho SMTP
+    // 2. Send email via SMTP
     const emailResult = await sendInquiryEmail({
       name,
       business,

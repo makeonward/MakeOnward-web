@@ -17,7 +17,7 @@ const ProposalForm = forwardRef(({ service, setService, categories, budgetRanges
   const [error, setError] = useState("");
   const [sent, setSent] = useState(null);
 
-  const email = companyInfo?.email || "info@pixiedigitalcreatives.com";
+  const email = companyInfo?.email || "info@makeonward.com";
   const set = (key) => (e) => {
     setForm((f) => ({ ...f, [key]: e.target.value }));
     if (error) setError("");

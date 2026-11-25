@@ -1,18 +1,18 @@
-# MakeOnward (formerly Pixie Digital Creatives / PDC WEB) — Project context (handoff)
+# MakeOnward — Project context (handoff)
 
 Paste this into a new chat so the assistant understands the project. Last updated 2026-10-08.
 
 ---
 
 ## 1. What this is
-Marketing website + admin CMS for **MakeOnward** (formerly Pixie Digital Creatives), a creative/technology agency
+Marketing website + admin CMS for **MakeOnward**, a creative/technology agency
 (websites, apps, CRM, video/content, social, SEO/GEO/AEO, Meta ads).
 
 - **Location:** `D:\PDC WEB` (Windows). **Not a git repo** — there is no undo history, so back up before big changes.
 - **Frontend:** React 19 + Vite 7, SCSS (Dart Sass, `@use`), framer-motion 12, GSAP (only for Lenis/ScrollTrigger plumbing), Lenis smooth scroll, react-router-dom 7, react-icons (hi2 / fa6 / ri / md).
-- **Backend:** Express 5 (`server/server.js`), MongoDB Atlas (mongoose), JWT admin auth, Cloudinary uploads, Zoho SMTP for contact mails.
+- **Backend:** Express 5 (`server/server.js`), MongoDB Atlas (mongoose), JWT admin auth, Cloudinary uploads, Polpo Mail SMTP for contact mails.
 - **Run:** `npm run dev` (Vite on :5173, proxies `/api` and `/uploads` to :5000), `npm run server` (API on :5000), `npm start` (both), `npm run build`.
-- **.env (root) keys:** PORT, NODE_ENV, JWT_SECRET, MONGODB_URI, ADMIN_EMAIL, ADMIN_PASSWORD, (optional) SUPER_ADMIN_EMAIL / SUPER_ADMIN_PASSWORD, CLOUDINARY_CLOUD_NAME/API_KEY/API_SECRET, ZOHO_EMAIL, ZOHO_APP_PASSWORD, CONTACT_RECEIVE_EMAIL. (Optional: GEMINI_API_KEY, GEMINI_IMAGE_MODEL for the image script.)
+- **.env (root) keys:** PORT, NODE_ENV, JWT_SECRET, MONGODB_URI, ADMIN_EMAIL, ADMIN_PASSWORD, (optional) SUPER_ADMIN_EMAIL / SUPER_ADMIN_PASSWORD, CLOUDINARY_CLOUD_NAME/API_KEY/API_SECRET, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_FROM (sender address, may be an alias), CONTACT_RECEIVE_EMAIL. (Optional: GEMINI_API_KEY, GEMINI_IMAGE_MODEL for the image script.)
 
 ## 2. Hard rules from the owner
 1. **Only real data from the DB.** No mock/demo/fallback content (no fake projects, stats, testimonials or team). If the DB has nothing, the section hides.
@@ -27,7 +27,7 @@ Marketing website + admin CMS for **MakeOnward** (formerly Pixie Digital Creativ
 Based on a reference design: "Brands That Inspire Growth", silk wave ribbons, handwritten notes, Poppins font.
 **REBRAND to MakeOnward, 2026-11-24 (supersedes the plum rebrand below):** Onyx #0B0B0C, Onward Orange #FF6A00, Stone #D9D4CD, Ivory #F7F5EF.
 Masters: `makeOnward-*.png/.ico` in the repo root. Web files in `public/brand/`: `lockup-dark.png`, `lockup-light.png`, `mark-400.png`, `mark-1200.webp`, favicons, `og-image.png`.
-Domain is now makeonward.com (bare) and Instagram @makeonward. Not changed (no new values given): email addresses, LinkedIn, X, Facebook, `pdc_*` storage keys, Render/Cloudinary names. `rebrand()` / `withCompanyDefaults()` in `src/data/initialData.js` swap the old name in text still saved in the database.
+Domain is now makeonward.com (bare) and Instagram @makeonward. Public email is info@makeonward.com. Not changed (no new values given): team members' own emails, LinkedIn, X, Facebook, `pdc_*` storage keys, Render/Cloudinary names. `rebrand()` / `withCompanyDefaults()` in `src/data/initialData.js` swap the old name in text still saved in the database.
 
 **Rebrand 2026-11-01 (replaces the blue/silver one of 2026-10-30):** ribbon `PDC` logo in cream/champagne with lilac shading
 and a rose glow on deep plum (`public/PDC1`, a PNG without extension, 1900x828, plum background baked in). The whole palette
@@ -88,7 +88,7 @@ Pinned sections are desktop-only (`useIsDesktop` = ≥1024px) and disabled for `
 
 **Contact flow** (Contact page form + the "Let's Talk" modal, both use `src/utils/sendInquiry.js` -> `POST /api/contact`):
 - The forms show "received" only when the server says `success`; otherwise an inline error appears (with the studio email), the typed text is kept and the button is disabled while sending. Timeout 60 s (a sleeping free-tier server can take that long to wake). No budget is sent (the forms have no budget field).
-- `server/routes/contact.js` validates (strings only, email format, length limits), saves the inquiry to MongoDB **first**, then sends the email through Zoho SMTP (`server/config/mailer.js`, visitor text is HTML-escaped) to `CONTACT_RECEIVE_EMAIL`. `Inquiry.emailSent` records whether the mail went out. There is no inbox for inquiries in the Admin yet, so a lead whose email failed is only in the database.
+- `server/routes/contact.js` validates (strings only, email format, length limits), saves the inquiry to MongoDB **first**, then sends the email through Polpo Mail SMTP (`server/config/mailer.js`, visitor text is HTML-escaped) to `CONTACT_RECEIVE_EMAIL`. `Inquiry.emailSent` records whether the mail went out. There is no inbox for inquiries in the Admin yet, so a lead whose email failed is only in the database.
 - `server.js` sets `trust proxy` (1 hop, override with `TRUST_PROXY_HOPS`): behind Render the socket address is the proxy's, which used to put every visitor in one rate-limit bucket (5 per hour for the whole site). Failed/rejected submissions no longer use up the quota.
 - Production: Netlify/Vercel rewrite `/api/*` to the Render API (`pdc-api-6e15.onrender.com`), so the server-side changes only apply after the API is redeployed.
 - Test (2026-10-08): API started via `.claude/launch.json` entry `pdc-api`; 12 invalid payloads -> 400; one submission from each form -> saved + email sent. Two test inquiries ("TEST - Claude (ignore)") remain in the database.
@@ -133,14 +133,14 @@ Known Figma nit: in the dark reference footer, LinkedIn/X/Facebook icons need th
 ESLint reports false "defined but never used" for components used only as JSX (`motion`, `Icon`) and react-refresh warnings on context files — pre-existing config quirks, not real errors. `npm run build` passes.
 
 ## 11. SEO (added 2026-11-01)
-Target keywords: website development, website, premium website, application development, digital agency, social media handling. Live site: `https://www.pixiedigitalcreatives.com` (Vercel; the bare domain 308-redirects to www).
+Target keywords: website development, website, premium website, application development, digital agency, social media handling. Live site: `https://makeonward.com` (Vercel).
 - **One source:** `src/data/seo.js` → `PAGES` (per page: title, description, `kicker` = keyword line inside the H1, `h1` = the slogan, `lead` = intro text, breadcrumb label, `listServices`, `noindex`), `SITE_URL`, `seoPage()`. The heroes (Home, Services, Pricing, Portfolio, About, Process, Contact) import `kicker` and `lead` from it, so the page and its SEO copy never drift. Keep it truthful (owner rule 3).
 - **H1s:** each hero H1 starts with a small keyword line (`.h1-kicker` in `index.scss`), then the unchanged slogan; KineticLine heroes prefix their `aria-label` with it. Contact's separate "Get in touch" label was removed (the keyword line replaces it).
 - **While browsing:** `components/RouteSeo.jsx` (mounted in `App.jsx`) updates title, description, canonical, robots, og/twitter tags in place. Unknown URLs and `/admin` get `noindex, follow` and no canonical.
 - **At build:** `npm run build` = `vite build && node scripts/prerender-seo.mjs`. It writes `dist/index.html` + one flat file per page (`dist/services.html` …) with the page's own head tags, JSON-LD (`Organization` + `WebSite` + page node + `BreadcrumbList`; Home and Services also list the services as an `OfferCatalog`; no FAQ/HowTo), and a plain copy of the H1, intro and service list inside `#root` for crawlers without JavaScript (React replaces it on start; `.has-js .seo-prerender` keeps it out of sight meanwhile). It also writes `dist/sitemap.xml` (every non-noindex page) and warns about titles over 65 or descriptions outside 70–160 characters.
 - **Hosting:** `vercel.json` has `buildCommand: npm run build` and `cleanUrls: true` (serves `services.html` at `/services`); the SPA fallback rewrite now points at `/`. `public/robots.txt` blocks `/admin` and `/api/` and links the sitemap. `index.html` holds the home-page defaults (used in dev).
 - **Adding a page:** add its route in `App.jsx` and an entry in `PAGES`; the build creates its HTML file and sitemap line.
-- **After deploying:** check `view-source:https://www.pixiedigitalcreatives.com/services` shows the Services title; submit `https://www.pixiedigitalcreatives.com/sitemap.xml` in Google Search Console and Bing Webmaster Tools; test a page in Google's Rich Results Test.
+- **After deploying:** check `view-source:https://makeonward.com/services` shows the Services title; submit `https://makeonward.com/sitemap.xml` in Google Search Console and Bing Webmaster Tools; test a page in Google's Rich Results Test.
 - Not done (ideas): the main JS bundle is ~930 kB (code-splitting would help Core Web Vitals); project pages don't have their own URLs, so the portfolio can only rank as one page.
 
 ## 12. GEO (added 2026-11-01)

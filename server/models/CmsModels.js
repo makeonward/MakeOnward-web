@@ -38,7 +38,7 @@ const statSchema = new mongoose.Schema({
 const companySchema = new mongoose.Schema({
   name: { type: String, default: "MakeOnward" },
   shortName: { type: String, default: "MakeOnward" },
-  email: { type: String, default: "info@pixiedigitalcreatives.com" },
+  email: { type: String, default: "info@makeonward.com" },
   phone: { type: String, default: "+91 96086 84177" },
   address: { type: String, default: "Digital Studio Worldwide & Remote" },
   website: { type: String, default: "makeonward.com" },

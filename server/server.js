@@ -39,7 +39,7 @@ if (!process.env.JWT_SECRET) {
 // 1. Connect MongoDB
 await connectDb();
 
-// 2. Init Zoho Mailer
+// 2. Init SMTP Mailer
 initMailer();
 
 // 3. Security Headers (Helmet)
@@ -117,7 +117,7 @@ app.get("/api/health", (req, res) => {
     status: "ok",
     studio: "MakeOnward",
     database: "MongoDB Atlas",
-    mailer: "Zoho SMTP",
+    mailer: "SMTP",
     timestamp: new Date().toISOString(),
   });
 });
@@ -132,7 +132,7 @@ app.listen(PORT, () => {
   console.log(`🚀 MakeOnward Backend running on port ${PORT}`);
   console.log(`🔒 Security: Helmet + Rate Limiter + bcrypt + JWT`);
   console.log(`🍃 Database: MongoDB Atlas`);
-  console.log(`📧 Mailer: Zoho SMTP`);
+  console.log(`📧 Mailer: SMTP`);
   console.log(`☁️  Storage: Cloudinary CDN`);
   console.log(`======================================================\n`);
 });

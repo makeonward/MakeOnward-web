@@ -534,7 +534,7 @@ const Admin = () => {
                 type="email"
                 required
                 autoFocus
-                placeholder="admin@pixiedigitalcreatives.com"
+                placeholder="admin@makeonward.com"
                 value={loginEmail}
                 onChange={(e) => {
                   setLoginEmail(e.target.value);
@@ -1523,7 +1523,7 @@ const Admin = () => {
                         <label>Direct Email</label>
                         <input
                           type="email"
-                          placeholder="name@pixiedigitalcreatives.com"
+                          placeholder="name@makeonward.com"
                           value={teamForm.email}
                           onChange={(e) => setTeamForm({ ...teamForm, email: e.target.value })}
                         />

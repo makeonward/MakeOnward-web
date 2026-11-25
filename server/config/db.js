@@ -30,7 +30,7 @@ export const connectDb = async () => {
 const seedAdmin = async () => {
   const adminCount = await Admin.countDocuments();
   if (adminCount === 0) {
-    const adminEmail = process.env.ADMIN_EMAIL || "admin@pixiedigitalcreatives.com";
+    const adminEmail = process.env.ADMIN_EMAIL || "admin@makeonward.com";
     const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
 
     const admin = new Admin({
