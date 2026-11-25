@@ -1,0 +1,256 @@
+// What is printed on the pages of the two books (components/flipbook/BookFace.jsx). Sizes in cqw: a page is
+// 100cqw wide and about 141cqw tall. Its own colours, whatever the site's theme.
+
+.bp {
+  --pg: #ffffff;
+  --tx: #0b0b0c;
+  --tx2: #6f6a63;
+  --ln: rgba(11, 11, 12, 0.14);
+  --hi: #f26200;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 6.4cqw 7cqw 5.4cqw;
+  font-family: 'Geist', 'Poppins', system-ui, sans-serif;
+  letter-spacing: -0.012em;
+  background: var(--pg);
+  color: var(--tx);
+
+  &--onyx { --pg: #0b0b0c; --tx: #ffffff; --tx2: #a8a29a; --ln: rgba(255, 255, 255, 0.18); --hi: #ff6a00; }
+
+  h2, h3, p, ul, ol, blockquote { margin: 0; padding: 0; }
+  ul, ol { list-style: none; }
+  img { display: block; }
+  a { color: inherit; }
+
+  &__head {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 3.2cqw;
+    border-bottom: 0.3cqw solid var(--tx);
+    font-size: 2.5cqw;
+    font-weight: 500;
+    .bp-strokes { width: 7.4cqw; fill: var(--hi); }
+  }
+  &__foot {
+    flex: none;
+    margin-top: auto;
+    padding-top: 3.4cqw;
+    display: flex;
+    justify-content: space-between;
+    font-size: 2.2cqw;
+    color: var(--tx2);
+    b { font-family: 'Geist Mono', monospace; font-weight: 500; color: var(--tx); }
+  }
+  &__title {
+    margin-top: 5.6cqw !important;
+    font-size: 8.8cqw;
+    font-weight: 600;
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+    text-wrap: balance;
+    &--small { font-size: 7.2cqw; }
+  }
+  &__lead { margin-top: 3cqw !important; max-width: 74cqw; font-size: 2.9cqw; line-height: 1.42; color: var(--tx2); }
+  &__note { margin-top: 3.4cqw !important; font-size: 2.05cqw; line-height: 1.45; color: var(--tx2); }
+}
+.bp-strokes { display: block; fill: currentColor; }
+
+// ---- Covers ----
+.bp-cover {
+  padding: 8cqw;
+  justify-content: space-between;
+
+  &__strokes { position: absolute; width: 190cqw; left: -62cqw; top: 22cqw; fill: #ff6a00; }
+  &__top {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Geist Mono', monospace;
+    font-size: 2.9cqw;
+    img { width: 42cqw; }
+  }
+  &__foot {
+    position: relative;
+    // the words stand on the page's own colour
+    margin: 0 -8cqw -8cqw;
+    padding: 6cqw 8cqw 8cqw;
+    background: var(--pg);
+    h2 { font-size: 17.5cqw; font-weight: 600; line-height: 0.86; letter-spacing: -0.07em; span { display: block; } }
+    p { margin-top: 4cqw; font-size: 3.1cqw; color: var(--tx2); }
+  }
+
+  &--back { justify-content: flex-end; }
+  &--back &__strokes { width: 150cqw; left: -8cqw; top: -16cqw; }
+  &__line { position: relative; max-width: 78cqw; font-size: 9.4cqw; font-weight: 600; line-height: 0.98; letter-spacing: -0.055em; text-wrap: balance; }
+  &__end {
+    position: relative;
+    margin-top: 9cqw;
+    padding-top: 4.4cqw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 0.3cqw solid var(--tx);
+    font-size: 3cqw;
+    font-weight: 500;
+    img { width: 36cqw; }
+    a { text-decoration: none; }
+  }
+}
+
+// ---- One statement ----
+.bp-statement {
+  &__strokes { position: absolute; width: 78cqw; right: -9cqw; top: 19cqw; fill: #ff6a00; }
+  &__body {
+    position: relative;
+    margin-top: auto;
+    h2 { font-size: 11.6cqw; font-weight: 600; line-height: 0.95; letter-spacing: -0.06em; text-wrap: balance; }
+    p { margin-top: 5cqw; max-width: 72cqw; font-size: 3.15cqw; line-height: 1.42; }
+    & + .bp__foot { margin-top: 6cqw; }
+  }
+}
+
+// ---- Numbered steps ----
+.bp-steps {
+  margin-top: 7cqw !important;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  li { flex: 1; display: grid; grid-template-columns: 19cqw 1fr; align-items: center; border-top: 0.2cqw solid var(--ln); }
+  b { font-size: 10.4cqw; font-weight: 600; line-height: 0.85; letter-spacing: -0.06em; color: var(--hi); }
+  h3 { font-size: 6cqw; font-weight: 600; line-height: 1; letter-spacing: -0.05em; }
+  p { margin-top: 1.6cqw; font-size: 3.1cqw; line-height: 1.3; color: var(--tx2); }
+
+  &--tight {
+    margin-top: 5.4cqw !important;
+    li { grid-template-columns: 15cqw 1fr; }
+    b { font-size: 7.4cqw; }
+    h3 { font-size: 5.3cqw; }
+    p { margin-top: 1.1cqw; font-size: 2.9cqw; }
+  }
+  &--seven h3 { font-size: 5.2cqw; }
+  &--seven b { font-size: 6.4cqw; }
+}
+
+// ---- Large list ----
+.bp-big {
+  flex: 1;
+  margin-top: 2cqw !important;
+  display: flex;
+  flex-direction: column;
+  li { flex: 1; display: flex; align-items: center; font-size: 8.6cqw; font-weight: 600; line-height: 0.96; letter-spacing: -0.06em; & + li { border-top: 0.2cqw solid var(--ln); } }
+}
+
+.bp-quote { margin-top: 8cqw !important; font-size: 15cqw; font-weight: 600; line-height: 0.9; letter-spacing: -0.07em; text-wrap: balance; }
+.bp-rows {
+  margin-top: auto !important;
+  li { display: grid; grid-template-columns: 38cqw 1fr; gap: 3cqw; align-items: center; padding-block: 4cqw; border-top: 0.2cqw solid var(--ln); }
+  h3 { font-size: 4.1cqw; font-weight: 600; line-height: 1.05; letter-spacing: -0.04em; }
+  p { font-size: 3cqw; line-height: 1.3; color: var(--tx2); }
+}
+
+// ---- Capabilities ----
+.bp-caps {
+  flex: 1;
+  min-height: 0;
+  margin-top: 5.4cqw !important;
+  display: flex;
+  flex-direction: column;
+  gap: 3.4cqw;
+  li { flex: 1; min-height: 0; display: grid; grid-template: minmax(0, 1fr) / 43cqw 1fr; gap: 4.6cqw; align-items: center; }
+  img { width: 100%; height: 100%; max-height: 35cqw; object-fit: cover; border-radius: 1.6cqw; }
+  h3 { font-size: 5cqw; font-weight: 600; line-height: 1; letter-spacing: -0.05em; text-wrap: balance; }
+  p { margin-top: 2cqw; font-size: 3cqw; line-height: 1.32; color: var(--tx2); }
+}
+
+// ---- Prices ----
+.bp-prices {
+  flex: 1;
+  margin-top: 4.4cqw;
+  display: flex;
+  flex-direction: column;
+  section { flex: 1; display: flex; flex-direction: column; }
+  section:first-child { flex: 1.3; }
+  section + section { margin-top: 2.6cqw; }
+  h3 { padding-bottom: 1.5cqw; font-size: 3.3cqw; font-weight: 600; letter-spacing: -0.03em; color: var(--hi); border-bottom: 0.3cqw solid var(--tx); }
+  ul { flex: 1; display: flex; flex-direction: column; }
+}
+.bp-prices li, .bp-list li {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3cqw;
+  border-bottom: 0.2cqw solid var(--ln);
+  b { font-size: 3.2cqw; font-weight: 500; letter-spacing: -0.025em; }
+  em { flex: none; font-style: normal; font-size: 3.4cqw; font-weight: 600; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+}
+.bp-list {
+  flex: 1;
+  margin-top: 6cqw !important;
+  display: flex;
+  flex-direction: column;
+  border-top: 0.3cqw solid var(--tx);
+  b { font-size: 3.8cqw !important; font-weight: 600 !important; }
+  em { font-size: 3.8cqw !important; color: var(--hi); }
+}
+
+// ---- Team ----
+.bp-team {
+  flex: 1;
+  min-height: 0;
+  margin-top: 6cqw !important;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.4cqw;
+  li { display: flex; flex-direction: column; min-height: 0; }
+  img { flex: 1; width: 100%; min-height: 0; height: 0; object-fit: cover; object-position: 50% 18%; border-radius: 1.8cqw; }
+  h3 { margin-top: 1.8cqw; font-size: 3.7cqw; font-weight: 600; line-height: 1.05; letter-spacing: -0.04em; }
+  p { margin-top: 0.7cqw; font-size: 2.5cqw; line-height: 1.3; color: var(--tx2); }
+  &--3 li:first-child { grid-row: 1 / 3; }
+}
+
+// ---- Work ----
+.bp-work {
+  flex: 1;
+  min-height: 0;
+  margin-top: 5.4cqw !important;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 1fr;
+  gap: 2.8cqw;
+  li { display: flex; flex-direction: column; min-height: 0; }
+  li:first-child { grid-column: 1 / -1; grid-row: span 2; }
+  img { flex: 1; width: 100%; height: 0; min-height: 0; object-fit: cover; object-position: top; border-radius: 1.4cqw; }
+  h3 { flex: none; padding-top: 1.2cqw; font-size: 2.8cqw; font-weight: 500; line-height: 1.1; letter-spacing: -0.03em; }
+}
+
+// ---- Services of the brochure ----
+.bp-svc__shot { flex: none; width: 100%; height: 48cqw; margin-top: 4.4cqw; object-fit: cover; border-radius: 2cqw; clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%); & + .bp__title { margin-top: 3.4cqw !important; font-size: 10.4cqw; } }
+.bp-svc {
+  flex: 1;
+  margin-top: 4cqw !important;
+  display: flex;
+  flex-direction: column;
+  li { flex: 1; display: grid; grid-template-columns: 8.4cqw 1fr; align-items: center; border-top: 0.2cqw solid var(--ln); }
+  svg { font-size: 4.6cqw; color: var(--hi); }
+  h3 { font-size: 4.1cqw; font-weight: 500; line-height: 1.1; letter-spacing: -0.035em; }
+}
+
+// ---- Contact ----
+.bp-contact {
+  position: relative;
+  margin-top: auto !important;
+  border-top: 0.3cqw solid var(--tx);
+  li { padding-block: 3.4cqw; border-bottom: 0.2cqw solid var(--ln); }
+  span { display: block; font-size: 2.6cqw; color: var(--tx2); }
+  a { display: block; margin-top: 0.8cqw; font-size: 6.4cqw; font-weight: 600; line-height: 1.05; letter-spacing: -0.055em; text-decoration: none; overflow-wrap: anywhere; }
+  &__strokes { position: absolute; width: 50cqw; right: -5cqw; top: 46cqw; fill: #ff6a00; }
+}
+.bp--contact .bp__foot { margin-top: 4cqw; }
+.bp--contact .bp__title { position: relative; font-size: 11.4cqw; }

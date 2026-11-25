@@ -47,7 +47,7 @@ const IndustryPage = () => {
         title={page.h1}
         lead={page.lead}
       >
-        <button type="button" className="btn-primary" onClick={() => setIsContactModalOpen(true)}>
+        <button type="button" className="st-slant" onClick={() => setIsContactModalOpen(true)}>
           <span>Start your project</span>
         </button>
       </ContentHero>

@@ -1,4 +1,5 @@
 import React from "react";
+import { serviceMockup } from "../data/mockups";
 import { Link, useParams } from "react-router-dom";
 import { useCms } from "../context/CmsContext";
 import { servicePage } from "../data/servicePages";
@@ -36,11 +37,12 @@ const ServiceDetailPage = () => {
         kicker={page.kicker}
         title={page.h1}
         lead={page.lead}
+        shot={serviceMockup(page.visuals[0] || "shoot").src}
       >
-        <button type="button" className="btn-primary" onClick={() => setIsContactModalOpen(true)}>
+        <button type="button" className="st-slant" onClick={() => setIsContactModalOpen(true)}>
           <span>Discuss your project</span>
         </button>
-        <Link to={`/pricing#price-${page.pricingSlug}`} className="btn-secondary">
+        <Link to={`/pricing#price-${page.pricingSlug}`} className="st-slant st-slant--line">
           <span>See pricing</span>
         </Link>
       </ContentHero>

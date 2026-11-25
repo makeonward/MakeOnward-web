@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, useMotionValue, useMotionValueEvent, useScroll, useSpring, useTransform } from "framer-motion";
 import { HiArrowRight } from "react-icons/hi2";
 import { useCms } from "../../context/CmsContext";
-import { useIsDesktop, usePrefersReducedMotion } from "../../animations/hooks";
+import { useScenes } from "../../animations/hooks";
 import { EASE, VIEWPORT } from "../../animations/variants";
 import Reveal from "../../components/motion/Reveal";
 import MaskText from "../../components/motion/MaskText";
@@ -90,7 +90,7 @@ const DealCard = ({ s, i, n, p, delta }) => {
   );
 };
 
-// Desktop: the section pins while the hand of six cards is dealt into the row.
+// The section pins while the hand of six cards is dealt into the row.
 const Dealt = ({ cards }) => {
   const ref = useRef(null);
   const gridRef = useRef(null);
@@ -139,7 +139,7 @@ const Dealt = ({ cards }) => {
   );
 };
 
-// Phones / reduced motion: cards flip up in sequence as the grid scrolls into view.
+// Very short screens / reduced motion: cards flip up in sequence as the grid scrolls into view.
 const flip = {
   hidden: { opacity: 0, y: 60, rotateX: 28 },
   show: (i) => ({ opacity: 1, y: 0, rotateX: 0, transition: { duration: 1, ease: EASE, delay: i * 0.08 } }),
@@ -156,13 +156,12 @@ const StaticCell = ({ s, i }) => {
 
 const ServicesGrid = () => {
   const cards = useCards();
-  const desktop = useIsDesktop();
-  const reduce = usePrefersReducedMotion();
+  const scenes = useScenes();
   if (!cards.length) return null;
 
   return (
     <section className="st-services" id="services" aria-label="Services">
-      {desktop && !reduce ? (
+      {scenes ? (
         <Dealt cards={cards} />
       ) : (
         <div className="st-section">

@@ -1,69 +1,36 @@
 @use './abstracts' as *;
 
 .preloader {
+  --w: clamp(150px, 26vw, 340px);
   position: fixed;
   inset: 0;
   z-index: $z-preloader;
-  background: $black;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
   color: $white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  will-change: transform;
+  &.is-leaving { pointer-events: none; }
 
-  &__inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    padding: $gutter;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  &__meta {
-    @include meta;
-    color: $white-48;
-  }
-
-  &__word {
-    @include display(clamp(3rem, 14.5vw, 17rem));
-    display: flex;
-    gap: 0.02em;
-    line-height: 1;
-  }
-
-  &__mask {
-    display: block;
-    overflow: hidden;
-    padding-bottom: 0.06em;
-
-    > span { display: block; will-change: transform; }
-  }
+  // The svg's own cover is the background, so the mark can be cut out of it
+  &__mark { width: var(--w); height: auto; overflow: visible; }
+  &__cover, &__base { fill: $black; }
+  // hides the hairline seam between the cover and the base
+  &__base { stroke: $black; stroke-width: 4; }
+  &__line { fill: none; stroke: $white-24; stroke-width: 5; stroke-linejoin: round; }
+  &__fill { fill: #ff6b00; } // the logo's own orange, in both themes
 
   &__foot {
+    position: absolute;
+    left: 50%;
+    top: calc(50% + var(--w) * 0.29 + 30px);
+    width: var(--w);
+    translate: -50% 0;
     display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  &__count {
+    justify-content: space-between;
     @include meta;
-    color: $white;
-    min-width: 3ch;
+    color: $white-48;
+    transition: opacity 0.2s;
   }
-
-  &__rule {
-    flex: 1;
-    height: 1px;
-    background: $white-12;
-    overflow: hidden;
-
-    > span {
-      display: block;
-      height: 100%;
-      background: $accent;
-      transform-origin: left center;
-    }
-  }
+  &.is-leaving &__foot { opacity: 0; }
+  &__count { color: $white; font-variant-numeric: tabular-nums; }
 }

@@ -6,7 +6,8 @@ import Footer from "../components/Footer";
 import ContactModal from "../components/ContactModal";
 import MaskText from "../components/motion/MaskText";
 import Reveal from "../components/motion/Reveal";
-import HeroAurora from "../components/motion/HeroAurora";
+import MarkStroke from "../components/hero/MarkStroke";
+import "../styles/pagehero.scss";
 import "../styles/notfound.scss";
 
 const LINKS = [
@@ -19,8 +20,8 @@ const LINKS = [
 const NotFoundPage = () => (
   <div className="nf-page">
     <Navbar />
-    <main id="main" className="nf has-aurora">
-      <HeroAurora />
+    <main id="main" className="nf">
+      <MarkStroke className="nf__mark" />
       <div className="container-custom nf__inner">
         <Reveal as="span" className="section-eyebrow" delay={0.35}>Error 404</Reveal>
         <MaskText as="h1" className="nf__title" delay={5} lines={["This page", <em key="e">wandered off.</em>]} />

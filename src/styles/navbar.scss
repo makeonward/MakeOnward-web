@@ -1,65 +1,82 @@
 @use './abstracts' as *;
 
+// The site's bar, cut at the angle of the mark (like .st-slant in pagehero.scss). At the top of a page it lies
+// open across the screen; once scrolled it closes up into a floating, slanted dock.
+
 // The row of links (5 entries, two with dropdowns) shows from this width; below it the menu button takes over.
-$bp-nav: $bp-lg;
+$bp-nav: 1180px;
+$lean: -14deg;
+$edge: color-mix(in srgb, var(--fg) 18%, transparent);
+
+// A slanted face behind upright words
+@mixin slab($radius: 10px, $lean-by: $lean) {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: $radius;
+  transform: skewX($lean-by);
+}
 
 .navbar-wrapper {
+  --nav-sans: 'Geist', 'Poppins', system-ui, sans-serif;
+  --nav-mono: 'Geist Mono', ui-monospace, monospace;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: $z-nav;
-  background: transparent;
-  transition: background $dur-base $ease-out, border-color $dur-base $ease-out;
-  border-bottom: 1px solid transparent;
+  font-family: var(--nav-sans);
+  pointer-events: none; // only the bar itself takes the pointer
   will-change: transform;
 
   // keep the bar (and its close button) above the fullscreen menu
-  &.menu-open {
-    z-index: $z-menu + 1;
-    background: transparent;
-    border-bottom-color: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-
-  &.scrolled {
-    background: var(--glass);
-    backdrop-filter: blur(18px) saturate(1.4);
-    -webkit-backdrop-filter: blur(18px) saturate(1.4);
-    border-bottom-color: $white-08;
-
-    .navbar-container { height: 72px; }
-    .logo-stack { height: 26px; }
-    .logo-img--primary { opacity: 0; }
-    .logo-img--secondary { opacity: 1; }
-  }
+  &.menu-open { z-index: $z-menu + 1; }
 }
 
 .navbar-container {
   @include container;
+  position: relative;
+  isolation: isolate;
+  max-width: 1520px;
   height: 92px;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 1.25rem;
-  transition: height $dur-base $ease-out;
+  gap: 1rem;
+  pointer-events: auto;
+  transition: max-width 0.6s $ease-out, height 0.6s $ease-out, translate 0.6s $ease-out, padding 0.6s $ease-out;
 
-  @include down($bp-nav) { grid-template-columns: 1fr auto; }
-  @include down($bp-lg) { height: 72px; }
+  // the dock
+  &::before {
+    @include slab(16px, -10deg);
+    inset: 0 18px;
+    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    border: 1px solid $edge;
+    box-shadow: 0 18px 44px -22px alpha($shadow-tint, 0.75);
+    backdrop-filter: blur(18px) saturate(1.4);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    opacity: 0;
+    transition: opacity 0.4s $ease-out;
+  }
+
+  @include down($bp-nav) { grid-template-columns: minmax(0, 1fr) auto; height: 72px; }
+}
+.navbar-wrapper.scrolled:not(.menu-open) .navbar-container {
+  max-width: min(1240px, calc(100% - 24px));
+  height: 64px;
+  translate: 0 12px;
+  padding-inline: 46px;
+  &::before { opacity: 1; }
+  @include down($bp-nav) { height: 60px; padding-inline: 38px; &::before { inset: 0 8px; } }
 }
 
-.navbar-logo {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  min-width: 0;
-}
-
+// ---- Logo ----
+.navbar-logo { display: flex; align-items: center; min-width: 0; }
 .logo-link { display: inline-flex; }
 
 // Two logos share one slot: the full primary logo at the top of the page, and the compact
-// orange mark once the bar shrinks on scroll. Shown as supplied: no filter, tint or recolour.
+// orange mark in the dock. Shown as supplied: no filter, tint or recolour.
 .logo-stack {
   position: relative;
   display: inline-flex;
@@ -84,75 +101,64 @@ $bp-nav: $bp-lg;
     opacity: 0;
   }
 }
-
-.section-indicator {
-  @include meta;
-  display: none;
-  align-items: center;
-  gap: 10px;
-  color: $white-48;
-  white-space: nowrap;
-
-  @include up(1280px) { display: inline-flex; }
-
-  i {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: $accent;
-  }
+.navbar-wrapper.scrolled:not(.menu-open) {
+  .logo-stack { height: 25px; }
+  .logo-img--primary { opacity: 0; }
+  .logo-img--secondary { opacity: 1; }
 }
 
+// ---- Links ----
 .navbar-center {
+  position: relative;
+  isolation: isolate;
   justify-self: center;
+  padding: 5px 12px;
+  &::before {
+    @include slab(13px);
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
+    border: 1px solid $edge;
+    transition: opacity 0.4s $ease-out;
+  }
   @include down($bp-nav) { display: none; }
 }
+.navbar-wrapper.scrolled .navbar-center::before { opacity: 0; } // the dock is face enough
 
-.nav-list {
-  display: flex;
-  list-style: none;
-  gap: 2px;
-  padding: 4px;
-  border-radius: 999px;
-}
+.nav-list { display: flex; list-style: none; }
 
 .nav-link {
   position: relative;
-  display: inline-block;
-  padding: 9px 17px;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  height: 42px;
+  padding: 0 20px;
   font-family: inherit;
-  line-height: inherit;
+  font-size: 0.94rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
   white-space: nowrap;
-  color: $chrome-2;
-  transition: color $dur-fast linear;
+  color: $chrome;
+  transition: color 0.25s linear;
 
-  @include down(1200px) { padding: 9px 13px; }
+  @include down(1280px) { padding: 0 14px; font-size: 0.9rem; }
 
   &:hover, &.active, &[aria-expanded='true'] { color: $white; }
-
-  &__text { position: relative; z-index: 1; }
+  &.has-pill { color: var(--btn-fg); }
+  &:focus-visible { outline: 2px solid $accent; outline-offset: 2px; border-radius: 8px; }
 
   &__chev {
-    position: relative;
-    z-index: 1;
-    margin-left: 5px;
-    font-size: 0.8em;
-    vertical-align: -1px;
+    margin-left: 6px;
+    font-size: 0.76em;
     transition: transform $dur-base $ease-out;
-
     &.open { transform: rotate(180deg); }
   }
 
+  // framer moves the pill itself, so the slant is on its face
   .nav-pill {
     position: absolute;
     inset: 0;
-    border-radius: 999px;
-    background: $white-08;
-    box-shadow: inset 0 0 0 1px $white-08;
+    z-index: -1;
+    &::before { @include slab(9px); background: var(--btn-bg); }
   }
 }
 
@@ -165,69 +171,82 @@ $bp-nav: $bp-lg;
   left: 50%;
   // framer animates `transform` (y), so the centring uses `translate`
   translate: -50% 0;
-  min-width: 250px;
+  width: 380px;
   // transparent bridge, so the pointer can travel from the link into the panel
-  padding-top: 12px;
+  padding-top: 18px;
   z-index: 2;
 
   &__list {
+    position: relative;
+    isolation: isolate;
     list-style: none;
-    display: grid;
-    gap: 2px;
-    padding: 8px;
-    border-radius: 18px;
-    background: $ink;
-    border: 1px solid $white-12;
-    box-shadow: 0 24px 60px -24px alpha($shadow-tint, 0.8);
+    padding: 12px 30px;
+    &::before {
+      @include slab(16px, -5deg);
+      background: var(--surface);
+      border: 1px solid $edge;
+      box-shadow: 0 30px 70px -28px alpha($shadow-tint, 0.9);
+    }
+    li + li { border-top: 1px solid $white-08; }
   }
 
   &__item {
+    position: relative;
+    isolation: isolate;
     display: grid;
-    gap: 3px;
-    padding: 11px 14px;
-    border-radius: 12px;
-    transition: background $dur-fast linear;
-
-    &:hover, &:focus-visible { background: $white-08; }
-    &.active .nav-menu__name { color: $accent; }
-  }
-
-  &__name {
-    font-size: 0.92rem;
-    font-weight: 600;
+    grid-template-columns: 2.2rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 2px 6px;
+    padding: 13px 14px;
     color: $white;
+    &::before { @include slab(9px, -5deg); background: var(--btn-bg); opacity: 0; transition: opacity 0.2s linear; }
+    > svg { grid-row: 1 / 3; grid-column: 3; opacity: 0; translate: -8px 0; transition: opacity 0.25s, translate 0.25s $ease-out; }
+
+    &:hover, &:focus-visible {
+      color: var(--btn-fg);
+      outline: none;
+      &::before { opacity: 1; }
+      > svg { opacity: 1; translate: 0 0; }
+      .nav-menu__no, .nav-menu__note { color: inherit; }
+    }
+    &.active:not(:hover, :focus-visible) .nav-menu__name { color: $accent; }
   }
 
-  &__note {
-    font-size: 0.78rem;
-    color: $chrome-3;
-  }
+  &__no { grid-row: 1 / 3; font-family: var(--nav-mono); font-size: 0.72rem; color: $accent; }
+  &__name { font-size: 1.02rem; font-weight: 600; letter-spacing: -0.02em; }
+  &__note { grid-column: 2; font-size: 0.8rem; line-height: 1.3; color: $chrome-3; }
 }
 
+// ---- Right side ----
 .navbar-right {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 1rem;
+  gap: 18px;
+  @include down(1280px) { gap: 12px; }
 }
 
-.currency-selector-wrap { position: relative; }
+.currency-selector-wrap { position: relative; @include down($bp-md) { display: none; } }
 
 .currency-toggle-btn {
-  @include meta;
+  position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  color: $white-72;
-  border: 1px solid $white-12;
-  border-radius: 999px;
-  font-size: 0.68rem;
-  transition: border-color $dur-fast linear, color $dur-fast linear;
+  gap: 7px;
+  height: 40px;
+  padding: 0 14px;
+  font-family: var(--nav-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  color: $chrome;
+  transition: color $dur-fast linear;
+  &::before { @include slab(9px); border: 1px solid $edge; transition: border-color $dur-fast linear; }
 
-  &:hover { border-color: $white-48; color: $white; }
+  &:hover { color: $white; &::before { border-color: $accent; } }
+  &:focus-visible { outline: 2px solid $accent; outline-offset: 3px; border-radius: 8px; }
 
-  .country-code-pill { color: $white; }
+  .country-code-pill { color: $accent; }
   .chevron-icon { transition: transform $dur-base $ease-out; &.open { transform: rotate(180deg); } }
 
   @include down($bp-md) { display: none; }
@@ -235,22 +254,23 @@ $bp-nav: $bp-lg;
 
 .currency-dropdown-menu {
   position: absolute;
-  top: calc(100% + 12px);
+  top: calc(100% + 18px);
   right: 0;
-  width: 280px;
+  width: 290px;
   max-height: 60vh;
   overflow-y: auto;
-  background: $ink;
-  border: 1px solid $white-12;
-  border-radius: 6px;
   padding: 8px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid $edge;
+  box-shadow: 0 30px 70px -28px alpha($shadow-tint, 0.9);
   z-index: $z-nav + 1;
 
   .dropdown-header-lbl {
-    @include meta;
-    font-size: 0.62rem;
-    color: $white-48;
     padding: 10px 12px 12px;
+    font-family: var(--nav-mono);
+    font-size: 0.7rem;
+    color: $chrome-3;
   }
 }
 
@@ -262,164 +282,210 @@ $bp-nav: $bp-lg;
   gap: 10px;
   text-align: left;
   padding: 10px 12px;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  color: $white-72;
+  border-radius: 9px;
+  font-family: var(--nav-sans);
+  font-size: 0.88rem;
+  color: $chrome;
   transition: background $dur-fast linear, color $dur-fast linear;
 
-  .country-code-badge { @include meta; font-size: 0.65rem; color: $white-48; }
-  .symbol { font-family: $font-mono; font-size: 0.7rem; color: $white-48; }
+  .country-code-badge { font-family: var(--nav-mono); font-size: 0.7rem; color: $chrome-3; }
+  .symbol { font-family: var(--nav-mono); font-size: 0.7rem; color: $chrome-3; }
 
-  &:hover, &.selected { background: $ink-2; color: $white; }
+  &:hover, &.selected { background: $white-08; color: $white; }
   &.selected .country-code-badge { color: $accent; }
 }
 
 .navbar-cta-btn {
+  position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 22px;
-  border-radius: 999px;
-  background: var(--btn-bg);
-  color: var(--btn-fg);
-  font-size: 0.88rem;
+  height: 44px;
+  padding: 0 24px;
+  font-family: var(--nav-sans);
+  font-size: 0.94rem;
   font-weight: 600;
-  box-shadow: 0 10px 26px -12px var(--btn-glow);
-  transition: box-shadow $dur-base $ease-out, transform $dur-fast $ease-out;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  color: var(--btn-fg);
+  &::before { @include slab(10px); background: var(--btn-bg); transition: box-shadow $dur-base $ease-out; }
+  &:focus-visible { outline: 2px solid $accent; outline-offset: 4px; border-radius: 8px; }
 
   .arrow-icon { transition: transform $dur-base $ease-out; }
 
   @include hover-device {
-    &:hover { box-shadow: 0 16px 34px -12px var(--btn-glow); }
+    &:hover::before { box-shadow: 0 14px 30px -10px var(--btn-glow); }
     &:hover .arrow-icon { transform: translateX(4px); }
   }
   &:active { transform: scale(0.97); }
 
+  @include down(1280px) { padding: 0 18px; }
   @include down($bp-md) { display: none; }
 }
+.navbar-wrapper.scrolled .navbar-cta-btn { height: 40px; }
 
-.navbar-theme { @include down($bp-nav) { display: none; } }
+.navbar-theme {
+  @include down($bp-nav) { display: none; }
+}
 
 .hamburger-btn {
   display: none;
   position: relative;
-  width: 48px;
-  height: 48px;
-  border: 1px solid $white-12;
-  border-radius: 50%;
+  isolation: isolate;
+  width: 54px;
+  height: 44px;
+  margin-right: 6px; // room for the slant
   z-index: $z-menu + 1;
+  &::before { @include slab(10px); border: 1px solid $edge; transition: background $dur-base linear, border-color $dur-base linear; }
+  &:focus-visible { outline: 2px solid $accent; outline-offset: 3px; border-radius: 8px; }
 
   @include down($bp-nav) { display: inline-block; }
 
   .line {
     position: absolute;
-    left: 15px;
-    right: 15px;
+    left: 17px;
+    right: 17px;
     height: 1.5px;
     background: $white;
-    transition: transform $dur-base $ease-out;
-    &:nth-child(1) { top: 19px; }
-    &:nth-child(2) { top: 27px; }
+    transition: transform $dur-base $ease-out, background $dur-base linear;
+    &:nth-child(1) { top: 18px; }
+    &:nth-child(2) { top: 25px; }
   }
 
   &.is-open {
-    .line:nth-child(1) { transform: translateY(4px) rotate(45deg); }
-    .line:nth-child(2) { transform: translateY(-4px) rotate(-45deg); }
+    &::before { background: var(--btn-bg); border-color: var(--btn-bg); }
+    .line { background: var(--btn-fg); }
+    .line:nth-child(1) { transform: translateY(3.5px) rotate(45deg); }
+    .line:nth-child(2) { transform: translateY(-3.5px) rotate(-45deg); }
   }
 }
 
 .nav-progress {
   position: absolute;
   left: 0;
-  bottom: -1px;
-  height: 1px;
+  top: 0;
+  height: 2px;
   width: 100%;
   background: $accent-gradient;
   transform-origin: left center;
   will-change: transform;
 }
 
-// ---------------- Mobile fullscreen menu ----------------
+// ---------------- Phones: the full-screen menu ----------------
 .mobile-menu {
+  --nav-sans: 'Geist', 'Poppins', system-ui, sans-serif;
+  --nav-mono: 'Geist Mono', ui-monospace, monospace;
   position: fixed;
   inset: 0;
   z-index: $z-menu;
   background: $black;
   display: flex;
   flex-direction: column;
-  padding: 88px $gutter 2rem;
-  overflow-y: auto;
+  gap: 16px;
+  padding: 82px $gutter max(18px, env(safe-area-inset-bottom));
+  overflow: hidden auto;
+  font-family: var(--nav-sans);
 
-  &__top { display: flex; align-items: center; justify-content: space-between; }
-  &__label { @include meta; color: $white-48; }
+  &__bands { flex: 1 0 auto; display: flex; flex-direction: column; gap: 8px; }
 
-  &__links {
-    margin-top: 1.5rem;
+  // a band cut at the angle of the mark; they share the height between them
+  &__band {
+    position: relative;
+    isolation: isolate;
+    flex: 1 0 auto;
     display: flex;
     flex-direction: column;
-  }
-
-  &__mask { overflow: hidden; border-bottom: 1px solid $white-08; }
-
-  &__link {
-    display: flex;
-    align-items: baseline;
-    gap: 1rem;
-    padding: 0.55rem 0 0.35rem;
+    margin-inline: 8px;
     color: $white;
-
-    .num { @include meta; color: $white-48; min-width: 2.2rem; }
-    .txt { @include display(clamp(2.6rem, 11vw, 4.6rem)); line-height: 1; }
-    &.active .txt { color: $accent; }
+    &::before { @include slab(14px, -6deg); background: var(--surface); border: 1px solid $edge; transition: background 0.35s linear, border-color 0.35s linear; }
+    &.is-open::before { border-color: $accent; }
+    &.is-here { color: var(--btn-fg); &::before { background: var(--btn-bg); border-color: var(--btn-bg); } }
   }
-
-  // The other pages of a group, under its main page
-  &__subs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 0.2rem 0 0.9rem 3.2rem;
-  }
-
-  &__sub {
-    padding: 7px 14px;
-    border-radius: 999px;
-    border: 1px solid $white-12;
-    font-size: 0.88rem;
-    font-weight: 500;
-    color: $white-72;
-
-    &.active { border-color: $accent; color: $accent; }
-  }
-
-  &__foot {
-    margin-top: auto;
-    padding-top: 2rem;
-    display: grid;
-    gap: 1.5rem;
-  }
-
-  &__pills { display: flex; flex-wrap: wrap; gap: 8px; }
-
-  .pill {
-    @include meta;
-    font-size: 0.66rem;
-    padding: 9px 14px;
-    border: 1px solid $white-12;
-    border-radius: 999px;
-    color: $white-72;
-    &.active { border-color: $accent; color: $accent; }
-  }
-
-  &__cta { width: 100%; padding-block: 20px; }
-
-  &__contact {
+  &__row {
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    flex-wrap: wrap;
-    a { color: $white-72; font-size: 0.9rem; }
-    .socials { display: flex; gap: 1.25rem; font-size: 1.1rem; }
+    width: 100%;
+    min-height: 58px;
+    padding: 8px 26px;
+    text-align: left;
+    color: inherit;
+    &:focus-visible { outline: 2px solid $accent; outline-offset: -6px; border-radius: 12px; }
+    > svg { flex: none; font-size: 1.25rem; }
+  }
+  &__name { font-size: clamp(1.75rem, min(8.6vw, 5.2svh), 3.4rem); font-weight: 600; line-height: 1; letter-spacing: -0.05em; }
+  &__plus {
+    position: relative;
+    flex: none;
+    width: 18px;
+    height: 18px;
+    &::before, &::after { content: ''; position: absolute; left: 0; right: 0; top: 8px; height: 2px; background: currentColor; transition: rotate 0.4s $ease-out; }
+    &::after { rotate: 90deg; }
+    .is-open & { &::before, &::after { rotate: 180deg; } }
+  }
+  &__pages {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: hidden;
+    padding-inline: 26px;
+    li:nth-last-child(-n + 2) { padding-bottom: 14px; }
+    a {
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: inherit;
+      opacity: 0.82;
+      border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+    }
+    a.is-here { opacity: 1; font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+  }
+
+  &__foot { display: grid; gap: 14px; }
+  &__cta {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 56px;
+    margin-inline: 8px;
+    padding-inline: 26px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: $white;
+    &::before { @include slab(14px, -6deg); border: 2px solid $white; }
+    &:active::before { background: $white-08; }
+  }
+  &__tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-inline: 8px; }
+  &__country {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    font-family: var(--nav-mono);
+    font-size: 0.8rem;
+    color: $chrome;
+    select { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; font-size: 16px; color: #0b0b0c; } // 16px: iOS does not zoom in
+    &:focus-within { outline: 2px solid $accent; outline-offset: 4px; border-radius: 6px; }
+  }
+  &__socials {
+    display: flex;
+    gap: 4px;
+    a { display: grid; place-items: center; width: 38px; height: 40px; font-size: 1.1rem; color: $chrome; }
   }
 }
+
+@include reduced-motion {
+  .navbar-container, .navbar-container::before { transition: none; }
+}
+
+// the open menu has its own
+.navbar-wrapper.menu-open :is(.navbar-cta-btn, .currency-selector-wrap) { visibility: hidden; }

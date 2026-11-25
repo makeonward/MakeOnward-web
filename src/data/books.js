@@ -12,12 +12,13 @@
 //   { type: "process", kicker, title, subtitle }    the seven phases of the Process page
 //   { type: "back" }                                branded back cover (contact details from the CMS)
 //   { type: "back", title, text, website, note }    back cover with the book's closing message
+//   { type: "statement", tone, kicker, title, text }, { type: "work", tone }, { type: "team" }
+//                                                   one big line; the projects; the people (CMS)
 //   { type: "image", src: "/books/brochure/03.webp", alt: "What we do" }
 //                                                   a finished page exported as an image (put files in public/books/<slug>/)
 //   { type: "placeholder" }                         an empty numbered page, until the real content is in
 //
 // pageAspect = width / height of ONE page (A4 portrait = 210 / 297, A4 landscape = 297 / 210).
-// pdf (optional) = a file in public/ offered as "Download PDF" in the toolbar.
 //
 // The brochure's prices are its own printed text: they do not follow the Pricing page (CMS).
 // Its service and process pages do follow the website (services and process data).
@@ -278,7 +279,7 @@ export const BOOKS = {
         actionNote: "Use the contact form on our website to discuss your project or request a custom proposal.",
         channels: [
           { label: "Website", value: "makeonward.com", href: "https://makeonward.com" },
-          { label: "Enquiries", value: "info@pixiedigitalcreatives.com", href: "mailto:info@pixiedigitalcreatives.com" },
+          { label: "Enquiries", value: "info@makeonward.com", href: "mailto:info@makeonward.com" },
           { label: "Direct Call", value: "+91 96086 84177", href: "tel:+919608684177" },
         ],
         steps: [
@@ -324,3 +325,63 @@ export const BOOKS = {
     ],
   },
 };
+
+// ---- What is printed, and in which order ------------------------------------------------------------
+// The books are shown to clients, so each page keeps to a few words: the full texts above are where they come
+// from. "work" and "team" come from the CMS. Pages are black ("onyx") or white.
+{
+  const [cover, build, social, growth, process, websites, creative, back] = BOOKS.brochure.pages;
+  BOOKS.brochure.pages = [
+    cover,
+    { type: "statement", tone: "onyx", title: back.tagline, text: "Websites, apps, search, social and video. One studio." },
+    build,
+    social,
+    growth,
+    process,
+    { type: "work", tone: "white" },
+    { ...websites, title: "Websites, apps & search", note: "Indicative prices. Your quote follows the scope." },
+    { ...creative, title: "Social, video & creators", note: "Indicative prices. Your quote follows the scope." },
+    back,
+  ];
+}
+{
+  const [cover, about, services, pricing, process, contact, , back] = BOOKS.companyProfile.pages;
+  const half = Math.ceil(services.services.length / 2);
+  const short = (list, texts) => list.map((x, i) => ({ ...x, text: texts[i], description: texts[i], offer: texts[i] }));
+  const offers = short(services.services, [
+    "From a simple site to a full online store.",
+    "First versions, service apps and shopping apps.",
+    "Found on Google and in AI answers.",
+    "Planned, designed and posted for you.",
+    "Shot and edited for every platform.",
+    "The right creators for your campaign.",
+  ]);
+  BOOKS.companyProfile.pages = [
+    cover,
+    { type: "statement", tone: "onyx", kicker: "About", title: about.title, text: "Clear communication, practical solutions, design-led execution." },
+    {
+      type: "approach",
+      title: "How we think.",
+      approach: short(about.approach, ["Your business, audience and goals.", "The right solution for your budget.", "Fast, clear and easy to use.", "Content and visibility, as you grow."]),
+    },
+    { type: "clients", whoWeWorkWith: about.whoWeWorkWith },
+    {
+      type: "values",
+      brandPromise: about.brandPromise,
+      coreValues: short(about.coreValues, ["Every feature has a purpose.", "No hidden charges.", "Code, designs and accounts are yours."]),
+    },
+    { ...services, services: offers.slice(0, half), title: "What we do." },
+    { ...services, services: offers.slice(half), title: null },
+    { type: "image", src: "/assets/mockups/home-websites-1000.webp", alt: "Websites designed and built by MakeOnward" },
+    { type: "work" },
+    { type: "team" },
+    {
+      ...process,
+      title: "From first call to delivery.",
+      steps: short(process.steps, ["Goals and needs.", "Deliverables, timeline and price.", "Progress you can see.", "Tested, revised, handed over.", "For as long as you need it."]),
+    },
+    { ...pricing, title: "Price ranges.", note: "Indicative ranges. Scope, taxes and terms are set in your approved proposal. No growth, ranking or sales outcome is guaranteed." },
+    { ...contact, text: null, steps: null },
+    back,
+  ];
+}

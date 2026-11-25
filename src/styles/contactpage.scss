@@ -4,48 +4,6 @@
   background: var(--bg);
   min-height: 100vh;
 
-  .contact-page-hero {
-    padding: 9rem 0 4.5rem;
-    position: relative;
-    text-align: center;
-    background: radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--accent) 5%, transparent) 0%, color-mix(in srgb, var(--accent-2) 2%, transparent) 40%, transparent 60%);
-    border-bottom: 1px solid color-mix(in srgb, var(--accent) 12%, transparent);
-
-    @media (max-width: 768px) {
-      padding: 7rem 0 3.5rem;
-    }
-
-    .hero-content-center {
-      max-width: 760px;
-      margin: 0 auto;
-
-      .contact-hero-title {
-        font-family: var(--font-serif);
-        font-size: clamp(2.5rem, 4.8vw, 4.2rem);
-        font-weight: 500;
-        line-height: 1.12;
-        color: var(--fg);
-        letter-spacing: -0.02em;
-        margin-bottom: 1.5rem;
-
-        em {
-          font-style: italic;
-          font-family: var(--font-serif);
-          background: var(--gradient-gold);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          text-shadow: 0 0 35px color-mix(in srgb, var(--accent) 35%, transparent);
-        }
-      }
-
-      .contact-hero-desc {
-        font-size: 1.05rem;
-        color: var(--fg-3);
-        line-height: 1.7;
-      }
-    }
-  }
-
   .contact-split-section {
     padding: 6rem 0;
 

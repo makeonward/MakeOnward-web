@@ -1,13 +1,8 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { animate, motion } from "framer-motion";
-import {
-  HiChevronLeft,
-  HiChevronRight,
-  HiOutlineArrowsPointingOut,
-  HiOutlineArrowsPointingIn,
-  HiOutlineArrowDownTray,
-} from "react-icons/hi2";
-import { useMediaQuery, usePrefersReducedMotion } from "../../animations/hooks";
+import { HiArrowLeft, HiArrowRight, HiOutlineArrowsPointingIn, HiOutlineArrowsPointingOut } from "react-icons/hi2";
+import { useReady } from "../../animations/ReadyContext";
+import { usePrefersReducedMotion } from "../../animations/hooks";
 import { lockScroll, unlockScroll } from "../../animations/lenis";
 import BookFace from "./BookFace";
 import { flapMatrix, foldAt, mirror, placeStrip, polygon, smoothstep, splitSheet } from "./fold";
@@ -17,7 +12,7 @@ import "../../styles/flipbook.scss";
 // the page comes over (geometry in fold.js). Landscape shows two pages side by side; portrait shows
 // one page that turns away to the left. The layout follows the screen: whichever fits it better is
 // picked again on every resize, so turning a phone switches it. Turn by dragging, clicking a page,
-// the arrows, the keyboard or the slider; hovering a corner lifts it a little.
+// the buttons or the keyboard; hovering a corner lifts it a little, and the cover lifts once by itself as an invitation.
 
 const TURN = 0.9; // seconds for a full turn
 const TURN_EASE = [0.42, 0, 0.3, 1];
@@ -43,10 +38,10 @@ const useSize = (ref) => {
 };
 
 const FlipBook = ({ book }) => {
-  const { pages, pageAspect = 210 / 297, pdf } = book;
+  const { pages, pageAspect = 210 / 297 } = book;
   const n = pages.length;
   const reduce = usePrefersReducedMotion();
-  const wide = useMediaQuery("(min-width: 768px)");
+  const ready = useReady();
 
   const rootRef = useRef(null);
   const stageRef = useRef(null);
@@ -56,9 +51,8 @@ const FlipBook = ({ book }) => {
   // ---- Layout and size: the biggest book that fits the stage ---------------------------------
   // A wide stage (desktop, a phone held sideways) holds two pages at full height: landscape. A tall
   // one would shrink them to half its width: portrait, one page as big as the stage allows.
-  const side = wide ? 72 : 0; // room for the side arrows
   const pad = Math.min(PAD, Math.round(size.h * 0.05));
-  const availW = Math.max(0, size.w - 2 * (pad + side));
+  const availW = Math.max(0, size.w - 2 * pad);
   const availH = Math.max(0, size.h - 2 * pad);
   const fit = (c) => Math.floor(Math.min(availW / c, availH * pageAspect));
   const spread = n > 1 && fit(2) >= fit(1) * SPREAD_MIN;
@@ -364,6 +358,25 @@ const FlipBook = ({ book }) => {
     return () => window.removeEventListener("keydown", onKey);
   });
 
+  // The cover lifts its corner once, to show that it turns.
+  const invited = useRef(false);
+  useEffect(() => {
+    if (!ready || !pw || reduce || invited.current) return undefined;
+    let down;
+    const up = setTimeout(() => {
+      if (turnRef.current || live.current.pos !== 0) return;
+      invited.current = true;
+      const { W, H } = live.current;
+      startTurn({ dir: 1, from: 0, to: 1, top: false, kind: "peek" }, () => runTo({ x: W * 0.62, y: H - W * 0.2 }, { duration: 0.7 }));
+      down = setTimeout(() => turnRef.current?.kind === "peek" && finish(false), 1300);
+    }, 1800);
+    return () => {
+      clearTimeout(up);
+      clearTimeout(down);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, pw > 0, reduce]);
+
   // ---- Full screen: the real thing where it exists, otherwise a fixed overlay ------------------
   const [nativeFull, setNativeFull] = useState(false);
   const [overlayFull, setOverlayFull] = useState(false);
@@ -450,14 +463,6 @@ const FlipBook = ({ book }) => {
       data-lenis-prevent={overlayFull || undefined}
     >
       <div className="fb-stage" ref={stageRef}>
-        <span className="fb-stage__glow" aria-hidden="true" />
-
-        {wide && (
-          <button type="button" className="fb-arrow fb-arrow--prev" onClick={prev} disabled={shown <= 0} aria-label="Previous page">
-            <HiChevronLeft />
-          </button>
-        )}
-
         {pw > 0 && (
           <motion.div
             key={spread ? "spread" : "single"}
@@ -511,48 +516,20 @@ const FlipBook = ({ book }) => {
           </motion.div>
         )}
 
-        {wide && (
-          <button type="button" className="fb-arrow fb-arrow--next" onClick={next} disabled={shown >= maxPos} aria-label="Next page">
-            <HiChevronRight />
-          </button>
-        )}
       </div>
 
       <div className="fb-bar" role="toolbar" aria-label={`${book.title} controls`}>
-        {!wide && (
-          <button type="button" className="fb-btn" onClick={prev} disabled={shown <= 0} aria-label="Previous page">
-            <HiChevronLeft />
-          </button>
-        )}
+        <button type="button" className="fb-btn" onClick={prev} disabled={shown <= 0} aria-label="Previous page" title="Previous page">
+          <HiArrowLeft />
+        </button>
         <span className="fb-bar__count" aria-live="polite">
+          <span className="fb-bar__sr">Page </span>
           {label} <i>/</i> {n}
         </span>
-        <input
-          type="range"
-          className="fb-bar__range"
-          min={0}
-          max={maxPos}
-          step={1}
-          value={shown}
-          onChange={(e) => jump(Number(e.target.value))}
-          style={{ "--p": `${maxPos ? (shown / maxPos) * 100 : 0}%` }}
-          aria-label="Go to page"
-          aria-valuetext={`Page ${label} of ${n}`}
-        />
-        {!wide && (
-          <button type="button" className="fb-btn" onClick={next} disabled={shown >= maxPos} aria-label="Next page">
-            <HiChevronRight />
-          </button>
-        )}
-
-        <span className="fb-bar__sep" aria-hidden="true" />
-
-        {pdf && (
-          <a className="fb-btn" href={pdf} download aria-label="Download PDF" title="Download PDF">
-            <HiOutlineArrowDownTray />
-          </a>
-        )}
-        <button type="button" className="fb-btn" onClick={toggleFull} aria-label={full ? "Exit full screen" : "Full screen"} title={full ? "Exit full screen" : "Full screen"}>
+        <button type="button" className="fb-btn" onClick={next} disabled={shown >= maxPos} aria-label="Next page" title="Next page">
+          <HiArrowRight />
+        </button>
+        <button type="button" className="fb-btn fb-btn--full" onClick={toggleFull} aria-label={full ? "Exit full screen" : "Full screen"} title={full ? "Exit full screen" : "Full screen"}>
           {full ? <HiOutlineArrowsPointingIn /> : <HiOutlineArrowsPointingOut />}
         </button>
       </div>

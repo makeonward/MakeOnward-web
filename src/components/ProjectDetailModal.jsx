@@ -1,4 +1,5 @@
 import React from "react";
+import { PROJECT_FALLBACK } from "../data/mockups";
 import { Link } from "react-router-dom";
 import { projectSlug } from "../data/projects";
 import { useCms } from "../context/CmsContext";
@@ -33,11 +34,11 @@ const ProjectDetailModal = () => {
 
         <div className="project-modal-image-wrap">
           <img
-            src={project.image || "/portfolio.jpg"}
+            src={project.image || PROJECT_FALLBACK}
             alt={project.title}
             className="project-modal-img"
             onError={(e) => {
-              e.target.src = "/portfolio.jpg";
+              e.target.src = PROJECT_FALLBACK;
             }}
           />
           <div className="image-vignette"></div>

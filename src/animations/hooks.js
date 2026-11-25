@@ -13,7 +13,13 @@ export const useMediaQuery = (query) =>
     () => false
   );
 
-// Pinned scroll scenes & heavy choreography are desktop-only.
+// Layout: wide screens.
 export const useIsDesktop = () => useMediaQuery("(min-width: 1024px)");
 export const useFinePointer = () => useMediaQuery("(hover: hover) and (pointer: fine)");
 export const usePrefersReducedMotion = () => useMediaQuery("(prefers-reduced-motion: reduce)");
+
+// Pinned scroll scenes run on phones too; only a very short screen or reduced motion gets the plain version.
+export const useScenes = () => {
+  const room = useMediaQuery("(min-width: 1024px), (min-height: 600px)");
+  return !usePrefersReducedMotion() && room;
+};

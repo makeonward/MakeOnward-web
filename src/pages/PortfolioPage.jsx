@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ContactModal from "../components/ContactModal";
 import ProjectDetailModal from "../components/ProjectDetailModal";
+import { PostersSkeleton } from "../components/Skeleton";
 import ScrollProgress from "../components/motion/ScrollProgress";
 import CtaBand from "../sections/Story/CtaBand";
 import PortfolioHero from "../sections/PortfolioStory/PortfolioHero";
@@ -12,8 +13,7 @@ import ProjectPoster from "../sections/PortfolioStory/ProjectPoster";
 import ProjectIndex from "../sections/PortfolioStory/ProjectIndex";
 import { byOrder, searchable } from "../sections/PortfolioStory/data";
 import { useCms } from "../context/CmsContext";
-import { useIsDesktop, usePrefersReducedMotion } from "../animations/hooks";
-import { scrollToTarget } from "../animations/lenis";
+import { useScenes } from "../animations/hooks";
 import "../sections/Story/story.scss";
 import "../sections/PortfolioStory/portfoliostory.scss";
 import "../styles/portfoliopage.scss";
@@ -22,9 +22,8 @@ import "../styles/portfoliopage.scss";
 // case-study posters or a typographic index you can filter and search -> the invitation.
 // Everything shown comes from the CMS; with no projects the page says so and the wall is hidden.
 const PortfolioPage = () => {
-  const { portfolioProjects, setSelectedProjectModal, setIsContactModalOpen } = useCms();
-  const desktop = useIsDesktop();
-  const reduce = usePrefersReducedMotion();
+  const { cmsReady, portfolioProjects, setSelectedProjectModal } = useCms();
+  const scenes = useScenes();
   const [filter, setFilter] = useState("All");
   const [query, setQuery] = useState("");
   const [view, setView] = useState("showcase");
@@ -43,14 +42,8 @@ const PortfolioPage = () => {
     [projects, filter, q]
   );
 
-  const mode = reduce || !desktop ? "rise" : "scroll";
+  const mode = scenes ? "scroll" : "rise";
   const open = (project) => setSelectedProjectModal(project);
-  const openContact = () => setIsContactModalOpen(true);
-  const pickCategory = (name) => {
-    setFilter(name);
-    setView("showcase");
-    scrollToTarget("#work", { offset: -40 });
-  };
   const clear = () => {
     setFilter("All");
     setQuery("");
@@ -62,7 +55,7 @@ const PortfolioPage = () => {
       <ScrollProgress />
 
       <main id="main">
-        <PortfolioHero projects={projects} categories={categories} onPickCategory={pickCategory} onOpen={open} openContact={openContact} />
+        <PortfolioHero projects={projects} onOpen={open} />
 
         <section className="pf-work" id="work" aria-label="Projects">
           {projects.length > 0 && (
@@ -80,7 +73,9 @@ const PortfolioPage = () => {
           )}
 
           <div className="pf-work__body">
-            {projects.length === 0 ? (
+            {projects.length === 0 && !cmsReady ? (
+              <PostersSkeleton />
+            ) : projects.length === 0 ? (
               <div className="pf-empty"><p>New work is being added. Check back soon.</p></div>
             ) : shown.length === 0 ? (
               <div className="pf-empty">

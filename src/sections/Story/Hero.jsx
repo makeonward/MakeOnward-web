@@ -1,55 +1,48 @@
-import React, { useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion, useMotionValue, useMotionTemplate } from "framer-motion";
-import { HiArrowRight } from "react-icons/hi2";
+import React, { useMemo, useRef, useState } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { HiArrowRight, HiPause, HiPlay } from "react-icons/hi2";
 import { useCms } from "../../context/CmsContext";
 import { useReady } from "../../animations/ReadyContext";
-import { useIsDesktop } from "../../animations/hooks";
+import { useFinePointer } from "../../animations/hooks";
 import { scrollToTarget } from "../../animations/lenis";
 import { EASE } from "../../animations/variants";
 import Magnetic from "../../components/buttons/Magnetic";
-import MaskText from "../../components/motion/MaskText";
-import SilkWaves from "./SilkWaves";
 import ChromeLogo from "./ChromeLogo";
-import { StageLight, Dust } from "./HeroAtmosphere";
+import "../../styles/pagehero.scss"; // slanted buttons
+import { StageLight } from "./HeroAtmosphere";
+import HeroCursor from "./HeroCursor";
+import HeroRail from "./HeroRail";
+import { heroMockup } from "../../data/mockups";
 import { seoPage } from "../../data/seo";
 
 // Keyword line and intro text are shared with the page's SEO copy (src/data/seo.js).
 const SEO = seoPage("/");
 
-const NOTES = ["Ideas", "Design", "Develop", "Grow"];
+// The two tall cards: what we do, shown with our own projects. Each opens its service page.
+const CARDS = [
+  { label: "Websites", to: "/services/website-development", ...heroMockup("websites") },
+  { label: "Apps", to: "/services/app-development", ...heroMockup("apps") },
+];
 
-// Chapter 0 — the promise. Everything enters after the preloader like an opening shot (light flare,
-// stage light, focus pull on the headline), then the camera pushes in toward the logo on scroll.
+// Chapter 0 — the promise. Exactly one screen: the logo and two actions, two tall pictures of what we do, a
+// draggable rail of every project, and a cursor that labels what it is over. The headline and intro stay
+// in the page for search engines and screen readers.
 const Hero = () => {
   const ref = useRef(null);
   const ready = useReady();
   const reduce = useReducedMotion();
-  const desktop = useIsDesktop();
-  const { portfolioProjects, stats, setIsContactModalOpen } = useCms();
-  const clients = portfolioProjects.filter((p) => p.image).slice(0, 5);
-  const clientStat = stats.find((s) => /client/i.test(s.label) && !/satisf/i.test(s.label));
+  const fine = useFinePointer();
+  const inView = useInView(ref, { amount: 0.25 });
+  const { portfolioProjects, isContactModalOpen, setIsContactModalOpen, selectedProjectModal, setSelectedProjectModal } = useCms();
 
-  const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const copyY = useTransform(p, [0, 1], ["0%", "-26%"]);
-  const copyO = useTransform(p, [0, 0.6], [1, 0]);
-  // Scrolling away reads as a camera push-in: the logo grows toward the viewer and fades out.
-  const logoY = useTransform(p, [0, 1], ["0%", "14%"]);
-  const logoS = useTransform(p, [0, 1], [1, 1.3]);
-  const logoO = useTransform(p, [0.15, 0.75], [1, 0]);
-  const vignetteO = useTransform(p, [0, 0.8], [0.85, 1]);
-  const waveY = useTransform(p, [0, 1], ["0%", "-16%"]);
-  const glowY = useTransform(p, [0, 1], ["0%", "30%"]);
+  const rail = useMemo(() => portfolioProjects.filter((p) => p.image), [portfolioProjects]);
 
-  // Soft spotlight that follows the cursor across the hero
-  const mx = useMotionValue(60);
-  const my = useMotionValue(40);
-  const spot = useMotionTemplate`radial-gradient(640px circle at ${mx}% ${my}%, var(--spot), transparent 62%)`;
-  const onMove = (e) => {
-    const r = ref.current?.getBoundingClientRect();
-    if (!r) return;
-    mx.set(((e.clientX - r.left) / r.width) * 100);
-    my.set(((e.clientY - r.top) / r.height) * 100);
-  };
+  // null = the visitor has not chosen: the rail drifts, unless they asked their system for less motion.
+  const [choice, setChoice] = useState(null);
+  const playing = choice ?? !reduce;
+  const running = playing && ready && inView && !isContactModalOpen && !selectedProjectModal;
+  const showCursor = fine && !reduce;
 
   const enter = (delay) => ({
     initial: { opacity: 0, y: 24 },
@@ -58,102 +51,70 @@ const Hero = () => {
   });
 
   return (
-    <section className="st-hero" id="hero" ref={ref} onMouseMove={desktop && !reduce ? onMove : undefined} aria-label="Introduction">
-      <motion.div className="st-hero__bg" style={reduce ? undefined : { y: glowY }} aria-hidden="true">
-        <span className="st-glow st-glow--a" />
-        <span className="st-glow st-glow--b" />
-        <span className="st-glow st-glow--c" />
-      </motion.div>
-      <motion.div className="st-hero__spot" style={{ background: spot }} aria-hidden="true" />
-      <motion.div className="st-hero__waves" style={reduce ? undefined : { y: waveY }} aria-hidden="true">
-        {ready && <SilkWaves lines={desktop ? 16 : 9} delay={0.5} />}
-      </motion.div>
-      <motion.div className="st-hero__vignette" style={reduce ? undefined : { opacity: vignetteO }} aria-hidden="true" />
-      <Dust mx={mx} my={my} desktop={desktop} reduce={reduce} ready={ready} />
-
+    <section className={`st-hero${showCursor ? " has-cursor" : ""}`} id="hero" ref={ref} aria-label="Introduction">
       <div className="st-hero__inner">
-        <motion.div className="st-hero__copy" style={reduce ? undefined : { y: copyY, opacity: copyO }}>
-          <MaskText
-            as="h1"
-            className={`st-hero__title${ready && !reduce ? " is-live" : ""}`}
-            onReady
-            delay={2}
-            lines={[
-              <span className="h1-kicker" key="k">{SEO.kicker}</span>,
-              "Brands",
-              <>That <span className="grad-text st-shimmer">Inspire</span></>,
-              <span className="grad-text-2 st-shimmer" key="g">Growth</span>,
-            ]}
-          />
-          <motion.p className="st-hero__lead" {...enter(0.6)}>
-            {SEO.lead}
-          </motion.p>
+        <div className="st-hero__brand">
+          <div className="st-hero__sr">
+            <h1>
+              {SEO.kicker}: {SEO.h1}
+            </h1>
+            <p>{SEO.lead}</p>
+          </div>
+          <div className="st-hero__logo">
+            <StageLight ready={ready} reduce={reduce} />
+            <ChromeLogo ready={ready} />
+          </div>
           <motion.div className="st-hero__ctas" {...enter(0.75)}>
-            <Magnetic strength={0.25}>
-              <button type="button" className="btn-primary" onClick={() => setIsContactModalOpen(true)}>
-                <span>Get Started</span>
+            <Magnetic strength={0.2}>
+              <button type="button" className="st-slant" onClick={() => setIsContactModalOpen(true)}>
+                <span>Get started</span>
                 <HiArrowRight />
               </button>
             </Magnetic>
-            <button type="button" className="btn-secondary" onClick={() => scrollToTarget("#work")}>
-              Our Work
-            </button>
+            <Magnetic strength={0.2}>
+              <button type="button" className="st-slant st-slant--line" onClick={() => scrollToTarget("#work")}>
+                <span>Our work</span>
+              </button>
+            </Magnetic>
           </motion.div>
-          {clients.length > 0 && (
-            <motion.div className="st-proof" {...enter(0.9)}>
-              <div className="st-proof__stack">
-                {clients.map((c, i) => (
-                  <motion.img
-                    key={c.id || i}
-                    src={c.image}
-                    alt={c.title}
-                    loading="lazy"
-                    initial={{ opacity: 0, x: -14, scale: 0.5 }}
-                    animate={ready ? { opacity: 1, x: 0, scale: 1 } : undefined}
-                    transition={{ delay: 1.1 + i * 0.09, type: "spring", stiffness: 320, damping: 20 }}
-                  />
-                ))}
-              </div>
-              {clientStat && (
-                <div className="st-proof__text">
-                  <b>{clientStat.number}</b>
-                  <span>Happy clients</span>
-                </div>
-              )}
-            </motion.div>
-          )}
-        </motion.div>
+        </div>
 
-        <motion.div className="st-hero__visual" style={reduce ? undefined : { y: logoY, scale: logoS, opacity: logoO }}>
-          <StageLight ready={ready} reduce={reduce} />
-          <ChromeLogo ready={ready} />
-          <div className="st-notes" aria-hidden="true">
-            {NOTES.map((n, i) => (
-              <motion.span
-                key={n}
-                className="st-notes__word"
-                initial={{ clipPath: "inset(0 100% 0 0)" }}
-                animate={ready ? { clipPath: "inset(0 0% 0 0)" } : undefined}
-                transition={{ duration: 0.7, ease: EASE, delay: 1.6 + i * 0.3 }}
-              >
-                {n}
-              </motion.span>
-            ))}
-            <svg className="st-notes__arrow" viewBox="0 0 70 92" fill="none">
-              <motion.path d="M58 4 C 68 42, 42 72, 8 82" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"
-                initial={{ pathLength: 0 }} animate={ready ? { pathLength: 1 } : undefined} transition={{ duration: 0.9, delay: 2.9, ease: EASE }} />
-              <motion.path d="M19 74 L 8 82 L 21 88" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"
-                initial={{ pathLength: 0 }} animate={ready ? { pathLength: 1 } : undefined} transition={{ duration: 0.4, delay: 3.7 }} />
-            </svg>
-          </div>
-        </motion.div>
+        {CARDS.map((card, i) => (
+          <motion.div className="st-hero__cell" key={card.label} {...enter(0.45 + i * 0.15)}>
+            <Link className="st-hero__card" to={card.to} data-hero-cursor="View" aria-label={`${card.label}: see this service`} draggable="false">
+              <img
+                sizes="(max-width: 1023px) 46vw, 24vw"
+                srcSet={card.srcSet}
+                src={card.src}
+                alt=""
+                fetchPriority={i ? "auto" : "high"}
+                decoding="async"
+                draggable="false"
+              />
+              <span aria-hidden="true">
+                <i>{card.label}</i>
+                <i>0{i + 1}</i>
+              </span>
+            </Link>
+          </motion.div>
+        ))}
       </div>
-      <Dust front mx={mx} my={my} desktop={desktop} reduce={reduce} ready={ready} />
 
-      <motion.button type="button" className="st-scroll" onClick={() => scrollToTarget("#journey")} {...enter(1.5)}>
-        <span>Scroll to explore</span>
-        <i />
-      </motion.button>
+      {/* Always here, so the layout is the same while the projects are still on their way */}
+      <motion.div className="st-hero__base" {...enter(1)}>
+        <div className="st-hero__archive">
+          <p>
+            <b>Our work</b>
+            <span>Drag the rail</span>
+          </p>
+          <button type="button" onClick={() => setChoice(!playing)} aria-label={playing ? "Pause moving images" : "Play moving images"}>
+            {playing ? <HiPause /> : <HiPlay />}
+          </button>
+        </div>
+        <HeroRail projects={rail} running={running} onOpen={setSelectedProjectModal} />
+      </motion.div>
+
+      {showCursor && <HeroCursor rootRef={ref} />}
     </section>
   );
 };

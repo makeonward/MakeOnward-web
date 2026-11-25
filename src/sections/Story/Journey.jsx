@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
 import { useCms } from "../../context/CmsContext";
-import { useIsDesktop, usePrefersReducedMotion } from "../../animations/hooks";
+import { useScenes } from "../../animations/hooks";
 import { getLenis } from "../../animations/lenis";
 import { EASE } from "../../animations/variants";
-import ServiceArt from "../../components/media/ServiceArt";
+import { serviceMockup } from "../../data/mockups";
 import Reveal from "../../components/motion/Reveal";
 import SilkWaves from "./SilkWaves";
 import { SERVICE_ICONS } from "./icons";
@@ -34,16 +34,6 @@ const Chips = ({ items }) => (
     })}
   </ul>
 );
-
-// The picture only pops in if it mounts hidden, so switch it "live" a frame later.
-const LiveVisual = ({ type }) => {
-  const [live, setLive] = useState(false);
-  useEffect(() => {
-    const id = requestAnimationFrame(() => setLive(true));
-    return () => cancelAnimationFrame(id);
-  }, []);
-  return <ServiceArt type={type} live={live} />;
-};
 
 const copyVariants = {
   out: { opacity: 0, y: 40, filter: "blur(10px)" },
@@ -120,9 +110,7 @@ const Scene = () => {
                 transition={{ duration: 0.8, ease: EASE }}
               >
                 <span className="st-orb-card__glow" />
-                <div className="st-orb-card__art">
-                  <LiveVisual type={ch.visual} />
-                </div>
+                <img className="st-orb-card__shot" {...serviceMockup(ch.visual)} sizes="(max-width: 1023px) 60vw, 440px" alt="" draggable="false" decoding="async" />
                 <span className="st-orb-card__tag">{pad(active + 1)} — {ch.key}</span>
               </motion.div>
             </AnimatePresence>
@@ -149,7 +137,7 @@ const Scene = () => {
   );
 };
 
-// Phones and reduced motion: the same story as a calm vertical list.
+// Very short screens and reduced motion: the same story as a calm vertical list.
 const Stacked = () => {
   const pick = useChapterServices();
   return (
@@ -172,11 +160,10 @@ const Stacked = () => {
 };
 
 const Journey = () => {
-  const desktop = useIsDesktop();
-  const reduce = usePrefersReducedMotion();
+  const scenes = useScenes();
   return (
     <section className="st-journey" id="journey" aria-label="Our story: idea to growth">
-      {desktop && !reduce ? <Scene /> : <Stacked />}
+      {scenes ? <Scene /> : <Stacked />}
     </section>
   );
 };

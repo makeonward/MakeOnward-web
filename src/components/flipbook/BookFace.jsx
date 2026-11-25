@@ -1,491 +1,332 @@
 import React from "react";
 import { useCms } from "../../context/CmsContext";
-import { useLogos } from "../../context/ThemeContext";
 import { SERVICE_ICONS } from "../../sections/Story/icons";
-import { CHAPTER_BLURB } from "../../sections/ServicesStory/data";
+import { cldUrl } from "../../sections/Story/cloudinary";
 import { PHASES, pad } from "../../sections/ProcessStory/data";
+import { bookMockup } from "../../data/mockups";
+import "../../styles/bookpages.scss";
 
-// What is printed on one side of a sheet. Sizes inside a page use container units (cqw),
-// so a page reads the same at any book size. Page types are described in src/data/books.js.
+// What is printed on one side of a sheet. Sizes inside a page use container units (cqw), so a page reads the
+// same at any book size. The print is black or white, with orange only as ink, in both themes.
+// Page types are described in src/data/books.js.
 
 const siteUrl = (website) => `https://${website.replace(/^https?:\/\//, "")}`;
 
-// Front cover. With `headline` it is the book's own designed cover; without, a generic one with
-// the book title.
+// The two strokes of the mark, as a picture that can bleed off a page
+const Strokes = ({ className = "" }) => (
+  <svg className={`bp-strokes ${className}`} viewBox="0 0 1200 692" aria-hidden="true" focusable="false">
+    <path d="M386 216 Q408 190 436 190 H640 Q664 192 663 214 L649 264 Q645 292 632 308 L318 654 Q300 679 274 679 H20 Q5 678 5 662 Q6 654 14 645 Z" />
+    <path d="M906 28 Q922 7 942 7 H1164 Q1187 9 1185 32 L1050 556 Q1044 598 1010 607 L762 686 Q744 690 744 674 L845 322 Q846 315 838 315 H694 Q682 312 682 301 Q684 294 692 285 Z" />
+  </svg>
+);
+
+// An inside page: running head, content, running foot
+const Page = ({ tone = "white", kicker, number, className = "", children }) => (
+  <div className={`bp bp--${tone} ${className}`}>
+    <header className="bp__head">
+      <span>{kicker || "MakeOnward"}</span>
+      <Strokes />
+    </header>
+    {children}
+    <footer className="bp__foot">
+      <span>makeonward.com</span>
+      <b>{pad(number)}</b>
+    </footer>
+  </div>
+);
+// "02 — CORE SERVICES" -> "Core services"
+const plain = (kicker = "") => {
+  const t = kicker.replace(/^\d+\s*—\s*/, "").toLowerCase().replace("makeonward", "MakeOnward");
+  return t.charAt(0).toUpperCase() + t.slice(1);
+};
+const Title = ({ children, small = false }) => <h2 className={`bp__title${small ? " bp__title--small" : ""}`}>{children}</h2>;
+
+// ---- Covers ------------------------------------------------------------------------------------
 const Cover = ({ book, page }) => {
   const { companyInfo } = useCms();
-  const logos = useLogos();
-
-  if (page.headline) {
-    return (
-      <div className="fb-cover fb-cover--rich">
-        <span className="fb-cover__glow fb-cover__glow--a" />
-        <span className="fb-cover__glow fb-cover__glow--b" />
-        <img className="fb-cover__logo" src={logos.lockup} alt="MakeOnward" draggable={false} />
-        <div className="fb-cover__body">
-          {page.eyebrow && <span className="fb-cover__eyebrow-pill">{page.eyebrow}</span>}
-          <h2 className="fb-cover__headline">
-            <span>{page.headline[0]}</span>
-            {page.headline[1] && <span className="fb-cover__grad">{page.headline[1]}</span>}
-          </h2>
-          {page.services?.length > 0 && (
-            <ul className="fb-cover__services">
-              {page.services.map((s) => (
-                <li key={s}>{s}</li>
-              ))}
-            </ul>
-          )}
-          {page.text && <p className="fb-cover__text">{page.text}</p>}
-        </div>
-        <div className="fb-cover__foot fb-cover__foot--split">
-          {page.tagline && <span>{page.tagline}</span>}
-          {page.website && <span className="fb-cover__site">{page.website}</span>}
-        </div>
-      </div>
-    );
-  }
-
+  const white = book.slug === "brochure";
+  const words = (page.title || book.title).split(" ");
   return (
-    <div className="fb-cover">
-      <span className="fb-cover__glow fb-cover__glow--a" />
-      <span className="fb-cover__glow fb-cover__glow--b" />
-      <img className="fb-cover__logo" src={logos.lockup} alt="MakeOnward" draggable={false} />
-      <div className="fb-cover__body">
-        <span className="fb-cover__eyebrow">{page.eyebrow || companyInfo?.name || "MakeOnward"}</span>
-        <h2 className="fb-cover__title">{page.title || book.title}</h2>
-        {(page.tagline || companyInfo?.tagline) && (
-          <p className="fb-cover__tag">{page.tagline || companyInfo.tagline}</p>
-        )}
+    <div className={`bp bp-cover bp--${white ? "white" : "onyx"}`}>
+      <Strokes className="bp-cover__strokes" />
+      <div className="bp-cover__top">
+        <img src={`/brand/lockup-${white ? "light" : "dark"}.png`} alt="MakeOnward" draggable={false} />
+        <span>{page.year || new Date().getFullYear()}</span>
       </div>
-      <span className="fb-cover__foot">{page.year || new Date().getFullYear()}</span>
+      <div className="bp-cover__foot">
+        <h2>{words.map((w) => <span key={w}>{w}</span>)}</h2>
+        <p>{page.tagline || companyInfo?.tagline}</p>
+      </div>
     </div>
   );
 };
 
-// Back cover. With `title` it carries the book's closing message; without, minimal clean brand mark.
-const BackCover = ({ page }) => {
+const BackCover = ({ book, page }) => {
   const { companyInfo } = useCms();
-  const logos = useLogos();
-  const website = page?.website || companyInfo?.website || "makeonward.com";
-  const tagline = page?.tagline || companyInfo?.tagline || "Turning ideas into digital experiences.";
-
-  if (page?.title) {
-    return (
-      <div className="fb-cover fb-cover--back fb-cover--closing">
-        <span className="fb-cover__glow fb-cover__glow--a" />
-        <span className="fb-cover__glow fb-cover__glow--b" />
-        <img className="fb-cover__mark" src={logos.mark} alt="MakeOnward" draggable={false} />
-        <h2 className="fb-cover__closing">{page.title}</h2>
-        {page.text && <p className="fb-cover__text">{page.text}</p>}
-        <div className="fb-cover__contact">
-          <span className="fb-cover__label">Website</span>
-          <a href={siteUrl(website)} target="_blank" rel="noreferrer">{website}</a>
-        </div>
-        {page.note && <p className="fb-cover__note">{page.note}</p>}
-      </div>
-    );
-  }
-
+  const website = page.website || companyInfo?.website || "makeonward.com";
+  const white = book.slug === "brochure";
   return (
-    <div className="fb-cover fb-cover--back">
-      <span className="fb-cover__glow fb-cover__glow--a" />
-      <span className="fb-cover__glow fb-cover__glow--b" />
-      <img className="fb-cover__mark" src={logos.mark} alt="MakeOnward" draggable={false} />
-      {tagline && <p className="fb-cover__tag">{tagline}</p>}
-      <div className="fb-cover__site-badge">
+    <div className={`bp bp-cover bp-cover--back bp--${white ? "white" : "onyx"}`}>
+      <Strokes className="bp-cover__strokes" />
+      <p className="bp-cover__line">{page.title || page.tagline || companyInfo?.tagline}</p>
+      <div className="bp-cover__end">
+        <img src={`/brand/lockup-${white ? "light" : "dark"}.png`} alt="MakeOnward" draggable={false} />
         <a href={siteUrl(website)} target="_blank" rel="noreferrer">{website}</a>
       </div>
     </div>
   );
 };
 
-// Running footer of the inside pages
-const PageFoot = ({ number }) => (
-  <footer className="fb-cards__foot">
-    <span>MakeOnward</span>
-    <span>
-      makeonward.com <b>{pad(number)}</b>
-    </span>
-  </footer>
-);
-
-const PageHead = ({ page, subtitle = page.subtitle }) => (
-  <header className="fb-cards__head">
-    {page.kicker && <span className="fb-cards__kicker">{page.kicker}</span>}
-    <h2 className="fb-cards__title">{page.title}</h2>
-    {subtitle && <p className="fb-cards__sub">{subtitle}</p>}
-  </header>
-);
-
-// 01 — About MakeOnward: overview, approach, who we work with, positioning, promise, values
-const ProfileAboutPage = ({ page, number }) => (
-  <div className="fb-cards fb-pabout">
-    <PageHead page={page} />
-    {page.overview && <p className="fb-pabout__lead">{page.overview}</p>}
-    <div className="fb-pabout__body">
-      {page.approach && (
-        <section className="fb-pabout__section">
-          <h3 className="fb-pabout__section-title">Our Approach</h3>
-          <ul className="fb-pabout__approach-grid">
-            {page.approach.map((app) => (
-              <li key={app.title} className="fb-pabout__app-item">
-                <h4>{app.title}</h4>
-                <p>{app.text}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      <div className="fb-pabout__mid-split">
-        {page.whoWeWorkWith && (
-          <div className="fb-pabout__box">
-            <h3 className="fb-pabout__section-title">Who We Work With</h3>
-            <ul className="fb-pabout__clients-list">
-              {page.whoWeWorkWith.map((c) => (
-                <li key={c}>{c}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {page.positioning && (
-          <div className="fb-pabout__box">
-            <h3 className="fb-pabout__section-title">Our Positioning</h3>
-            <p>{page.positioning}</p>
-          </div>
-        )}
-      </div>
-
-      {page.brandPromise && (
-        <div className="fb-pabout__promise-banner">
-          <span>Brand Promise</span>
-          <blockquote>&ldquo;{page.brandPromise}&rdquo;</blockquote>
-        </div>
-      )}
-
-      {page.coreValues && (
-        <ul className="fb-pabout__values">
-          {page.coreValues.map((v) => (
-            <li key={v.label}>
-              <b>{v.label}</b>
-              <span>{v.text}</span>
-            </li>
-          ))}
-        </ul>
-      )}
+// A page that says one thing
+const StatementPage = ({ page, number }) => (
+  <Page tone={page.tone || "onyx"} kicker={page.kicker} number={number} className="bp-statement">
+    <Strokes className="bp-statement__strokes" />
+    <div className="bp-statement__body">
+      <h2>{page.title}</h2>
+      {page.text && <p>{page.text}</p>}
     </div>
-    <PageFoot number={number} />
-  </div>
+  </Page>
 );
 
-// 02 — Core Services: 6 service cards with visual icons and highlights
-const ProfileServicesPage = ({ page, number }) => (
-  <div className="fb-cards fb-pservices">
-    <PageHead page={page} />
-    <ul className="fb-pservices__grid">
-      {page.services.map((s) => {
-        const Icon = SERVICE_ICONS[s.visual] || SERVICE_ICONS.web;
-        return (
-          <li key={s.title} className="fb-pservices__card">
-            <div className="fb-pservices__head">
-              <span className="fb-pservices__icon" aria-hidden="true">
-                <Icon />
-              </span>
-              <div>
-                <span className="fb-cards__kicker">{s.category}</span>
-                <h4 className="fb-pservices__title">{s.title}</h4>
-              </div>
-            </div>
-            <p className="fb-pservices__offer">{s.offer}</p>
-            {s.highlights?.length > 0 && (
-              <ul className="fb-pservices__highlights">
-                {s.highlights.map((h) => (
-                  <li key={h}>{h}</li>
-                ))}
-              </ul>
-            )}
-          </li>
-        );
-      })}
-    </ul>
-    {page.note && <p className="fb-pservices__note">{page.note}</p>}
-    <PageFoot number={number} />
-  </div>
-);
-
-// 03 — Pricing Overview: structured categories, package scopes, and prices
-const ProfilePricingPage = ({ page, number }) => (
-  <div className="fb-cards fb-ppricing">
-    <PageHead page={page} />
-    <div className="fb-ppricing__body">
-      {page.groups.map((group) => (
-        <section key={group.category} className="fb-ppricing__group">
-          <div className="fb-ppricing__group-header">
-            <h3 className="fb-ppricing__cat-title">{group.category}</h3>
-            {group.badge && <span className="fb-ppricing__badge">{group.badge}</span>}
-          </div>
-          <ul className="fb-ppricing__table">
-            {group.rows.map((row) => (
-              <li key={row.name} className="fb-ppricing__row">
-                <div className="fb-ppricing__row-info">
-                  <b>{row.name}</b>
-                  {row.scope && <span>{row.scope}</span>}
-                </div>
-                <span className="fb-ppricing__price">{row.price}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
-    </div>
-    {page.note && <p className="fb-ppricing__note">{page.note}</p>}
-    <PageFoot number={number} />
-  </div>
-);
-
-// 04 — Engagement Process: 5 structured phases + client needs & commitment
-const ProfileProcessPage = ({ page, number }) => (
-  <div className="fb-cards fb-pprocess">
-    <PageHead page={page} />
-    <ol className="fb-pprocess__steps">
-      {page.steps.map((st) => (
-        <li key={st.number} className="fb-pprocess__step">
-          <b className="fb-pprocess__num">{st.number}</b>
-          <div className="fb-pprocess__copy">
-            <h4>
-              {st.title} {st.tagline && <span>• {st.tagline}</span>}
-            </h4>
-            <p>{st.description}</p>
+// ---- Company profile -----------------------------------------------------------------------------
+const ApproachPage = ({ page, number }) => (
+  <Page kicker="Our approach" number={number}>
+    <Title>{page.title}</Title>
+    <ol className="bp-steps">
+      {page.approach.map((a, i) => (
+        <li key={a.title}>
+          <b>{pad(i + 1)}</b>
+          <div>
+            <h3>{a.title}</h3>
+            <p>{a.text}</p>
           </div>
         </li>
       ))}
     </ol>
-    <div className="fb-pprocess__dual">
-      {page.clientNeeds && (
-        <div className="fb-pprocess__box">
-          <h5>{page.clientNeeds.title}</h5>
-          <p>{page.clientNeeds.text}</p>
-        </div>
-      )}
-      {page.ourCommitment && (
-        <div className="fb-pprocess__box">
-          <h5>{page.ourCommitment.title}</h5>
-          <p>{page.ourCommitment.text}</p>
-        </div>
-      )}
-    </div>
-    <PageFoot number={number} />
-  </div>
+  </Page>
 );
 
-// 05 — Let's Work Together: inside paper page for contact & getting started
-const ProfileContactPage = ({ page, number }) => {
-  const { companyInfo } = useCms();
-  const website = page.website || companyInfo?.website || "makeonward.com";
-  const email = page.email || companyInfo?.email || "info@pixiedigitalcreatives.com";
-  const phone = page.phone || companyInfo?.phone || "+91 96086 84177";
+const ClientsPage = ({ page, number }) => (
+  <Page tone="onyx" kicker="Who we work with" number={number}>
+    <ul className="bp-big">
+      {page.whoWeWorkWith.map((c) => <li key={c}>{c}</li>)}
+    </ul>
+  </Page>
+);
 
-  return (
-    <div className="fb-cards fb-pcontact">
-      <PageHead page={page} />
-      {page.text && <p className="fb-pcontact__lead">{page.text}</p>}
+const ValuesPage = ({ page, number }) => (
+  <Page kicker="What we stand for" number={number}>
+    <blockquote className="bp-quote">{page.brandPromise}</blockquote>
+    <ul className="bp-rows">
+      {page.coreValues.map((v) => (
+        <li key={v.label}>
+          <h3>{v.label}</h3>
+          <p>{v.text}</p>
+        </li>
+      ))}
+    </ul>
+  </Page>
+);
 
-      <div className="fb-pcontact__body">
-        <ul className="fb-pcontact__channels">
-          <li className="fb-pcontact__chan">
-            <span>Website</span>
-            <a href={siteUrl(website)} target="_blank" rel="noreferrer">
-              {website}
-            </a>
-          </li>
-          <li className="fb-pcontact__chan">
-            <span>Enquiries</span>
-            <a href={`mailto:${email}`}>{email}</a>
-          </li>
-          <li className="fb-pcontact__chan">
-            <span>Direct Call</span>
-            <a href={`tel:${phone.split(",")[0].trim()}`}>{phone}</a>
-          </li>
-        </ul>
-
-        {page.actionNote && <p className="fb-pcontact__action">{page.actionNote}</p>}
-
-        {page.steps && (
-          <div className="fb-pcontact__steps-box">
-            <h4 className="fb-pcontact__steps-title">Next Steps to Get Started</h4>
-            <ol className="fb-pcontact__steps-list">
-              {page.steps.map((st, i) => (
-                <li key={st.title || i}>
-                  <b>0{i + 1}</b>
-                  <div>
-                    <h5>{st.title}</h5>
-                    <p>{st.text}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
+const CapabilitiesPage = ({ page, number }) => (
+  <Page kicker={plain(page.kicker)} number={number}>
+    {page.title && <Title>{page.title}</Title>}
+    <ul className="bp-caps">
+      {page.services.map((s) => (
+        <li key={s.title}>
+          <img src={bookMockup(s.visual)} alt="" draggable={false} decoding="async" />
+          <div>
+            <h3>{s.title}</h3>
+            <p>{s.offer}</p>
           </div>
-        )}
-      </div>
+        </li>
+      ))}
+    </ul>
+  </Page>
+);
 
-      <PageFoot number={number} />
-    </div>
-  );
-};
-
-// 06 — Project Scope, Terms & Disclaimer: inside paper page
-const ProfileTermsPage = ({ page, number }) => (
-  <div className="fb-cards fb-pterms">
-    <PageHead page={page} />
-    <div className="fb-pterms__body">
-      {page.disclaimer && (
-        <div className="fb-pterms__disclaimer-box">
-          <h4 className="fb-pterms__box-title">{page.disclaimer.title}</h4>
-          <p className="fb-pterms__box-text">{page.disclaimer.text}</p>
-        </div>
-      )}
-
-      {page.safeguards && (
-        <div className="fb-pterms__safeguards">
-          <h4 className="fb-pterms__section-title">Our Working Principles</h4>
-          <ul className="fb-pterms__grid">
-            {page.safeguards.map((sg) => (
-              <li key={sg.title} className="fb-pterms__card">
-                <h5>{sg.title}</h5>
-                <p>{sg.text}</p>
+const PricingPage = ({ page, number }) => (
+  <Page kicker={plain(page.kicker)} number={number}>
+    <Title small>{page.title}</Title>
+    <div className="bp-prices">
+      {page.groups.map((g) => (
+        <section key={g.category}>
+          <h3>{g.category}</h3>
+          <ul>
+            {g.rows.map((r) => (
+              <li key={r.name}>
+                <b>{r.name}</b>
+                <em>{r.price}</em>
               </li>
             ))}
           </ul>
-        </div>
-      )}
-
-      {page.brandPromise && (
-        <div className="fb-pterms__promise">
-          <span>Brand Commitment</span>
-          <p>&ldquo;{page.brandPromise}&rdquo;</p>
-        </div>
-      )}
+        </section>
+      ))}
     </div>
-    <PageFoot number={number} />
-  </div>
+    {page.note && <p className="bp__note">{page.note}</p>}
+  </Page>
 );
 
-// What we do: the services of one or more categories, with the same descriptions and key points
-// as the Services page (CMS services).
+const EngagementPage = ({ page, number }) => (
+  <Page tone="onyx" kicker={plain(page.kicker)} number={number}>
+    <Title>{page.title}</Title>
+    <ol className="bp-steps bp-steps--tight">
+      {page.steps.map((s) => (
+        <li key={s.number}>
+          <b>{s.number}</b>
+          <div>
+            <h3>{s.title}</h3>
+            <p>{s.description}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </Page>
+);
+
+const TeamPage = ({ number }) => {
+  const { teamMembers } = useCms();
+  const team = [...teamMembers].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).filter((m) => m.image).slice(0, 4);
+  return (
+    <Page kicker="The people" number={number}>
+      <Title>The people behind every project.</Title>
+      <ul className={`bp-team bp-team--${team.length}`}>
+        {team.map((m) => (
+          <li key={m.id || m.name}>
+            <img src={cldUrl(m.image, 600)} alt={m.name} draggable={false} decoding="async" />
+            <h3>{m.name}</h3>
+            <p>{m.role}</p>
+          </li>
+        ))}
+      </ul>
+    </Page>
+  );
+};
+
+const ContactPage = ({ page, number }) => {
+  const { companyInfo } = useCms();
+  const website = page.website || companyInfo?.website || "makeonward.com";
+  const email = page.email || companyInfo?.email || "info@makeonward.com";
+  const phone = page.phone || companyInfo?.phone || "+91 96086 84177";
+  return (
+    <Page tone="onyx" kicker={plain(page.kicker)} number={number} className="bp--contact">
+      <Title>{page.title}</Title>
+      <Strokes className="bp-contact__strokes" />
+      <ul className="bp-contact">
+        <li><span>Website</span><a href={siteUrl(website)} target="_blank" rel="noreferrer">{website}</a></li>
+        <li><span>Email</span><a href={`mailto:${email}`}>{email}</a></li>
+        <li><span>Call</span><a href={`tel:${phone.split(",")[0].trim()}`}>{phone}</a></li>
+      </ul>
+    </Page>
+  );
+};
+
+// ---- Both books ------------------------------------------------------------------------------------
+// The studio's projects, from the CMS
+const WorkPage = ({ page, number }) => {
+  const { portfolioProjects } = useCms();
+  const list = [...portfolioProjects].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).filter((p) => p.image).slice(0, 7);
+  return (
+    <Page tone={page.tone || "onyx"} kicker="Selected work" number={number}>
+      <Title small>Work that speaks for itself.</Title>
+      <ul className="bp-work">
+        {list.map((p) => (
+          <li key={p.id || p.title}>
+            <img src={cldUrl(p.image, 700)} alt="" draggable={false} decoding="async" />
+            <h3>{p.title}</h3>
+          </li>
+        ))}
+      </ul>
+    </Page>
+  );
+};
+
+// The services of one or more categories, with the Services page's own words (CMS)
 const ServicesPage = ({ page, number }) => {
   const { services } = useCms();
   const groups = page.categories
-    .map((cat) => ({ cat, blurb: CHAPTER_BLURB[cat] || "", items: services.filter((s) => s.category === cat) }))
+    .map((cat) => ({ cat, items: services.filter((s) => s.category === cat) }))
     .filter((g) => g.items.length > 0);
-  const single = groups.length === 1;
-
+  const picture = groups[0]?.items[0] && bookMockup(groups[0].items[0].visual);
   return (
-    <div className="fb-cards fb-svc">
-      <PageHead page={page} subtitle={single ? groups[0].blurb : page.subtitle} />
-      <div className="fb-svc__body">
-        {groups.map((g) => (
-          <section key={g.cat} className="fb-svc__group">
-            {!single && (
-              <h3 className="fb-svc__cat">
-                {g.cat}
-                {g.blurb && <span>{g.blurb}</span>}
-              </h3>
-            )}
-            <ul className="fb-svc__list">
-              {g.items.map((s) => {
-                const Icon = SERVICE_ICONS[s.visual] || SERVICE_ICONS.web;
-                const points = Array.isArray(s.points) ? s.points : [];
-                return (
-                  <li key={s.id || s.title} className="fb-svc__item">
-                    <span className="fb-svc__icon" aria-hidden="true">
-                      <Icon />
-                    </span>
-                    <div className="fb-svc__copy">
-                      <h4>{s.title}</h4>
-                      {s.description && <p>{s.description}</p>}
-                      {points.length > 0 && (
-                        <ul className="fb-svc__points">
-                          {points.map((pt) => (
-                            <li key={pt}>{pt}</li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        ))}
-      </div>
-      <PageFoot number={number} />
-    </div>
+    <Page kicker={page.kicker} number={number}>
+      {picture && <img className="bp-svc__shot" src={picture} alt="" draggable={false} decoding="async" />}
+      <Title>{page.title}</Title>
+      <ul className="bp-svc">
+        {groups.flatMap((g) => g.items).map((s) => {
+          const Icon = SERVICE_ICONS[s.visual] || SERVICE_ICONS.web;
+          return (
+            <li key={s.id || s.title}>
+              <Icon aria-hidden="true" />
+              <h3>{s.title}</h3>
+            </li>
+          );
+        })}
+      </ul>
+    </Page>
   );
 };
 
-// How we work: the seven phases of the Process page.
 const ProcessPage = ({ page, number }) => (
-  <div className="fb-cards fb-proc">
-    <PageHead page={page} />
-    <ol className="fb-proc__steps">
+  <Page tone="onyx" kicker={page.kicker} number={number}>
+    <Title>{page.title}</Title>
+    <ol className="bp-steps bp-steps--tight bp-steps--seven">
       {PHASES.map((ph, i) => (
         <li key={ph.short}>
           <b>{pad(i + 1)}</b>
-          <div>
-            <h4>{ph.name}</h4>
-            <p>{ph.tagline}</p>
-          </div>
+          <h3>{ph.name}</h3>
         </li>
       ))}
     </ol>
-    <PageFoot number={number} />
-  </div>
+  </Page>
 );
 
-// An inside page of price / service cards with a title, an optional footnote and a running footer.
+// Price list of the brochure
 const CardsPage = ({ page, number }) => (
-  <div className="fb-cards">
-    <PageHead page={page} />
-    <ul className={`fb-cards__grid ${page.cards.length > 6 ? "is-dense" : ""}`}>
+  <Page kicker="Pricing" number={number}>
+    <Title small>{page.title}</Title>
+    <ul className="bp-list">
       {page.cards.map((c) => (
-        <li key={c.label} className="fb-card">
-          <span className="fb-card__label">{c.label}</span>
-          <span className="fb-card__price">{c.price}</span>
-          {c.text && <span className="fb-card__text">{c.text}</span>}
+        <li key={c.label}>
+          <b>{c.label}</b>
+          <em>{c.price}</em>
         </li>
       ))}
     </ul>
-    {page.note && <p className="fb-cards__note">{page.note}</p>}
-    <PageFoot number={number} />
-  </div>
+    {page.note && <p className="bp__note">{page.note}</p>}
+  </Page>
 );
 
 const Placeholder = ({ number }) => (
-  <div className="fb-blank">
-    <span className="fb-blank__note">Content coming soon</span>
-    <span className="fb-blank__num">{String(number).padStart(2, "0")}</span>
-  </div>
+  <Page kicker="" number={number}><Title>Content coming soon</Title></Page>
 );
+
+const TYPES = {
+  cover: Cover,
+  back: BackCover,
+  statement: StatementPage,
+  approach: ApproachPage,
+  clients: ClientsPage,
+  values: ValuesPage,
+  "profile-services": CapabilitiesPage,
+  "profile-pricing": PricingPage,
+  "profile-process": EngagementPage,
+  "profile-contact": ContactPage,
+  team: TeamPage,
+  work: WorkPage,
+  services: ServicesPage,
+  process: ProcessPage,
+  cards: CardsPage,
+  placeholder: Placeholder,
+};
 
 const BookFace = ({ page, number, book }) => {
   if (!page) return <div className="fb-sheet fb-sheet--reverse" />;
+  const Type = TYPES[page.type];
   return (
     <div className="fb-sheet">
-      {page.type === "image" && (
-        <img className="fb-img" src={page.src} alt={page.alt || `Page ${number}`} draggable={false} decoding="async" />
-      )}
-      {page.type === "cover" && <Cover book={book} page={page} />}
-      {page.type === "cards" && <CardsPage page={page} number={number} />}
-      {page.type === "services" && <ServicesPage page={page} number={number} />}
-      {page.type === "process" && <ProcessPage page={page} number={number} />}
-      {page.type === "profile-about" && <ProfileAboutPage page={page} number={number} />}
-      {page.type === "profile-services" && <ProfileServicesPage page={page} number={number} />}
-      {page.type === "profile-pricing" && <ProfilePricingPage page={page} number={number} />}
-      {page.type === "profile-process" && <ProfileProcessPage page={page} number={number} />}
-      {page.type === "profile-contact" && <ProfileContactPage page={page} number={number} />}
-      {page.type === "profile-terms" && <ProfileTermsPage page={page} number={number} />}
-      {page.type === "back" && <BackCover page={page} />}
-      {page.type === "placeholder" && <Placeholder number={number} />}
+      {page.type === "image" && <img className="fb-img" src={page.src} alt={page.alt || `Page ${number}`} draggable={false} decoding="async" />}
+      {Type && <Type book={book} page={page} number={number} />}
     </div>
   );
 };

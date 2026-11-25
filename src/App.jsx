@@ -1,10 +1,11 @@
-import React, { useState, useEffect, Suspense, lazy } from "react";
+import React, { useCallback, useState, useEffect, Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { motion, useAnimationControls } from "framer-motion";
 import { CmsProvider } from "./context/CmsContext";
 import { CurrencyProvider } from "./context/CurrencyContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import Preloader from "./components/Preloader";
+import { ImageSkeletons, PageSkeleton } from "./components/Skeleton";
 import Home from "./pages/Home";
 const ServicesPage = lazy(() => import("./pages/ServicesPage"));
 const PricingPage = lazy(() => import("./pages/PricingPage"));
@@ -66,7 +67,7 @@ const AnimatedRoutes = () => {
     <>
       <ScrollAnimationManager pathKey={displayLocation.pathname} />
       <RouteSeo pathname={displayLocation.pathname} />
-      <Suspense fallback={null}>
+      <Suspense fallback={<PageSkeleton />}>
       <Routes location={displayLocation}>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<ServicesPage />} />
@@ -101,20 +102,24 @@ const AnimatedRoutes = () => {
 };
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // the preloader is on screen
+  const [ready, setReady] = useState(false); // the page behind it may start
+  const reveal = useCallback(() => setReady(true), []);
+  const finish = useCallback(() => setLoading(false), []);
 
   return (
     <ThemeProvider>
     <CmsProvider>
       <CurrencyProvider>
-        <ReadyContext.Provider value={!loading}>
+        <ReadyContext.Provider value={ready}>
           <a className="skip-link" href="#main">Skip to content</a>
           <SmoothScroll />
           <Cursor />
+          <ImageSkeletons />
           <Router>
             <AnimatedRoutes />
           </Router>
-          {loading && <Preloader onFinish={() => setLoading(false)} />}
+          {loading && <Preloader onReveal={reveal} onFinish={finish} />}
         </ReadyContext.Provider>
       </CurrencyProvider>
     </CmsProvider>

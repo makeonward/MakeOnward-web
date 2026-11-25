@@ -1,3 +1,5 @@
+export { serviceMockup } from "../../data/mockups.js";
+
 // Services page: groups the CMS services into chapters by category, in the order they first appear.
 // Copy here only describes what each category covers — no metrics or claims.
 

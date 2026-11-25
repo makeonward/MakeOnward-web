@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useCms } from "../../context/CmsContext";
-import { useIsDesktop, usePrefersReducedMotion } from "../../animations/hooks";
+import { useScenes } from "../../animations/hooks";
 import CountUp from "../../components/motion/CountUp";
 import Reveal from "../../components/motion/Reveal";
 import ScrollWords from "../../components/motion/ScrollWords";
@@ -31,7 +31,7 @@ const ScrollStat = ({ stat, p, start, end }) => {
   );
 };
 
-// Desktop: the section pins; the sentence lights up word by word, then the numbers count up.
+// The section pins; the sentence lights up word by word, then the numbers count up.
 const Scene = ({ stats }) => {
   const ref = useRef(null);
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
@@ -71,7 +71,7 @@ const Scene = ({ stats }) => {
   );
 };
 
-// Phones / reduced motion: the same words and numbers, revealed as ordinary content.
+// Very short screens / reduced motion: the same words and numbers, revealed as ordinary content.
 const Static = ({ stats }) => (
   <div className="ab-man__static">
     <Reveal as="span" className="st-label">Who we are</Reveal>
@@ -99,12 +99,11 @@ const Static = ({ stats }) => (
 
 const Manifesto = () => {
   const { stats } = useCms();
-  const desktop = useIsDesktop();
-  const reduce = usePrefersReducedMotion();
+  const scenes = useScenes();
   const items = stats.slice(0, 4);
   return (
     <section className="ab-man" id="manifesto" aria-label="Who we are">
-      {desktop && !reduce ? <Scene stats={items} /> : <Static stats={items} />}
+      {scenes ? <Scene stats={items} /> : <Static stats={items} />}
     </section>
   );
 };

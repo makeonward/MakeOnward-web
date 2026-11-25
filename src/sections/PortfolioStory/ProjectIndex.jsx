@@ -4,9 +4,10 @@ import { AnimatePresence, motion, useSpring } from "framer-motion";
 import { HiOutlineArrowUpRight } from "react-icons/hi2";
 import { useFinePointer, usePrefersReducedMotion } from "../../animations/hooks";
 import { EASE, VIEWPORT } from "../../animations/variants";
+import { PROJECT_FALLBACK } from "../../data/mockups";
 import { pad } from "./data";
 
-const FALLBACK = "/portfolio.jpg";
+const FALLBACK = PROJECT_FALLBACK;
 const onImgError = (e) => {
   if (!e.target.dataset.fb) {
     e.target.dataset.fb = "1";
