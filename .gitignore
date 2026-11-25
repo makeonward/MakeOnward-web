@@ -30,6 +30,8 @@ dist-ssr
 .env
 .env.local
 .env.production
+.env.render
+.env.vercel
 
 # Secure database (contains bcrypt-hashed admin credentials)
 server/data/

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { apiFetch } from "../utils/api";
 import { defaultServices, defaultCompanyInfo, rebrand, withCompanyDefaults } from "../data/initialData";
 import { DEFAULT_PRICING, DEFAULT_BUDGET_RANGES } from "../data/pricing";
 
@@ -127,7 +128,7 @@ export const CmsProvider = ({ children }) => {
 
     const fetchCmsData = async () => {
       try {
-        const res = await fetch("/api/cms/all");
+        const res = await apiFetch("/api/cms/all");
         if (res.ok) {
           const data = rebrand(await res.json());
           if (data.success) {
@@ -187,7 +188,7 @@ export const CmsProvider = ({ children }) => {
     const token = getAuthToken();
     if (token) {
       try {
-        const res = await fetch("/api/cms/portfolio", {
+        const res = await apiFetch("/api/cms/portfolio", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -226,7 +227,7 @@ export const CmsProvider = ({ children }) => {
     const token = getAuthToken();
     if (token) {
       try {
-        await fetch(`/api/cms/portfolio/${id}`, {
+        await apiFetch(`/api/cms/portfolio/${id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -249,7 +250,7 @@ export const CmsProvider = ({ children }) => {
 
     const token = getAuthToken();
     try {
-      const res = await fetch("/api/cms/portfolio/order", {
+      const res = await apiFetch("/api/cms/portfolio/order", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -276,7 +277,7 @@ export const CmsProvider = ({ children }) => {
     const token = getAuthToken();
     if (token) {
       try {
-        await fetch(`/api/cms/portfolio/${id}`, {
+        await apiFetch(`/api/cms/portfolio/${id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -301,7 +302,7 @@ export const CmsProvider = ({ children }) => {
     const token = getAuthToken();
     if (token) {
       try {
-        const res = await fetch("/api/cms/team", {
+        const res = await apiFetch("/api/cms/team", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -340,7 +341,7 @@ export const CmsProvider = ({ children }) => {
     const token = getAuthToken();
     if (token) {
       try {
-        await fetch(`/api/cms/team/${id}`, {
+        await apiFetch(`/api/cms/team/${id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -363,7 +364,7 @@ export const CmsProvider = ({ children }) => {
     const token = getAuthToken();
     if (token) {
       try {
-        await fetch(`/api/cms/team/${id}`, {
+        await apiFetch(`/api/cms/team/${id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -387,7 +388,7 @@ export const CmsProvider = ({ children }) => {
     const token = getAuthToken();
     if (token) {
       try {
-        await fetch(`/api/cms/stats/${id}`, {
+        await apiFetch(`/api/cms/stats/${id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -409,7 +410,7 @@ export const CmsProvider = ({ children }) => {
     if (!token) return { ok: false, error: "Please log in again to save." };
     const { name, shortName, email, phone, address, tagline, description, website, services, digitalPresence, socials } = info;
     try {
-      const res = await fetch("/api/cms/company", {
+      const res = await apiFetch("/api/cms/company", {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ name, shortName, email, phone, address, tagline, description, website, services, digitalPresence, socials }),
@@ -439,7 +440,7 @@ export const CmsProvider = ({ children }) => {
     const token = getAuthToken();
     if (!token) return { ok: false, error: "Please log in again to save." };
     try {
-      const res = await fetch("/api/cms/pricing", {
+      const res = await apiFetch("/api/cms/pricing", {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(doc),

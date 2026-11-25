@@ -1,3 +1,4 @@
+import { apiFetch } from "./api";
 // Sends the contact form to the API and reports what really happened, so the page can show
 // "received" only when the server did receive it (and a clear error otherwise).
 
@@ -13,7 +14,7 @@ export const sendInquiry = async (fields) => {
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
-    const res = await fetch("/api/contact", {
+    const res = await apiFetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(fields),

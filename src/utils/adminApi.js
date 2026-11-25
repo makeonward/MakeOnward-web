@@ -1,3 +1,4 @@
+import { apiFetch } from "./api";
 // Calls to the admin API (/api/auth/*) with the logged-in admin's token.
 
 const TOKEN_KEY = "pdc_admin_token";
@@ -31,7 +32,7 @@ export const clearAdminSession = () => {
 export const adminApi = async (path, { method = "GET", body } = {}) => {
   const token = getAdminToken();
   try {
-    const res = await fetch(`/api${path}`, {
+    const res = await apiFetch(`/api${path}`, {
       method,
       headers: {
         ...(body ? { "Content-Type": "application/json" } : {}),

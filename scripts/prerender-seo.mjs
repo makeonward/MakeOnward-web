@@ -23,7 +23,7 @@ import { caseStudyMeta, projectServiceSlug, projectSlug, projectStatus } from ".
 
 const dist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../dist");
 const template = readFileSync(path.join(dist, "index.html"), "utf8");
-const CMS_URL = process.env.CMS_URL || "https://webapi.makeonward.com/api/cms/all"; // the API itself (as in vercel.json)
+const CMS_URL = process.env.CMS_URL || `${(process.env.VITE_API_URL || "https://webapi.makeonward.com").replace(/\/+$/, "").replace(/\/api$/, "")}/api/cms/all`; // the API itself (as in vercel.json)
 
 // ---- CMS ------------------------------------------------------------------------------------------
 const loadCms = async () => {
