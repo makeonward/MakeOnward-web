@@ -1,6 +1,12 @@
 @use './abstracts' as *;
 
 .nf {
+  position: relative;
+  overflow: clip;
+  isolation: isolate;
+
+  &__mark { z-index: -1; right: -6vw; top: 50%; width: min(62vw, 900px); translate: 0 -50%; }
+
   min-height: 100dvh;
   display: grid;
   align-items: center;
@@ -9,9 +15,12 @@
   &__inner { display: grid; gap: 1.75rem; justify-items: start; }
 
   &__title {
-    @include display(clamp(3.6rem, 11vw, 10rem));
+    font-family: var(--hero-sans);
+    font-size: clamp(2.8rem, 8vw, 7.5rem);
+    font-weight: 600;
+    letter-spacing: -0.05em;
     color: $white;
-    line-height: 0.9;
+    line-height: 1;
 
     em {
       background: $emphasis-gradient;

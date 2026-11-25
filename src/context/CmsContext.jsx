@@ -104,6 +104,9 @@ export const CmsProvider = ({ children }) => {
   const [pricing, setPricing] = useState(() => readPricingCache() || DEFAULT_PRICING_DOC);
   const [pricingReady, setPricingReady] = useState(() => !!readPricingCache());
 
+  // True once the database has answered (or failed to): until then pages show skeletons, not "empty"
+  const [cmsReady, setCmsReady] = useState(false);
+
   // Contact Modal State
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [selectedProjectModal, setSelectedProjectModal] = useState(null);
@@ -117,7 +120,10 @@ export const CmsProvider = ({ children }) => {
   // Initial Fetch from Backend Server API
   useEffect(() => {
     // A server that never answers must not hold the prices back forever.
-    const pricingFallback = setTimeout(() => setPricingReady(true), 20000);
+    const pricingFallback = setTimeout(() => {
+      setPricingReady(true);
+      setCmsReady(true);
+    }, 20000);
 
     const fetchCmsData = async () => {
       try {
@@ -147,6 +153,7 @@ export const CmsProvider = ({ children }) => {
       } finally {
         clearTimeout(pricingFallback);
         setPricingReady(true);
+        setCmsReady(true);
       }
     };
 
@@ -510,6 +517,7 @@ export const CmsProvider = ({ children }) => {
   return (
     <CmsContext.Provider
       value={{
+        cmsReady,
         portfolioProjects,
         teamMembers,
         stats,

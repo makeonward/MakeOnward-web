@@ -1,0 +1,78 @@
+@use './abstracts' as *;
+
+// Skeleton loading (src/components/Skeleton.jsx), in the theme's own colours.
+@keyframes sk-sweep {
+  from { background-position: 150% 0; }
+  to { background-position: -50% 0; }
+}
+
+@mixin shimmer {
+  background-color: color-mix(in srgb, var(--fg) 9%, var(--bg));
+  background-image: linear-gradient(105deg, transparent 35%, color-mix(in srgb, var(--fg) 9%, transparent) 50%, transparent 65%);
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  animation: sk-sweep 1.3s linear infinite;
+}
+
+.sk {
+  display: block;
+  max-width: 100%;
+  border-radius: 8px;
+  @include shimmer;
+  &--slant { transform: skewX(-14deg); border-radius: 10px; }
+  &--fill { position: absolute; inset: 0; border-radius: inherit; }
+}
+// doubled: outranks the page stylesheets, which load later
+img[data-sk], .st-reelrail__item.sk { @include shimmer; }
+
+.sk-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.sk-stack {
+  width: 100%;
+  display: grid;
+  align-content: center;
+  gap: 1rem;
+  &--wide { gap: clamp(1.1rem, 3svh, 2rem); }
+}
+.sk-poster { width: 100%; height: 62svh; }
+.sk-row { display: flex; gap: 14px; padding: 0.75rem 0 0 8px; }
+
+.sk-page {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  &__nav { @include container; display: flex; justify-content: space-between; align-items: center; padding-block: 18px; }
+  &__hero {
+    @include container;
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: center;
+    gap: clamp(2rem, 6vw, 6rem);
+    padding-block: 2rem 3rem;
+    &--case { min-height: 100svh; padding-top: 100px; }
+    @include down($bp-lg) { grid-template-columns: minmax(0, 1fr); }
+  }
+  &__art { width: 100%; aspect-ratio: 1.25; }
+}
+
+.sk-drawer {
+  cursor: default;
+  .drawer__card { transform: rotateY(-50deg); }
+}
+
+.sk-team {
+  @include container;
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 380px);
+  align-items: center;
+  gap: clamp(2rem, 6vw, 6rem);
+  padding-block: 6rem;
+  &__photo { width: 100%; aspect-ratio: 0.8; }
+  @include down($bp-lg) { grid-template-columns: minmax(0, 1fr); }
+}
+
+@include reduced-motion {
+  .sk, img[data-sk] { animation: none; }
+}

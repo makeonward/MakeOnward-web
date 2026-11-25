@@ -10,7 +10,7 @@ import {
 import { useCms } from "../context/CmsContext";
 import { useCurrency } from "../context/CurrencyContext";
 import { useLogos } from "../context/ThemeContext";
-import { HiArrowRight, HiOutlineArrowUpRight, HiOutlineChevronDown } from "react-icons/hi2";
+import { HiArrowRight, HiOutlineArrowUpRight, HiOutlineChevronDown, HiOutlineEnvelope } from "react-icons/hi2";
 import { FaInstagram, FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
 import Magnetic from "./buttons/Magnetic";
 import ThemeToggle from "./ThemeToggle";
@@ -90,6 +90,7 @@ const PILL_SPRING = { type: "spring", stiffness: 420, damping: 36 };
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [band, setBand] = useState(null); // the group open in the phone menu
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
@@ -148,7 +149,7 @@ const Navbar = () => {
     };
   }, []);
 
-  const email = companyInfo?.email || "info@pixiedigitalcreatives.com";
+  const email = companyInfo?.email || "info@makeonward.com";
 
   return (
     <>
@@ -182,7 +183,7 @@ const Navbar = () => {
                     <li key={key} className="nav-item">
                       <Link
                         to={link.path}
-                        className={`nav-link ${active ? "active" : ""}`}
+                        className={`nav-link ${active ? "active" : ""} ${pillHere ? "has-pill" : ""}`}
                         aria-current={active ? "page" : undefined}
                         onMouseEnter={() => setHoverPath(key)}
                         onFocus={() => setHoverPath(key)}
@@ -215,7 +216,7 @@ const Navbar = () => {
                   >
                     <button
                       type="button"
-                      className={`nav-link ${active ? "active" : ""}`}
+                      className={`nav-link ${active ? "active" : ""} ${pillHere ? "has-pill" : ""}`}
                       aria-expanded={isOpen}
                       aria-controls={menuId}
                       onClick={() => setMenu(isOpen ? null : link.name)}
@@ -236,7 +237,7 @@ const Navbar = () => {
                           transition={{ duration: 0.22, ease: EASE }}
                         >
                           <ul className="nav-menu__list">
-                            {link.children.map((c) => {
+                            {link.children.map((c, i) => {
                               const here = location.pathname === c.path;
                               return (
                                 <li key={c.path}>
@@ -246,8 +247,10 @@ const Navbar = () => {
                                     aria-current={here ? "page" : undefined}
                                     onClick={() => setMenu(null)}
                                   >
+                                    <span className="nav-menu__no" aria-hidden="true">0{i + 1}</span>
                                     <span className="nav-menu__name">{c.name}</span>
                                     <span className="nav-menu__note">{c.note}</span>
+                                    <HiArrowRight aria-hidden="true" />
                                   </Link>
                                 </li>
                               );
@@ -315,7 +318,10 @@ const Navbar = () => {
 
             <button
               className={`hamburger-btn ${open ? "is-open" : ""}`}
-              onClick={() => setOpen((v) => !v)}
+              onClick={() => {
+                setBand(navLinks.find((l) => l.children && isActive(l, location.pathname))?.name ?? null);
+                setOpen((v) => !v);
+              }}
               aria-label={open ? "Close navigation" : "Open navigation"}
               aria-expanded={open}
             >
@@ -328,96 +334,107 @@ const Navbar = () => {
         <motion.span className="nav-progress" style={{ scaleX: progress }} aria-hidden="true" />
       </motion.header>
 
-      {/* MOBILE: fullscreen cinematic menu */}
+      {/* PHONES: the menu fills the screen with one band per entry; a group opens its pages inside its band */}
       <AnimatePresence>
         {open && (
           <motion.div
             className="mobile-menu"
             data-lenis-prevent
-            initial={{ clipPath: "inset(0 0 100% 0)" }}
-            animate={{ clipPath: "inset(0 0 0% 0)" }}
-            exit={{ clipPath: "inset(0 0 100% 0)" }}
-            transition={{ duration: 0.7, ease: EASE_IN_OUT }}
+            initial={{ clipPath: "polygon(125% 0%, 125% 0%, 125% 100%, 100% 100%)" }}
+            animate={{ clipPath: "polygon(0% 0%, 125% 0%, 125% 100%, -25% 100%)" }}
+            exit={{ clipPath: "polygon(125% 0%, 125% 0%, 125% 100%, 100% 100%)" }}
+            transition={{ duration: 0.65, ease: EASE_IN_OUT }}
           >
-            <div className="mobile-menu__top">
-              <span className="mobile-menu__label">Menu</span>
-              <ThemeToggle />
-            </div>
-
-            <nav className="mobile-menu__links" aria-label="Mobile">
+            <nav className="mobile-menu__bands" aria-label="Mobile">
               {navLinks.map((link, idx) => {
-                // A group shows its main page big and the other pages of the group underneath.
-                const to = link.path || link.children[0].path;
-                const subs = link.children ? link.children.slice(1) : [];
+                const active = isActive(link, location.pathname);
+                const isOpen = band === link.name;
+                const face = (
+                  <>
+                    <span className="mobile-menu__name">{link.name}</span>
+                    {link.children ? <i className="mobile-menu__plus" aria-hidden="true" /> : <HiArrowRight aria-hidden="true" />}
+                  </>
+                );
                 return (
-                  <div className="mobile-menu__mask" key={keyOf(link)}>
-                    <motion.div
-                      initial={{ y: "110%" }}
-                      animate={{ y: "0%" }}
-                      exit={{ y: "110%" }}
-                      transition={{ duration: 0.8, ease: EASE, delay: 0.25 + idx * 0.06 }}
-                    >
-                      <Link
-                        to={to}
-                        onClick={() => setOpen(false)}
-                        className={`mobile-menu__link ${location.pathname === to ? "active" : ""}`}
-                      >
-                        <span className="num">0{idx + 1}</span>
-                        <span className="txt">{link.name}</span>
+                  <motion.div
+                    key={keyOf(link)}
+                    className={`mobile-menu__band ${active ? "is-here" : ""} ${isOpen ? "is-open" : ""}`}
+                    initial={{ x: "60%", opacity: 0 }}
+                    animate={{ x: "0%", opacity: 1 }}
+                    transition={{ duration: 0.7, ease: EASE, delay: 0.22 + idx * 0.07 }}
+                  >
+                    {link.children ? (
+                      <button type="button" className="mobile-menu__row" aria-expanded={isOpen} onClick={() => setBand(isOpen ? null : link.name)}>
+                        {face}
+                      </button>
+                    ) : (
+                      <Link to={link.path} className="mobile-menu__row" aria-current={active ? "page" : undefined} onClick={() => setOpen(false)}>
+                        {face}
                       </Link>
-                      {subs.length > 0 && (
-                        <div className="mobile-menu__subs">
-                          {subs.map((c) => (
-                            <Link
-                              key={c.path}
-                              to={c.path}
-                              onClick={() => setOpen(false)}
-                              className={`mobile-menu__sub ${location.pathname === c.path ? "active" : ""}`}
-                            >
-                              {c.name}
-                            </Link>
-                          ))}
-                        </div>
+                    )}
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.ul
+                          className="mobile-menu__pages"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.45, ease: EASE }}
+                        >
+                          {link.children.map((c) => {
+                            const here = location.pathname === c.path;
+                            return (
+                              <li key={c.path}>
+                                <Link to={c.path} className={here ? "is-here" : undefined} aria-current={here ? "page" : undefined} onClick={() => setOpen(false)}>
+                                  {c.name}
+                                </Link>
+                              </li>
+                            );
+                          })}
+                        </motion.ul>
                       )}
-                    </motion.div>
-                  </div>
+                    </AnimatePresence>
+                  </motion.div>
                 );
               })}
             </nav>
 
             <motion.div
               className="mobile-menu__foot"
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.7, ease: EASE, delay: 0.7 }}
+              transition={{ duration: 0.6, ease: EASE, delay: 0.6 }}
             >
-              <div className="mobile-menu__pills" role="group" aria-label="Country">
-                {countries.map((c) => (
-                  <button
-                    key={c.countryCode}
-                    className={`pill ${selectedCountry.countryCode === c.countryCode ? "active" : ""}`}
-                    onClick={() => setSelectedCountry(c)}
-                  >
-                    {c.countryCode} · {c.currencyCode}
-                  </button>
-                ))}
-              </div>
-
               <button
+                type="button"
+                className="mobile-menu__cta"
                 onClick={() => {
                   setOpen(false);
                   setIsContactModalOpen(true);
                 }}
-                className="btn-primary mobile-menu__cta"
               >
                 <span>Let&apos;s talk</span>
-                <HiOutlineArrowUpRight />
+                <HiOutlineArrowUpRight aria-hidden="true" />
               </button>
 
-              <div className="mobile-menu__contact">
-                <a href={`mailto:${email}`}>{email}</a>
-                <div className="socials">
+              <div className="mobile-menu__tools">
+                <label className="mobile-menu__country">
+                  <span>{selectedCountry.countryCode} · {selectedCountry.currencyCode}</span>
+                  <HiOutlineChevronDown aria-hidden="true" />
+                  <select
+                    aria-label="Select your country"
+                    value={selectedCountry.countryCode}
+                    onChange={(e) => setSelectedCountry(countries.find((c) => c.countryCode === e.target.value))}
+                  >
+                    {countries.map((c) => (
+                      <option key={c.countryCode} value={c.countryCode}>{c.countryName} ({c.currencyCode})</option>
+                    ))}
+                  </select>
+                </label>
+                <ThemeToggle />
+                <div className="mobile-menu__socials">
+                  <a href={`mailto:${email}`} aria-label={`Email ${email}`}><HiOutlineEnvelope /></a>
                   <a href={companyInfo?.socials?.instagram || "https://www.instagram.com/makeonward/"} target="_blank" rel="noreferrer" aria-label="Instagram"><FaInstagram /></a>
                   <a href={companyInfo?.socials?.linkedin || "https://www.linkedin.com/company/pixiedigitalcreatives"} target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedinIn /></a>
                   <a href={companyInfo?.socials?.twitter || "https://x.com/pixiedigital"} target="_blank" rel="noreferrer" aria-label="X"><FaXTwitter /></a>

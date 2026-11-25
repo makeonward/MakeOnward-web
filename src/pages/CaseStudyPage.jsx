@@ -6,8 +6,10 @@ import { INDUSTRIES } from "../data/industries";
 import { servicePage } from "../data/servicePages";
 import { useSeo } from "../components/RouteSeo";
 import CtaBand from "../sections/Story/CtaBand";
+import { cldUrl } from "../sections/Story/cloudinary";
 import Reveal from "../components/motion/Reveal";
 import { ContentShell, ContentHero, Section, CardGrid } from "../components/content/ContentKit";
+import { CaseSkeleton } from "../components/Skeleton";
 import NotFoundPage from "./NotFoundPage";
 
 // Case study per real portfolio project (/work/<slug>), from the CMS. It shows only what the CMS
@@ -15,9 +17,9 @@ import NotFoundPage from "./NotFoundPage";
 // or quotes are added. Owners can enrich a case study by writing a longer description in the Admin.
 const CaseStudyPage = () => {
   const { slug } = useParams();
-  const { portfolioProjects, pricingReady } = useCms();
+  const { portfolioProjects, cmsReady } = useCms();
   const project = findProject(portfolioProjects, slug);
-  const loaded = pricingReady; // set once the CMS request has finished
+  const loaded = cmsReady;
 
   const status = project ? projectStatus(project) : null;
   useSeo(
@@ -31,7 +33,7 @@ const CaseStudyPage = () => {
   if (!project) {
     return loaded ? <NotFoundPage /> : (
       <ContentShell>
-        <div className="cp-loading" role="status">Loading the case study…</div>
+        <CaseSkeleton />
       </ContentShell>
     );
   }
@@ -48,6 +50,7 @@ const CaseStudyPage = () => {
         kicker={`Case study · ${project.category || "Project"}`}
         title={project.title}
         lead={project.type}
+        shot={project.image ? cldUrl(project.image, 1200) : undefined}
         meta={<span className="cp-status">{status === "Live" ? "Live project" : status}</span>}
       />
 

@@ -15,210 +15,11 @@
   --ab-shadow: 0 34px 70px -40px rgba(0, 0, 0, 0.85);
 }
 
-// Pillar tones
-.ab-tone-0 { --ta: var(--accent-3); }
-.ab-tone-1 { --ta: var(--accent-2); }
-.ab-tone-2 { --ta: var(--accent); }
-.ab-tone-3 { --ta: var(--accent-3); }
-[data-theme='dark'] {
-  .ab-tone-0 { --tone-bg: linear-gradient(140deg, #d9d4cd, #a8a198); --tone-fg: #0b0b0c; }
-  .ab-tone-1 { --tone-bg: linear-gradient(140deg, #2e2d2f, #1b1b1d); --tone-fg: #ff8a33; }
-  .ab-tone-2 { --tone-bg: linear-gradient(140deg, #ff6a00, #d95400); --tone-fg: #0b0b0c; }
-  .ab-tone-3 { --tone-bg: linear-gradient(140deg, #ffa05c, #ff7a1a); --tone-fg: #0b0b0c; }
-}
-[data-theme='light'] {
-  .ab-tone-0 { --tone-bg: #eeeae2; --tone-fg: #5c5751; }
-  .ab-tone-1 { --tone-bg: #e9e5de; --tone-fg: #0b0b0c; }
-  .ab-tone-2 { --tone-bg: #ffe8d6; --tone-fg: #bf4a00; }
-  .ab-tone-3 { --tone-bg: #eeeae2; --tone-fg: #5c5751; }
-}
-
 // ---------------- Hero ----------------
-.ab-hero {
-  position: relative;
-  isolation: isolate;
-  min-height: 100svh;
-  padding: 124px $gutter 120px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
 
-  &__bg, &__spot, &__waves { position: absolute; pointer-events: none; }
-  &__bg { inset: -10% 0 0; z-index: -3; }
-  &__spot { inset: 0; z-index: -2; }
-  &__waves { left: 0; right: 0; bottom: -4%; height: 70%; z-index: -1; }
 
-  &__ghost {
-    position: absolute;
-    left: -2%;
-    bottom: -2%;
-    z-index: -1;
-    font-size: clamp(4rem, 15.5vw, 18rem);
-    font-weight: 800;
-    line-height: 0.8;
-    letter-spacing: -0.06em;
-    color: transparent;
-    -webkit-text-stroke: 1px alpha($white, 0.07);
-    pointer-events: none;
-    user-select: none;
-  }
 
-  &__inner {
-    width: 100%;
-    max-width: 1440px;
-    margin-inline: auto;
-    display: grid;
-    grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
-    align-items: center;
-    gap: 2.5rem;
 
-    @include down($bp-lg) { grid-template-columns: 1fr; gap: 3.5rem; }
-  }
-
-  &__title {
-    margin: 0 0 1.4rem;
-    font-size: clamp(2.5rem, 4.9vw, 4.8rem);
-    font-weight: 700;
-    line-height: 1.04;
-    letter-spacing: -0.045em;
-    color: $white;
-  }
-
-  &__lead {
-    max-width: 48ch;
-    font-size: clamp(1rem, 1.25vw, 1.15rem);
-    line-height: 1.7;
-    color: $chrome-2;
-  }
-
-  &__ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 2rem; }
-
-  &__visual { display: grid; place-items: center; }
-}
-
-// Collage of arches
-.ab-collage {
-  position: relative;
-  width: min(560px, 100%);
-  aspect-ratio: 1 / 1.12;
-
-  @include down($bp-lg) { width: min(430px, 88vw); }
-}
-
-.ab-plate {
-  position: absolute;
-  will-change: transform;
-
-  &__float {
-    width: 100%;
-    height: 100%;
-    animation: pg-float 7s ease-in-out infinite alternate;
-  }
-  &__frame {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
-    border-radius: 999px 999px 26px 26px;
-    border: 1px solid $white-12;
-    background: var(--surface-2);
-    box-shadow: var(--ab-shadow);
-
-    img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 20%;
-      user-select: none;
-    }
-
-    figcaption {
-      position: absolute;
-      inset: auto 0 0 0;
-      z-index: 2;
-      padding: 0 8% 7%;
-      display: grid;
-      gap: 2px;
-      color: #fff;
-      b { font-size: clamp(0.8rem, 1.1vw, 1rem); font-weight: 600; letter-spacing: -0.01em; }
-      span { font-size: clamp(0.6rem, 0.8vw, 0.72rem); opacity: 0.8; line-height: 1.3; }
-    }
-  }
-  &__shade {
-    position: absolute;
-    inset: 40% 0 0 0;
-    z-index: 1;
-    background: linear-gradient(to top, rgba(11, 11, 12, 0.85), transparent);
-    pointer-events: none;
-  }
-}
-
-// Tagline ring around the logo
-.ab-ring {
-  position: absolute;
-  right: -5%;
-  top: 43%;
-  z-index: 4;
-  width: clamp(96px, 23%, 134px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: var(--glass);
-  border: 1px solid $white-12;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: var(--ab-shadow);
-
-  &__text {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    animation: pg-spin 22s linear infinite;
-    text {
-      font-family: $font-display;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      fill: var(--fg-2);
-    }
-  }
-  &__logo {
-    position: absolute;
-    inset: 27%;
-    width: 46%;
-    height: 46%;
-    object-fit: contain;
-  }
-}
-
-.ab-note {
-  position: absolute;
-  left: -3%;
-  top: -3%;
-  z-index: 4;
-  display: grid;
-  justify-items: start;
-  font-family: $font-hand;
-  font-size: clamp(1.3rem, 2vw, 1.9rem);
-  font-weight: 500;
-  line-height: 1;
-  color: $chrome;
-  transform: rotate(-6deg);
-  pointer-events: none;
-
-  svg {
-    width: 48px;
-    height: 64px;
-    margin: 4px 0 0 64px;
-    color: $chrome-2;
-    transform: scaleX(-1) rotate(-10deg);
-  }
-}
 
 // ---------------- Manifesto (pinned) ----------------
 .ab-man { position: relative; }
@@ -326,154 +127,148 @@
   .ab-man__sub--static { margin-top: 0; }
 }
 
-// ---------------- Pillars ----------------
-.ab-pillars { padding-block: clamp(4rem, 9vw, 8rem) clamp(3rem, 6vw, 5rem); }
-.ab-pillars__wrap { @include container; max-width: 1440px; }
-.ab-pillars__head { margin-bottom: clamp(2rem, 4vw, 3rem); }
+// ---------------- Pillars: they rise and lift the beam ----------------
+.ab-pillars {
+  --hero-sans: 'Geist', 'Poppins', system-ui, sans-serif;
+  --hero-mono: 'Geist Mono', ui-monospace, monospace;
+  position: relative;
+  font-family: var(--hero-sans);
 
-.ab-pillars__row {
-  list-style: none;
-  display: flex;
-  gap: 14px;
-  height: clamp(480px, 64vh, 620px);
-
-  @include down($bp-lg) { flex-direction: column; height: auto; }
+  &__track { position: relative; height: 330svh; }
+  &__stage {
+    @include container;
+    position: sticky;
+    top: 0;
+    max-width: 1440px;
+    height: 100vh;
+    height: 100svh;
+    overflow: clip;
+    overflow-clip-margin: 40px;
+    display: flex;
+    flex-direction: column;
+    padding-block: 96px 26px;
+    .st-label { margin: 0; }
+  }
+  &__still {
+    @include container;
+    max-width: 1440px;
+    padding-block: clamp(4rem, 9vw, 8rem);
+    ul { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+    li { padding-top: 1rem; border-top: 2px solid $accent; }
+    h3 { margin: 0.75rem 0 0.5rem; font-size: 1.3rem; font-weight: 600; letter-spacing: -0.03em; color: $white; }
+    p { line-height: 1.6; color: $chrome-2; }
+  }
 }
 
-.ab-pillar {
-  flex: 1 1 0;
-  min-width: 0;
-  transition: flex-grow 0.9s $ease-out;
-  will-change: flex-grow;
+.ab-temple { flex: 1; min-height: 0; display: flex; flex-direction: column; padding-top: clamp(64px, 13.5svh, 132px); padding-inline: clamp(0px, 2vw, 30px); } // the beam's own height
+.ab-temple__field { position: relative; flex: 1; min-height: 0; }
+.ab-temple__floor { flex: none; height: 3px; margin-inline: calc(clamp(0px, 2vw, 30px) * -1); background: color-mix(in srgb, var(--fg) 34%, var(--bg)); }
 
-  &.is-active { flex-grow: 3.6; }
-  @include down($bp-lg) { flex: none; }
+.ab-beam {
+  position: absolute;
+  z-index: 2;
+  left: -1.2%;
+  right: -1.2%;
+  bottom: 100%;
+  transform-origin: 1.2% 100%;
+  display: grid;
+  place-items: center;
+  height: clamp(54px, 11.5svh, 112px);
+  border-radius: 14px;
+  background: var(--fg);
+  color: var(--bg);
+  will-change: transform;
 
-  &__btn {
+  &__title {
+    font-size: clamp(1.25rem, min(3.9vw, 6.4svh), 4rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    text-align: center;
+    em { font-style: normal; color: #d95400; }
+    [data-theme='light'] & em { color: #ff8a33; }
+    .ab-pillars__still & { margin-top: 0.75rem; text-align: left; font-size: clamp(1.9rem, 5vw, 3.6rem); color: $white; em { color: $accent; } }
+  }
+}
+
+.ab-cols {
+  position: absolute;
+  inset: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(14px, 1.8vw, 28px);
+  overflow: clip; // they come up out of the floor
+  overflow-clip-margin: 0;
+}
+.ab-col {
+  height: 100%;
+  padding-top: 10px;
+  will-change: transform;
+
+  &__face {
     position: relative;
     display: block;
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    padding: 28px;
     text-align: left;
-    border-radius: 28px;
-    background: var(--surface);
-    border: 1px solid $white-08;
-    box-shadow: var(--ab-shadow), inset 0 1px 0 alpha($white, 0.05);
-    transition: border-color 0.5s linear;
-
-    @include down($bp-lg) { padding: 24px; }
-  }
-  &.is-active &__btn { border-color: alpha(var(--ta), 0.55); }
-
-  &__glow {
-    position: absolute;
-    width: 90%;
-    aspect-ratio: 1;
-    left: -20%;
-    bottom: -45%;
-    border-radius: 50%;
-    background: var(--ta);
-    filter: blur(80px);
-    opacity: 0.16;
-    transition: opacity 0.8s linear;
-    pointer-events: none;
-  }
-  &.is-active &__glow { opacity: 0.42; }
-
-  &__num {
-    position: absolute;
-    left: 28px;
-    top: 22px;
-    font-size: clamp(3.5rem, 6vw, 6rem);
-    font-weight: 800;
-    line-height: 0.85;
-    letter-spacing: -0.06em;
-    color: transparent;
-    -webkit-text-stroke: 1px alpha($white, 0.22);
-    transition: -webkit-text-stroke-color 0.6s linear;
-    @include down($bp-lg) { position: static; display: block; margin-bottom: 1rem; font-size: 3.4rem; }
-  }
-  &.is-active &__num { -webkit-text-stroke-color: alpha(var(--ta), 0.7); }
-
-  // Collapsed panels carry their title sideways
-  &__vtitle {
-    position: absolute;
-    left: 30px;
-    bottom: 28px;
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    white-space: nowrap;
-    font-size: 1.15rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
     color: $white;
-    transition: opacity 0.35s linear;
-    @include down($bp-lg) { display: none; }
+    border-radius: 14px 14px 0 0;
+    border: 2px solid color-mix(in srgb, var(--fg) 24%, var(--bg));
+    border-bottom: 0;
+    // fluted, like a column
+    background:
+      repeating-linear-gradient(90deg, color-mix(in srgb, var(--fg) 5%, transparent) 0 1px, transparent 1px 25%),
+      var(--surface);
+    transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+    &:focus-visible { outline: 3px solid $accent; outline-offset: -8px; }
   }
-  &.is-active &__vtitle { opacity: 0; }
+  &.is-on &__face { background-color: var(--btn-bg); border-color: var(--btn-bg); color: var(--btn-fg); }
 
-  // Fixed width, so the text doesn't reflow while the panel grows
-  &__body {
-    position: absolute;
-    left: 28px;
-    bottom: 28px;
-    width: min(440px, calc(100% - 56px));
-    display: grid;
-    gap: 14px;
-    opacity: 0;
-    transform: translateY(26px);
-    pointer-events: none;
-    transition: opacity 0.4s linear, transform 0.5s $ease-out;
+  &__in { display: flex; flex-direction: column; height: 100%; padding: clamp(18px, 3.2svh, 34px) clamp(16px, 1.9vw, 30px) clamp(20px, 3.6svh, 36px); }
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    svg { font-size: clamp(1.5rem, 2vw, 2rem); }
+  }
+  &__no { font-family: var(--hero-mono); font-size: 0.86rem; letter-spacing: 0.06em; color: $accent; }
+  &.is-on &__no { color: inherit; }
+  &__title { margin-top: auto; font-size: clamp(1.4rem, min(2.35vw, 4.4svh), 2.4rem); font-weight: 600; line-height: 1.04; letter-spacing: -0.045em; text-wrap: balance; }
+  &__desc { margin-top: 0.9rem; font-size: clamp(0.88rem, 1.05vw, 1rem); line-height: 1.5; color: $chrome-2; transition: color 0.5s; }
+  &.is-on &__desc { color: inherit; }
+}
 
-    @include down($bp-lg) { position: static; width: auto; opacity: 1; transform: none; pointer-events: auto; }
-  }
-  &.is-active &__body {
-    opacity: 1;
-    transform: none;
-    transition: opacity 0.6s linear 0.3s, transform 0.9s $ease-out 0.25s;
-  }
+.ab-now { display: none; }
 
-  &__icon {
-    display: grid;
-    place-items: center;
-    width: 58px;
-    height: 58px;
-    border-radius: 17px;
-    font-size: 26px;
-    background: var(--tone-bg);
-    color: var(--tone-fg);
+@include down($bp-lg) {
+  .ab-pillars__stage { padding-block: 84px 18px; }
+  .ab-temple { padding-top: clamp(70px, 11svh, 96px); padding-inline: 4px; }
+  .ab-beam { height: clamp(50px, 8.5svh, 72px); &__title { font-size: clamp(1.2rem, 5.6vw, 2.4rem); } }
+  .ab-cols { gap: 10px; }
+  .ab-col {
+    padding-top: 7px;
+    &__face { border-radius: 10px 10px 0 0; }
+    &__in { align-items: center; padding: 16px 4px 18px; }
+    &__top { flex-direction: column; gap: 14px; }
+    &__title { writing-mode: vertical-rl; rotate: 180deg; white-space: nowrap; font-size: clamp(1rem, min(4.6vw, 2.7svh), 1.5rem); line-height: 1; }
+    &__desc { display: none; }
   }
-  &__title {
-    font-size: clamp(1.5rem, 2.4vw, 2.2rem);
-    font-weight: 700;
-    line-height: 1.08;
-    letter-spacing: -0.04em;
-    color: $white;
-  }
-  &__desc { font-size: 0.98rem; line-height: 1.7; color: $chrome-2; }
-
-  // Turn-taking timer
-  &__bar {
-    position: absolute;
-    left: 28px;
-    right: 28px;
-    bottom: 0;
-    height: 3px;
-    i {
-      display: block;
-      height: 100%;
-      border-radius: 3px;
-      background: var(--grad-accent);
-      transform-origin: left;
-      animation: ab-bar linear forwards;
-    }
+  .ab-now {
+    display: block;
+    min-height: 23svh;
+    padding-top: 18px;
+    h3 { display: flex; align-items: baseline; gap: 12px; font-size: clamp(1.4rem, 6.4vw, 2.2rem); font-weight: 600; line-height: 1.08; letter-spacing: -0.045em; color: $white; }
+    h3 span { font-family: var(--hero-mono); font-size: 0.82rem; font-weight: 400; letter-spacing: 0.04em; color: $accent; }
+    p { margin-top: 0.6rem; font-size: 0.95rem; line-height: 1.5; color: $chrome-2; }
   }
 }
-@keyframes ab-bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-@include reduced-motion {
-  .ab-plate__float, .ab-ring__text { animation: none !important; }
-  .ab-pillar { transition: none; }
+// ---------------- Phones: the same scenes, in one column ----------------
+@include down($bp-lg) {
+  .ab-man__stage { padding: 88px $gutter 28px; }
+  .ab-man__text { font-size: clamp(1.45rem, min(6.8vw, 3.9svh), 3rem); }
+  .ab-man__sub { font-size: 0.95rem; line-height: 1.5; }
+  .ab-man__ghost { font-size: 28svh; bottom: -3%; }
+  .ab-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem 1rem; }
 }

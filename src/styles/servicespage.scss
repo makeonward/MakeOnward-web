@@ -4,6 +4,6 @@
 .services-page {
   background: $black;
   min-height: 100vh;
-  // `clip` (not `hidden`) so the sticky chapter index keeps working
+  // `clip` (not `hidden`) so the sticky sheets keeps working
   overflow-x: clip;
 }

@@ -1,96 +1,44 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { HiArrowRight } from "react-icons/hi2";
-import { useReady } from "../../animations/ReadyContext";
-import { EASE } from "../../animations/variants";
-import { KineticLine, KineticWord } from "../../components/motion/KineticText";
-import Magnetic from "../../components/buttons/Magnetic";
+import React, { useRef } from "react";
+import { useInView } from "framer-motion";
+import { usePrefersReducedMotion } from "../../animations/hooks";
+import HeroDust from "../../components/hero/HeroDust";
+import PageHero, { SlantButton } from "../../components/hero/PageHero";
 import { useCurrency } from "../../context/CurrencyContext";
-import { categoryFrom } from "../../data/pricing";
+import PriceTags from "./PriceTags";
 import { seoPage } from "../../data/seo";
 
 // Keyword line and intro text are shared with the page's SEO copy (src/data/seo.js).
 const SEO = seoPage("/pricing");
 
-// Opening: the promise on the left, a price guide on the right (every service with the lowest
-// confirmed price it starts at), each row jumping to its section.
+// The promise on the left, the price list hanging on strings on the right.
 const PricingHero = ({ categories, pricesReady, onQuote, openContact, onJump }) => {
-  const ready = useReady();
+  const root = useRef(null);
+  const reduce = usePrefersReducedMotion();
+  const inView = useInView(root, { amount: 0.1 });
   const { selectedCountry } = useCurrency();
 
-  const enter = (delay) => ({
-    initial: { opacity: 0, y: 24 },
-    animate: ready ? { opacity: 1, y: 0 } : undefined,
-    transition: { duration: 1, ease: EASE, delay },
-  });
-
   return (
-    <section className="pc-hero" aria-label="Pricing and plans">
-      <div className="pc-hero__bg" aria-hidden="true">
-        <span className="pg-glow pg-glow--a" />
-        <span className="pg-glow pg-glow--b" />
-      </div>
-
-      <div className="pc-hero__inner">
-        <div className="pc-hero__copy">
-
-          <h1 className="pc-hero__title" aria-label={`${SEO.kicker}. Clear pricing, built around you.`}>
-            <motion.span className="h1-kicker" {...enter(0.1)}>{SEO.kicker}</motion.span>
-            <KineticLine text="Clear pricing," ready={ready} />
-            <KineticWord className="grad-text" delay={0.55} ready={ready}>built around you.</KineticWord>
-          </h1>
-
-          <motion.p className="pc-hero__lead" {...enter(0.7)}>
-            {SEO.lead}
-          </motion.p>
-
-          <motion.div className="pc-hero__ctas" {...enter(0.85)}>
-            <Magnetic strength={0.25}>
-              <button type="button" className="btn-primary" onClick={() => onQuote()}>
-                <span>Request a custom quote</span>
-                <HiArrowRight />
-              </button>
-            </Magnetic>
-            <button type="button" className="btn-secondary" onClick={openContact}>
-              Discuss your project
-            </button>
-          </motion.div>
-
-          <motion.p className="pc-hero__note" {...enter(1)}>
-            All prices are in Indian Rupees (₹).
-            {selectedCountry.countryCode !== "IN" && ` Outside India? Ask us for a quote in ${selectedCountry.currencyCode}.`}
-          </motion.p>
-        </div>
-
-        <motion.nav className="pc-index" aria-label="Price guide" {...enter(0.6)}>
-          <div className="pc-index__head">
-            <span>Price guide</span>
-            <span>Starting from</span>
-          </div>
-          <ul aria-busy={!pricesReady}>
-            {!pricesReady &&
-              [0, 1, 2, 3].map((i) => (
-                <li key={i} className="pc-index__ghost" aria-hidden="true">
-                  <i />
-                </li>
-              ))}
-            {pricesReady && categories.map((c) => {
-              const from = categoryFrom(c);
-              return (
-                <li key={c.slug}>
-                  <button type="button" className="pc-index__row" onClick={() => onJump(c.slug)}>
-                    <b>{c.number}</b>
-                    <span className="pc-index__title">{c.title}</span>
-                    <span className="pc-index__price">{from || "On request"}</span>
-                    <HiArrowRight aria-hidden="true" />
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </motion.nav>
-      </div>
-    </section>
+    <div ref={root}>
+      <PageHero
+        variant="tags"
+        label="Pricing and plans"
+        kicker={SEO.kicker}
+        lines={["Clear pricing,", "built around you."]}
+        lead={SEO.lead}
+        note={`All prices are in Indian Rupees (₹).${
+          selectedCountry.countryCode !== "IN" ? ` Outside India? Ask us for a quote in ${selectedCountry.currencyCode}.` : ""
+        }`}
+        actions={
+          <>
+            <SlantButton onClick={() => onQuote()}>Request a custom quote</SlantButton>
+            <SlantButton line onClick={openContact}>Discuss your project</SlantButton>
+          </>
+        }
+      >
+        <HeroDust running={inView && !reduce} />
+        {(!pricesReady || categories.length > 0) && <PriceTags categories={categories} pricesReady={pricesReady} onJump={onJump} />}
+      </PageHero>
+    </div>
   );
 };
 

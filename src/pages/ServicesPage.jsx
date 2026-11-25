@@ -10,21 +10,19 @@ import ServicesHero from "../sections/ServicesStory/ServicesHero";
 import ServiceChapter from "../sections/ServicesStory/ServiceChapter";
 import { groupServices } from "../sections/ServicesStory/data";
 import { useCms } from "../context/CmsContext";
-import { useIsDesktop, usePrefersReducedMotion } from "../animations/hooks";
 import "../sections/Story/story.scss";
 import "../sections/ServicesStory/servicesstory.scss";
 import "../styles/servicespage.scss";
 
 // The services page reads as one scroll story, like the home page:
-// the promise (hero + orbit of every service) -> one chapter per category (Build, Social, Content,
-// Growth), each service a big card that tips up out of the page -> the invitation.
+// the promise (hero + a spiral of every service) -> one chapter per category (Build, Social, Content,
+// Growth), each laid out its own way -> the invitation.
 // It renders whatever services the CMS holds, so it always matches the home page.
 const ServicesPage = () => {
   const { services, setIsContactModalOpen } = useCms();
-  const desktop = useIsDesktop();
-  const reduce = usePrefersReducedMotion();
   const groups = useMemo(() => groupServices(services), [services]);
-  const mode = reduce ? "fade" : desktop ? "scroll" : "rise";
+  // the hero counts the services as the chapters below do
+  const ordered = useMemo(() => groups.flatMap((g) => g.items.map((i) => i.service)), [groups]);
   const openContact = () => setIsContactModalOpen(true);
 
   return (
@@ -33,12 +31,10 @@ const ServicesPage = () => {
       <ScrollProgress />
 
       <main id="main">
-        <ServicesHero services={services} openContact={openContact} />
+        <ServicesHero services={ordered} openContact={openContact} />
 
         {services.length > 0 && (
           <>
-            <Marquee items={services.map((s) => s.title)} speed={70} />
-
             <div id="chapters" className="sv-chapters">
               {groups.map((group) => (
                 <ServiceChapter
@@ -46,8 +42,6 @@ const ServicesPage = () => {
                   group={group}
                   chapters={groups.length}
                   totalServices={services.length}
-                  mode={mode}
-                  desktop={desktop && !reduce}
                   openContact={openContact}
                 />
               ))}

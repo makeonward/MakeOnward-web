@@ -7,6 +7,8 @@ import ProjectDetailModal from "../ProjectDetailModal";
 import ScrollProgress from "../motion/ScrollProgress";
 import MaskText from "../motion/MaskText";
 import Reveal from "../motion/Reveal";
+import MarkStroke from "../hero/MarkStroke";
+import "../../styles/pagehero.scss";
 import { scrollToTarget } from "../../animations/lenis";
 import { useReady } from "../../animations/ReadyContext";
 import "../../sections/Story/story.scss";
@@ -47,7 +49,7 @@ export const ContentShell = ({ children }) => {
 };
 
 // Building blocks for the content pages (service, industry, blog and case-study pages). One look,
-// taken from the existing design system: the inner-page glows, the H1 keyword line, glass panels
+// taken from the existing design system: the hairline mark, the H1 keyword line, glass panels
 // and the pill buttons. Everything is real, crawlable HTML (headings, lists, details/summary).
 
 export const Breadcrumbs = ({ items }) => (
@@ -62,13 +64,9 @@ export const Breadcrumbs = ({ items }) => (
   </nav>
 );
 
-export const ContentHero = ({ crumbs, kicker, title, lead, meta, children }) => (
+// `art` is an optional picture (a service object or a project screenshot) in place of the hairline mark.
+export const ContentHero = ({ crumbs, kicker, title, lead, meta, art, shot, children }) => (
   <section className="cp-hero" aria-label="Introduction">
-    <div className="cp-hero__bg" aria-hidden="true">
-      <span className="pg-glow pg-glow--a" />
-      <span className="pg-glow pg-glow--b" />
-      <span className="pg-glow pg-glow--c" />
-    </div>
     <div className="cp-hero__inner container-custom">
       {crumbs && <Breadcrumbs items={crumbs} />}
       <MaskText
@@ -81,6 +79,14 @@ export const ContentHero = ({ crumbs, kicker, title, lead, meta, children }) => 
       {meta && <Reveal className="cp-hero__meta" delay={0.55}>{meta}</Reveal>}
       {children && <Reveal className="cp-hero__actions" delay={0.65}>{children}</Reveal>}
     </div>
+    {shot ? (
+      <Reveal className="cp-hero__shot" delay={0.3}><span><img src={shot} alt="" decoding="async" /></span></Reveal>
+    ) : (
+      <div className="cp-hero__mark" aria-hidden="true">
+        <MarkStroke />
+        {art && <img className="cp-hero__art" src={art} alt="" decoding="async" draggable="false" />}
+      </div>
+    )}
   </section>
 );
 

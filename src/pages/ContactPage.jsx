@@ -8,18 +8,18 @@ import { useCurrency } from "../context/CurrencyContext";
 import { HiOutlineArrowUpRight, HiOutlineEnvelope, HiOutlinePhone, HiOutlineSparkles } from "react-icons/hi2";
 import { FaInstagram, FaLinkedinIn, FaXTwitter, FaFacebookF } from "react-icons/fa6";
 import { RiCheckLine, RiGlobalLine, RiComputerLine } from "react-icons/ri";
-import MaskText from "../components/motion/MaskText";
-import Reveal from "../components/motion/Reveal";
-import HeroAurora from "../components/motion/HeroAurora";
+import PageHero from "../components/hero/PageHero";
+import TypedLine from "../components/hero/TypedLine";
 import TiltCard from "../components/motion/TiltCard";
 import { Stagger } from "../components/motion/Stagger";
-import { genImage } from "../data/images";
 import { sendInquiry } from "../utils/sendInquiry";
 import { seoPage } from "../data/seo";
 import "../styles/contactpage.scss";
 
 // Keyword line and intro text are shared with the page's SEO copy (src/data/seo.js).
 const SEO = seoPage("/contact");
+
+const TYPED = ["A website.", "An app.", "An online store.", "A brand people follow.", "Something new."];
 
 const ContactPage = () => {
   const { companyInfo, services } = useCms();
@@ -96,23 +96,16 @@ const ContactPage = () => {
       <Navbar />
 
       <main id="main" className="contact-page-main">
-        {/* Hero Section */}
-        <section className="contact-page-hero has-aurora">
-          <HeroAurora image={genImage("hero-contact")} />
-          <div className="container-custom">
-            <div className="hero-content-center">
-              <MaskText
-                as="h1"
-                className="contact-hero-title"
-                delay={5}
-                lines={[<span className="h1-kicker" key="k">{SEO.kicker}</span>, "Tell us what", <>you're <em>building.</em></>]}
-              />
-              <Reveal as="p" className="contact-hero-desc" delay={0.75}>
-                {SEO.lead}
-              </Reveal>
-            </div>
-          </div>
-        </section>
+        {/* Hero: the sentence finishes itself with what people ask us for */}
+        <PageHero
+          variant="type"
+          label="Contact introduction"
+          kicker={SEO.kicker}
+          lines={["Tell us what", "you're building."]}
+          lead={SEO.lead}
+        >
+          <TypedLine words={TYPED} />
+        </PageHero>
 
         {/* Contact Split Grid */}
         <section className="contact-split-section">
@@ -130,8 +123,8 @@ const ContactPage = () => {
                     <span className="info-icon"><HiOutlineEnvelope /></span>
                     <div>
                       <span className="info-lbl">DIRECT EMAIL</span>
-                      <a href={`mailto:${companyInfo?.email || "info@pixiedigitalcreatives.com"}`} className="info-val">
-                        {companyInfo?.email || "info@pixiedigitalcreatives.com"}
+                      <a href={`mailto:${companyInfo?.email || "info@makeonward.com"}`} className="info-val">
+                        {companyInfo?.email || "info@makeonward.com"}
                       </a>
                     </div>
                   </div>
@@ -273,8 +266,8 @@ const ContactPage = () => {
                     {error && (
                       <p className="form-error" role="alert">
                         {error} Please try again, or email us at{" "}
-                        <a href={`mailto:${companyInfo?.email || "info@pixiedigitalcreatives.com"}`}>
-                          {companyInfo?.email || "info@pixiedigitalcreatives.com"}
+                        <a href={`mailto:${companyInfo?.email || "info@makeonward.com"}`}>
+                          {companyInfo?.email || "info@makeonward.com"}
                         </a>.
                       </p>
                     )}

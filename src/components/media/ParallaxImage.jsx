@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { imageReveal, VIEWPORT } from "../../animations/variants";
-import { useIsDesktop } from "../../animations/hooks";
 
 // Image plate: clip-path reveal on entry, subtle scroll parallax inside the frame,
 // tonal (grayscale -> colour) treatment via CSS. Transform / clip-path / filter only.
@@ -10,7 +9,7 @@ const ParallaxImage = ({
   alt = "",
   className = "",
   strength = 9, // % of travel
-  fallback = "/portfolio.jpg",
+  fallback = "/assets/mockups/project-1400.webp",
   position = "center",
   tonal = true,
   priority = false,
@@ -18,9 +17,8 @@ const ParallaxImage = ({
 }) => {
   const ref = useRef(null);
   const reduce = useReducedMotion();
-  const desktop = useIsDesktop();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const range = reduce || !desktop ? 0 : strength;
+  const range = reduce ? 0 : strength;
   const y = useTransform(scrollYProgress, [0, 1], [`-${range}%`, `${range}%`]);
 
   return (

@@ -11,7 +11,7 @@ const rank = (label) => {
   return i < 0 ? ORDER.length : i;
 };
 
-// Frosted bar that overlaps the bottom of the hero. Numbers come from the CMS and count up on entry.
+// Frosted bar right below the hero. Numbers come from the CMS and count up on entry.
 const StatsBar = () => {
   const { stats } = useCms();
   if (!stats.length) return null;

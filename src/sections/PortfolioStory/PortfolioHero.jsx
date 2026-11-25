@@ -1,181 +1,235 @@
-import React, { useEffect, useMemo, useRef } from "react";
-import { motion, useMotionValue, useMotionTemplate, useScroll, useSpring, useTransform } from "framer-motion";
-import { HiArrowRight } from "react-icons/hi2";
-import { useReady } from "../../animations/ReadyContext";
-import { useFinePointer, useIsDesktop, usePrefersReducedMotion } from "../../animations/hooks";
-import { scrollToTarget } from "../../animations/lenis";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion, useInView, useMotionTemplate, useSpring, useTransform } from "framer-motion";
+import { HiPause, HiPlay } from "react-icons/hi2";
+import { usePrefersReducedMotion } from "../../animations/hooks";
 import { EASE } from "../../animations/variants";
-import { KineticLine, KineticWord } from "../../components/motion/KineticText";
-import Magnetic from "../../components/buttons/Magnetic";
+import { useCms } from "../../context/CmsContext";
+import { useReady } from "../../animations/ReadyContext";
+import HeroDust from "../../components/hero/HeroDust";
+import { useEnter } from "../../components/hero/PageHero";
+import { DrawerSkeleton } from "../../components/Skeleton";
+import { projectSlug } from "../../data/projects";
+import { cldUrl } from "../Story/cloudinary";
 import { pad } from "./data";
 import { seoPage } from "../../data/seo";
 
 // Keyword line and intro text are shared with the page's SEO copy (src/data/seo.js).
 const SEO = seoPage("/portfolio");
 
-const COLS = 3;
-const SPRING = { stiffness: 60, damping: 18, mass: 0.8 };
+const CARDS = 12; // a full drawer; with fewer projects they repeat, keeping their own numbers
+const SWEEP = 1500; // ms per card while the drawer sweeps by itself
+const TURN = -50; // degrees a filed card is turned away
+const mix = (a, b, t) => a + (b - a) * t;
 
-// Spread the projects over the columns; every column gets at least four frames so the loop has no gap.
-const buildColumns = (items) => {
-  const cols = Array.from({ length: COLS }, () => []);
-  items.forEach((it, i) => cols[i % COLS].push(it));
-  return cols.map((col, c) => {
-    const out = [...col];
-    for (let k = 0; out.length < 4; k++) out.push(items[(c + 1 + k * 2) % items.length]);
-    return out;
-  });
+// The part of a wide screenshot that reads well in a tall card
+const FRAMES = {
+  "elv8-fitness": { top: "-14%", height: "150%", objectPosition: "90% 50%" },
+  mehfil: { objectPosition: "84% 50%" },
+  aksharcanvas: { objectPosition: "82% 50%" },
+  petmitra: { top: "-11%", height: "132%", objectPosition: "94% 50%" },
+  "ocean-rare": { objectPosition: "50% 50%" },
+  ghgamezone: { objectPosition: "88% 50%" },
+  "moti-restro": { top: "0", height: "100%", objectPosition: "100% 50%" },
 };
 
-// The wall: real project screenshots drifting up and down in three tilted columns.
-const Wall = ({ projects, onOpen, ready, nx, ny, scrollP, motionOn }) => {
-  const cols = useMemo(() => buildColumns(projects), [projects]);
-  const x = useTransform(nx, (v) => v * -34);
-  const cursorY = useTransform(ny, (v) => v * -24);
-  const scrollY = useTransform(scrollP, [0, 1], [0, -110]);
-  const y = useTransform([cursorY, scrollY], ([a, b]) => a + b);
+// One filed card. `pos` is the (springy, fractional) place in the drawer being looked at: the card there
+// stands up and faces front, its neighbours rise a little, so a sweep runs through the drawer as a wave.
+const Card = ({ item, i, pos, onFocus, onOpen }) => {
+  const k = useTransform(pos, (p) => Math.exp(-(((i - p) / 0.6) ** 2)));
+  const rotate = useTransform(k, (v) => mix(TURN, 2, v));
+  const lift = useTransform(k, (v) => mix(0, -38, v));
+  const transform = useMotionTemplate`translateY(${lift}%) rotateY(${rotate}deg)`;
+  const tab = useTransform(k, [0.25, 0.9], [0, 1]);
+  const { project, no, copy } = item;
 
   return (
-    <motion.div className="pf-wall" style={motionOn ? { x, y } : undefined}>
-      <div className="pf-wall__tilt">
-        {cols.map((col, c) => (
-          <motion.div
-            key={c}
-            className="pf-col"
-            style={{ "--dur": `${40 + c * 7}s`, "--dir": c === 1 ? "reverse" : "normal" }}
-            initial={{ opacity: 0, y: c === 1 ? -80 : 80 }}
-            animate={ready ? { opacity: 1, y: 0 } : undefined}
-            transition={{ duration: 1.4, ease: EASE, delay: 0.5 + c * 0.15 }}
-          >
-            <div className="pf-col__track">
-              {[0, 1].map((copy) => (
-                <div className="pf-col__set" key={copy} aria-hidden={copy === 1 ? "true" : undefined}>
-                  {col.map((p, i) => (
-                    <button
-                      key={`${p.id}-${i}`}
-                      type="button"
-                      className="pf-frame"
-                      onClick={() => onOpen(p)}
-                      tabIndex={copy === 1 ? -1 : 0}
-                      data-cursor="View"
-                      aria-label={`Open ${p.title}`}
-                    >
-                      <img src={p.image} alt="" loading="eager" decoding="async" draggable="false" />
-                      <span className="pf-frame__label">
-                        <b>{p.title}</b>
-                        {p.category && <em>{p.category}</em>}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </motion.div>
+    <motion.button
+      type="button"
+      className="drawer__card"
+      style={{ transform }}
+      tabIndex={copy ? -1 : undefined}
+      aria-hidden={copy || undefined}
+      aria-label={`Open ${project.title}`}
+      onFocus={(e) => e.target.matches(":focus-visible") && onFocus(i)}
+      onClick={(e) => e.detail === 0 && onOpen(project)} // keyboard; the mouse is handled by the drawer
+    >
+      <motion.span className="drawer__tab" style={{ opacity: tab }} aria-hidden="true">
+        {pad(no)} · {project.title}
+      </motion.span>
+      <span className="drawer__face">
+        <img src={cldUrl(project.image, 1200)} style={FRAMES[projectSlug(project.title)]} alt="" decoding="async" draggable="false" />
+      </span>
+    </motion.button>
   );
 };
 
-// Chapter 0 — the promise. The headline rises letter by letter beside a wall of the real work.
-const PortfolioHero = ({ projects, categories, onPickCategory, onOpen, openContact }) => {
-  const ref = useRef(null);
+const Drawer = ({ projects, onOpen }) => {
+  const box = useRef(null);
   const ready = useReady();
+  const { selectedProjectModal } = useCms();
   const reduce = usePrefersReducedMotion();
-  const desktop = useIsDesktop();
-  const fine = useFinePointer();
-  const withImages = useMemo(() => projects.filter((p) => p.image), [projects]);
-  const motionOn = !reduce;
+  const inView = useInView(box, { amount: 0.4 });
+  const enter = useEnter();
+  const items = useMemo(
+    () =>
+      Array.from({ length: Math.max(CARDS, projects.length) }, (_, i) => ({
+        project: projects[i % projects.length],
+        no: (i % projects.length) + 1,
+        copy: i >= projects.length,
+      })),
+    [projects]
+  );
+  const n = items.length;
+  const [at, setAt] = useState(n - 5);
+  const [choice, setChoice] = useState(null);
+  const [held, setHeld] = useState(false); // pointer or keyboard is on the drawer
+  const pos = useSpring(n - 5, { stiffness: 130, damping: 21, mass: 0.7 });
+  const playing = choice ?? !reduce;
+  const dir = useRef(1);
+  const touchLift = useRef(false);
 
-  const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const copyY = useTransform(p, [0, 1], ["0%", "-22%"]);
-  const copyO = useTransform(p, [0, 0.62], [1, 0]);
-  const glowY = useTransform(p, [0, 1], ["0%", "26%"]);
-
-  const nx = useSpring(0, SPRING);
-  const ny = useSpring(0, SPRING);
-  const mx = useMotionValue(62);
-  const my = useMotionValue(42);
-  const spot = useMotionTemplate`radial-gradient(620px circle at ${mx}% ${my}%, var(--pf-spot), transparent 62%)`;
   useEffect(() => {
-    if (!fine || reduce) return undefined;
-    const onMove = (e) => {
-      nx.set(e.clientX / window.innerWidth - 0.5);
-      ny.set(e.clientY / window.innerHeight - 0.5);
-      const r = ref.current?.getBoundingClientRect();
-      if (r) {
-        mx.set(((e.clientX - r.left) / r.width) * 100);
-        my.set(((e.clientY - r.top) / r.height) * 100);
-      }
-    };
-    window.addEventListener("pointermove", onMove, { passive: true });
-    return () => window.removeEventListener("pointermove", onMove);
-  }, [fine, reduce, nx, ny, mx, my]);
+    pos.set(at);
+  }, [at, pos]);
 
-  const enter = (delay) => ({
-    initial: { opacity: 0, y: 24 },
-    animate: ready ? { opacity: 1, y: 0 } : undefined,
-    transition: { duration: 1, ease: EASE, delay },
-  });
-  const fx = (style) => (reduce ? undefined : style);
+  useEffect(() => {
+    if (!playing || held || !inView || !ready || selectedProjectModal) return undefined;
+    const t = setInterval(
+      () =>
+        setAt((i) => {
+          if (i + dir.current > n - 1 || i + dir.current < 0) dir.current *= -1;
+          return i + dir.current;
+        }),
+      SWEEP
+    );
+    return () => clearInterval(t);
+  }, [playing, held, inView, ready, n, selectedProjectModal]);
+
+  // The card under the pointer, going by where the cards stand when filed (so a risen card never gets in
+  // the way): the front-most one whose span, seen in perspective, holds the pointer. Over the risen part of
+  // a card, that card stays.
+  const pointAt = (e) => {
+    const el = box.current;
+    const r = el.getBoundingClientRect();
+    const slots = [...el.querySelectorAll(".drawer__slot")];
+    const w = slots[0].offsetWidth;
+    const h = slots[0].offsetHeight;
+    const x = e.clientX - r.left;
+    const y = e.clientY - r.top;
+    const up = slots[at].offsetLeft;
+    if (y < r.height - h * 0.62 && x >= up - 8 && x <= up + w + 8) {
+      touchLift.current = false;
+      return;
+    }
+    const P = parseFloat(getComputedStyle(el).perspective) || r.width;
+    const rad = (TURN * Math.PI) / 180;
+    const near = P / (P + w * Math.sin(rad));
+    let best = n - 1;
+    for (let i = 0; i < n; i++) {
+      const right = r.width / 2 + (slots[i].offsetLeft - r.width / 2 + w * Math.cos(rad)) * near;
+      if (x <= right) {
+        best = i;
+        break;
+      }
+    }
+    touchLift.current = e.pointerType !== "mouse" && best !== at;
+    setAt(best);
+  };
+  const active = items[at];
 
   return (
-    <section className={`pf-hero ${withImages.length ? "has-wall" : ""}`} id="top" ref={ref} aria-label="Portfolio introduction">
-      <motion.div className="pf-hero__bg" style={fx({ y: glowY })} aria-hidden="true">
-        <span className="pg-glow pg-glow--a" />
-        <span className="pg-glow pg-glow--b" />
-        <span className="pg-glow pg-glow--c" />
-      </motion.div>
-      {desktop && <motion.div className="pf-hero__spot" style={{ background: spot }} aria-hidden="true" />}
-
-      <div className="pf-hero__inner">
-        <motion.div className="pf-hero__copy" style={fx({ y: copyY, opacity: copyO })}>
-
-          <h1 className="pf-hero__title" aria-label={`${SEO.kicker}. Work that speaks for itself.`}>
-            <motion.span className="h1-kicker" {...enter(0.1)}>{SEO.kicker}</motion.span>
-            <KineticLine text="Work that speaks" from={4} ready={ready} />
-            <KineticWord className="grad-text text-shimmer" delay={0.7} ready={ready}>for itself.</KineticWord>
-          </h1>
-
-          <motion.p className="pf-hero__lead" {...enter(0.8)}>
-            {SEO.lead}
-          </motion.p>
-
-          <motion.div className="pf-hero__ctas" {...enter(0.95)}>
-            <Magnetic strength={0.25}>
-              <button type="button" className="btn-primary" onClick={() => scrollToTarget("#work", { offset: -40 })}>
-                <span>Explore the work</span>
-                <HiArrowRight />
-              </button>
-            </Magnetic>
-            <button type="button" className="btn-secondary" onClick={openContact}>Start a project</button>
+    <>
+      <div
+        className="drawer"
+        ref={box}
+        data-cursor="View"
+        onPointerEnter={() => setHeld(true)}
+        onPointerMove={pointAt}
+        onPointerDown={pointAt}
+        onPointerLeave={() => setHeld(false)}
+        onBlur={() => setHeld(false)}
+        onClick={(e) => {
+          // touch: the first tap lifts a card, the next one opens it
+          if (e.detail > 0 && !touchLift.current) onOpen(active.project);
+        }}
+      >
+        {items.map((item, i) => (
+          <motion.div
+            key={i}
+            className="drawer__slot"
+            style={{ left: `calc(var(--from) + (var(--to) - var(--from)) * ${n > 1 ? i / (n - 1) : 0})`, zIndex: n - i }}
+            initial={reduce ? { opacity: 0 } : { y: "55%", opacity: 0 }}
+            animate={ready ? { y: "0%", opacity: 1 } : undefined}
+            transition={{ duration: 0.9, ease: EASE, delay: 0.3 + i * 0.05 }}
+          >
+            <Card
+              item={item}
+              i={i}
+              pos={pos}
+              onOpen={onOpen}
+              onFocus={(j) => {
+                setHeld(true);
+                setAt(j);
+              }}
+            />
           </motion.div>
-
-          {categories.length > 1 && (
-            <motion.ul className="pf-cats" {...enter(1.1)} aria-label="Project categories">
-              {categories.map(({ name, count }) => (
-                <li key={name}>
-                  <button type="button" className="pf-cat" onClick={() => onPickCategory(name)}>
-                    <span>{name}</span>
-                    <b>{pad(count)}</b>
-                  </button>
-                </li>
-              ))}
-            </motion.ul>
-          )}
-        </motion.div>
-
-        {withImages.length > 0 && (
-          <div className="pf-hero__visual">
-            <Wall projects={withImages} onOpen={onOpen} ready={ready} nx={nx} ny={ny} scrollP={p} motionOn={motionOn} />
-          </div>
-        )}
+        ))}
       </div>
+      <div className="drawer__fade" aria-hidden="true" />
+      <motion.div className="drawer__bar" {...enter(0.8)}>
+        <span className="drawer__name" aria-hidden="true">
+          <AnimatePresence initial={false} mode="wait">
+            <motion.span
+              key={active.no}
+              initial={{ opacity: 0, filter: "blur(4px)" }}
+              animate={{ opacity: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.16 }}
+            >
+              <b>{active.project.title}</b> <small>No. {pad(active.no)}</small>
+            </motion.span>
+          </AnimatePresence>
+        </span>
+        <span className="drawer__hint">
+          <span>Sweep to browse</span>
+          <button type="button" onClick={() => setChoice(!playing)} aria-label={playing ? "Pause the drawer" : "Play the drawer"}>
+            {playing ? <HiPause /> : <HiPlay />}
+          </button>
+        </span>
+      </motion.div>
+    </>
+  );
+};
 
-      <motion.button type="button" className="pg-scroll" onClick={() => scrollToTarget("#work", { offset: -40 })} {...enter(1.5)}>
-        <span>Scroll to explore</span>
-        <i />
-      </motion.button>
+// The work filed in a drawer, on its own light panel.
+const PortfolioHero = ({ projects, onOpen }) => {
+  const enter = useEnter();
+  const root = useRef(null);
+  const reduce = usePrefersReducedMotion();
+  const inView = useInView(root, { amount: 0.2 });
+  const { cmsReady } = useCms();
+  const shown = useMemo(() => projects.filter((p) => p.image), [projects]);
+  return (
+    <section className="drawer-hero" id="top" ref={root} aria-label="Portfolio introduction">
+      <HeroDust running={inView && !reduce} />
+      <div className="drawer-hero__panel">
+        <motion.h1 className="drawer-hero__title" {...enter(0.1)}>
+          <span className="drawer-hero__sr">{SEO.kicker}. </span>
+          Work that speaks
+          <span>for itself.</span>
+        </motion.h1>
+        <motion.p className="drawer-hero__lead" {...enter(0.25)}>
+          {shown.length > 0 && (
+            <b>
+              {shown.length} {shown.length === 1 ? "project" : "projects"}{" "}
+            </b>
+          )}
+          {shown.length > 0 ? "on file. " : ""}
+          {SEO.lead}
+        </motion.p>
+        {shown.length > 0 && <Drawer key={shown.length} projects={shown} onOpen={onOpen} />}
+        {shown.length === 0 && !cmsReady && <DrawerSkeleton />}
+      </div>
     </section>
   );
 };

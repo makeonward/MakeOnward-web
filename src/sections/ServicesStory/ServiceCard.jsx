@@ -1,162 +1,47 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
-import { Link } from "react-router-dom";
-import { motion, useInView, useScroll, useSpring, useTransform } from "framer-motion";
-import { HiArrowRight } from "react-icons/hi2";
-import { EASE, fadeIn, VIEWPORT } from "../../animations/variants";
-import MaskText from "../../components/motion/MaskText";
-import Reveal from "../../components/motion/Reveal";
-import TiltCard from "../../components/motion/TiltCard";
-import DrawTick from "../../components/motion/DrawTick";
-import ParallaxImage from "../../components/media/ParallaxImage";
-import ServiceArt from "../../components/media/ServiceArt";
-import { genImage } from "../../data/images";
-import { SERVICE_ICONS } from "../Story/icons";
+import React from "react";
+import { motion } from "framer-motion";
+import { EASE, EASE_IN_OUT } from "../../animations/variants";
+import { usePrefersReducedMotion } from "../../animations/hooks";
+import { scrollToTarget } from "../../animations/lenis";
+import ServicePhoto from "./ServicePhoto";
+import ServiceText from "./ServiceText";
 import { pad } from "./data";
-import { pricingForService } from "../../data/pricing";
-import { servicePathFor } from "../../data/servicePages";
-import { useCms } from "../../context/CmsContext";
 
-// Phones / tablets: the card rises into place when it enters the viewport.
-const riseIn = {
-  hidden: { opacity: 0, y: 64, scale: 0.95 },
-  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 1, ease: EASE } },
-};
+const SEEN = { once: true, amount: 0.25 };
+const rise = { hidden: { opacity: 0, y: 22 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: EASE, delay: 0.15 } } };
+const CUT = "polygon(var(--cut) 0%, 100% 0%, 100% 100%, 0% 100%)"; // the mark's own slant
+const SHUT = "polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)";
+const wipe = { hidden: { clipPath: SHUT }, show: { clipPath: CUT, transition: { duration: 1.1, ease: EASE_IN_OUT } } };
 
-/**
- * One service as a big split card.
- * mode "scroll" (desktop): the card is driven by its own scroll progress — it tips up out of the page, settles flat,
- * then recedes — while the line-art, the giant numeral and a rail inside it drift at different speeds.
- * The card closest to the middle of the screen is "active": a spinning gradient edge lights it up.
- */
-const ServiceCard = ({ service, n, total, flip, mode, onActive, openContact }) => {
-  const scrollFx = mode === "scroll";
-  const cellRef = useRef(null);
-  const tileRef = useRef(null);
-  const Icon = SERVICE_ICONS[service.visual] || SERVICE_ICONS.web;
-  const image = genImage(`service-${service.visual}`);
-  const approaches = Array.isArray(service.approaches) ? service.approaches : [];
-  const points = Array.isArray(service.points) ? service.points : [];
-  const { pricing: pricingDoc } = useCms();
-  const pricing = pricingForService(pricingDoc.categories, service.visual);
-
-  const seen = useInView(cellRef, { once: true, margin: "0px 0px -22% 0px" });
-  const inBand = useInView(cellRef, { margin: "-42% 0px -42% 0px" });
-  useEffect(() => {
-    if (inBand) onActive?.();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inBand]);
-
-  // Outline icons draw their own strokes (paths are normalised to length 1, see the stylesheet).
-  useLayoutEffect(() => {
-    tileRef.current?.querySelectorAll("path").forEach((el) => el.setAttribute("pathLength", "1"));
-  }, []);
-
-  const { scrollYProgress } = useScroll({ target: cellRef, offset: ["start end", "end start"] });
-  const p = useSpring(scrollYProgress, { stiffness: 120, damping: 28, mass: 0.4, restDelta: 0.0005 });
-  const y = useTransform(p, [0, 0.3, 0.72, 1], [160, 0, 0, -70]);
-  const rotateX = useTransform(p, [0, 0.3], [20, 0]);
-  const scale = useTransform(p, [0, 0.3, 0.72, 1], [0.86, 1, 1, 0.93]);
-  const opacity = useTransform(p, [0, 0.2, 0.8, 1], [0, 1, 1, 0.35]);
-  const artY = useTransform(p, [0, 1], [56, -56]);
-  const artRotate = useTransform(p, [0, 1], [-6, 6]);
-  const numX = useTransform(p, [0, 1], [-36, 36]);
-  const rail = useTransform(p, [0.14, 0.72], [0, 1]);
-
-  const cardMotion = scrollFx
-    ? { style: { y, rotateX, scale, opacity, transformPerspective: 1500, transformOrigin: "50% 100%" } }
-    : { variants: mode === "rise" ? riseIn : fadeIn, initial: "hidden", whileInView: "show", viewport: VIEWPORT };
+// One service as a filed sheet: a tab that always shows (number and title), and under it the service and a
+// photo cut at the mark's slant. With room, the sheets of a chapter pile up as you scroll (servicesstory.scss).
+const ServiceCard = ({ service, n, j, total, openContact }) => {
+  const reduce = usePrefersReducedMotion();
+  const motionOn = reduce ? {} : { initial: "hidden", whileInView: "show", viewport: SEEN };
 
   return (
-    <li className="sv-cell" id={`service-${n + 1}`} ref={cellRef}>
-      <TiltCard
-        as="article"
-        tilt={0}
-        className={`sv-card sv-tone-${n % 6} ${flip ? "is-flipped" : ""} ${inBand ? "is-active" : ""} ${seen ? "is-seen" : ""}`}
-        aria-labelledby={`service-title-${n + 1}`}
-        {...cardMotion}
-      >
-        {scrollFx && <motion.span className="sv-card__rail" style={{ scaleY: rail }} aria-hidden="true" />}
-
-        <div className="sv-stage">
-          <span className="sv-stage__glow" aria-hidden="true" />
-          <span className="sv-stage__grid" aria-hidden="true" />
-          <motion.span className="sv-stage__num" style={scrollFx ? { x: numX } : undefined} aria-hidden="true">
-            {pad(n + 1)}
-          </motion.span>
-          <motion.div className={`sv-stage__art ${image ? "sv-stage__art--image" : ""}`} style={scrollFx ? { y: artY, rotate: artRotate } : undefined}>
-            {image ? (
-              <ParallaxImage src={image} alt={service.title} className="sv-stage__img" tonal={false} strength={7} />
-            ) : (
-              <ServiceArt type={service.visual || "web"} live={seen} />
-            )}
+    <>
+      <span className="sv-anchor" id={`service-${n + 1}`} style={{ "--j": j }} aria-hidden="true" />
+      <article className="sv-sheet" style={{ "--j": j }} aria-labelledby={`service-title-${n + 1}`}>
+        <h3 className="sv-sheet__tab" id={`service-title-${n + 1}`}>
+          <button type="button" onClick={() => scrollToTarget(`#service-${n + 1}`, { offset: -90 })}>
+            <span className="sv-no" aria-hidden="true">{pad(n + 1)}</span>
+            <span className="sv-sheet__t">{service.title}</span>
+            <span className="sv-sheet__of" aria-hidden="true">{pad(n + 1)} / {pad(total)}</span>
+          </button>
+        </h3>
+        <div className="sv-sheet__in">
+          <motion.div className="sv-sheet__copy" variants={rise} {...motionOn}>
+            <ServiceText service={service} openContact={openContact} />
           </motion.div>
-          {service.category && <span className="sv-stage__cat">{service.category}</span>}
-          <i className="sv-corner sv-corner--tl" aria-hidden="true" />
-          <i className="sv-corner sv-corner--br" aria-hidden="true" />
+          <motion.div className="sv-sheet__photo" {...motionOn}>
+            <motion.span className="sv-sheet__cut" variants={wipe} style={reduce ? { clipPath: CUT } : undefined}>
+              <ServicePhoto service={service} sizes="(max-width: 1023px) 100vw, 52vw" />
+            </motion.span>
+          </motion.div>
         </div>
-
-        <div className="sv-body">
-          <div className="sv-body__top">
-            <span className="sv-tile" ref={tileRef}><Icon /></span>
-            <span className="sv-count"><b>{pad(n + 1)}</b> / {pad(total)}</span>
-          </div>
-
-          <MaskText as="h3" id={`service-title-${n + 1}`} className="sv-title" lines={[service.title]} />
-          <Reveal as="p" className="sv-desc" delay={0.12}>{service.description}</Reveal>
-
-          {approaches.length > 0 && (
-            <ul className="sv-pills" aria-label="Approaches">
-              {approaches.map((a, i) => (
-                <motion.li
-                  key={a}
-                  initial={{ opacity: 0, scale: 0.7, y: 10 }}
-                  animate={seen ? { opacity: 1, scale: 1, y: 0 } : undefined}
-                  transition={{ type: "spring", stiffness: 300, damping: 18, delay: 0.35 + i * 0.09 }}
-                >
-                  {a}
-                </motion.li>
-              ))}
-            </ul>
-          )}
-
-          {points.length > 0 && (
-            <div className="sv-included">
-              <h4 className="sv-included__head">What&apos;s included</h4>
-              <ul>
-                {points.map((item, i) => (
-                  <motion.li
-                    key={item}
-                    initial={{ opacity: 0, x: -18 }}
-                    animate={seen ? { opacity: 1, x: 0 } : undefined}
-                    transition={{ duration: 0.7, ease: EASE, delay: 0.3 + i * 0.1 }}
-                  >
-                    <DrawTick on={seen} delay={0.4 + i * 0.1} />
-                    <span>{item}</span>
-                  </motion.li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          <div className="sv-body__foot">
-            <button type="button" className="btn-primary" onClick={openContact} data-cursor="Talk">
-              <span>Discuss this service</span>
-              <HiArrowRight />
-            </button>
-            {servicePathFor(service.visual) && (
-              <Link to={servicePathFor(service.visual)} className="sv-body__price">
-                Learn more
-              </Link>
-            )}
-            {pricing && (
-              <Link to={`/pricing#price-${pricing.slug}`} className="sv-body__price">
-                See pricing
-              </Link>
-            )}
-          </div>
-        </div>
-      </TiltCard>
-    </li>
+      </article>
+    </>
   );
 };
 

@@ -4,14 +4,12 @@ import Footer from "../components/Footer";
 import ContactModal from "../components/ContactModal";
 import ProjectDetailModal from "../components/ProjectDetailModal";
 import AboutLeadership from "../components/AboutLeadership";
-import Marquee from "../components/motion/Marquee";
 import ScrollProgress from "../components/motion/ScrollProgress";
 import CtaBand from "../sections/Story/CtaBand";
 import AboutHero from "../sections/AboutStory/AboutHero";
 import Manifesto from "../sections/AboutStory/Manifesto";
 import Pillars from "../sections/AboutStory/Pillars";
 import { useCms } from "../context/CmsContext";
-import { disciplines } from "../data/story";
 import "../sections/Story/story.scss";
 import "../sections/AboutStory/aboutstory.scss";
 import "../styles/aboutpage.scss";
@@ -30,7 +28,6 @@ const AboutPage = () => {
 
       <main id="main">
         <AboutHero openContact={openContact} />
-        <Marquee items={disciplines} speed={36} />
         <Manifesto />
         <Pillars />
         <AboutLeadership />

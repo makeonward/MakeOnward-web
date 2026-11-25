@@ -9,7 +9,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { useIsDesktop, usePrefersReducedMotion } from "../../animations/hooks";
+import { usePrefersReducedMotion, useScenes } from "../../animations/hooks";
 import { EASE } from "../../animations/variants";
 import DrawTick from "../../components/motion/DrawTick";
 import MaskText from "../../components/motion/MaskText";
@@ -81,7 +81,7 @@ const Panel = ({ phase, i, pos, active, seen }) => {
   );
 };
 
-// Desktop: the section pins and the seven phases travel past, left to right.
+// The section pins and the seven phases travel past, left to right.
 const Scene = () => {
   const trackRef = useRef(null);
   const rowRef = useRef(null);
@@ -199,7 +199,7 @@ const PhaseCard = ({ phase, i }) => {
   );
 };
 
-// Phones / reduced motion: the same seven phases as a vertical timeline.
+// Very short screens / reduced motion: the same seven phases as a vertical timeline.
 const Stacked = ({ reduce }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 70%", "end 60%"] });
@@ -223,11 +223,11 @@ const Stacked = ({ reduce }) => {
 };
 
 const Journey = () => {
-  const desktop = useIsDesktop();
+  const scenes = useScenes();
   const reduce = usePrefersReducedMotion();
   return (
     <section className="pr-journey" id="journey" aria-label="The seven phases">
-      {desktop && !reduce ? <Scene /> : <Stacked reduce={reduce} />}
+      {scenes ? <Scene /> : <Stacked reduce={reduce} />}
     </section>
   );
 };

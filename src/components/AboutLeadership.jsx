@@ -11,16 +11,17 @@ import {
 import { FaLinkedinIn, FaXTwitter, FaGithub } from "react-icons/fa6";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { useCms } from "../context/CmsContext";
-import { useIsDesktop, usePrefersReducedMotion } from "../animations/hooks";
+import { useIsDesktop, useScenes } from "../animations/hooks";
 import { getLenis } from "../animations/lenis";
 import { EASE, EASE_IN_OUT } from "../animations/variants";
+import { TeamSkeleton } from "./Skeleton";
 import Reveal from "./motion/Reveal";
 import MaskText from "./motion/MaskText";
 import "../styles/aboutleadership.scss";
 
 const FALLBACK = "/rishi.jpg";
 const STEP = 32; // degrees between portraits on the arc
-const RADIUS = 560; // arc radius in px
+const RADIUS = { wide: 560, phone: 400 }; // arc radius in px
 const pad = (n) => String(n).padStart(2, "0");
 
 // Placeholder links such as "https://x.com" point at a homepage, not a profile: skip them.
@@ -107,13 +108,13 @@ const Details = ({ m, i, n }) => (
 );
 
 // A portrait on the arc. Brightness and visibility follow its distance from the front.
-const RingCard = ({ m, i, pos, active, onPick }) => {
+const RingCard = ({ m, i, pos, radius, active, onPick }) => {
   const dist = useTransform(pos, (v) => Math.abs(i - v));
   const bright = useTransform(dist, [0, 1, 2], [1, 0.38, 0.18]);
   const filter = useMotionTemplate`brightness(${bright})`;
   const opacity = useTransform(dist, [0, 1.5, 2.2], [1, 0.95, 0]);
   return (
-    <div className="ld-slot" style={{ transform: `rotateY(${i * STEP}deg) translateZ(${RADIUS}px)` }}>
+    <div className="ld-slot" style={{ transform: `rotateY(${i * STEP}deg) translateZ(${radius}px)` }}>
       <motion.button
         type="button"
         className={`ld-card ${active ? "is-active" : ""}`}
@@ -142,6 +143,7 @@ const settle = (raw, max) => {
 };
 
 const Ring = ({ members }) => {
+  const radius = useIsDesktop() ? RADIUS.wide : RADIUS.phone;
   const ref = useRef(null);
   const n = members.length;
   const max = n - 1;
@@ -209,9 +211,9 @@ const Ring = ({ members }) => {
 
           <div className="ld-scene">
             <motion.span className="ld-floor" style={{ opacity: floorGlow }} aria-hidden="true" />
-            <motion.div className="ld-ring" style={{ rotateY: ringRotate, z: -RADIUS }}>
+            <motion.div className="ld-ring" style={{ rotateY: ringRotate, z: -radius }}>
               {members.map((x, i) => (
-                <RingCard key={x.id || x.name} m={x} i={i} pos={pos} active={i === active} onPick={jump} />
+                <RingCard key={x.id || x.name} m={x} i={i} pos={pos} radius={radius} active={i === active} onPick={jump} />
               ))}
             </motion.div>
           </div>
@@ -221,7 +223,7 @@ const Ring = ({ members }) => {
   );
 };
 
-// Phones / reduced motion: each portrait opens from its centre, then the name assembles.
+// Very short screens / reduced motion: each portrait opens from its centre, then the name assembles.
 const Stacked = ({ members }) => (
   <div className="ld-stacked">
     <Reveal as="span" className="st-label">Founders &amp; core leadership</Reveal>
@@ -257,15 +259,14 @@ const Stacked = ({ members }) => (
 
 // Leadership: a scroll-driven 3D coverflow. Each founder swings to the front in turn.
 const AboutLeadership = () => {
-  const { teamMembers } = useCms();
-  const desktop = useIsDesktop();
-  const reduce = usePrefersReducedMotion();
-  if (teamMembers.length === 0) return null;
+  const { cmsReady, teamMembers } = useCms();
+  const scenes = useScenes();
+  if (teamMembers.length === 0) return cmsReady ? null : <TeamSkeleton />;
   const members = [...teamMembers].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
   return (
     <section className="ld" id="about" aria-label="Founders and core leadership">
-      {desktop && !reduce && members.length > 1 ? <Ring members={members} /> : <Stacked members={members} />}
+      {scenes && members.length > 1 ? <Ring members={members} /> : <Stacked members={members} />}
     </section>
   );
 };

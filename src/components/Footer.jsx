@@ -3,28 +3,23 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useCms } from "../context/CmsContext";
 import { useLogos } from "../context/ThemeContext";
-import { SERVICE_PAGES } from "../data/servicePages";
 import { FaInstagram, FaLinkedinIn, FaFacebookF, FaXTwitter } from "react-icons/fa6";
 import { EASE, VIEWPORT } from "../animations/variants";
 import "../styles/footer.scss";
 
-const quickLinks = [
-  { name: "Home", path: "/" },
+// The essentials only: everything else is in the navbar's menus.
+const links = [
   { name: "About", path: "/about" },
   { name: "Services", path: "/services" },
   { name: "Pricing", path: "/pricing" },
   { name: "Portfolio", path: "/portfolio" },
-  { name: "Process", path: "/process" },
-  { name: "Industries", path: "/industries" },
   { name: "Blog", path: "/blog" },
-  { name: "Brochure", path: "/brochure" },
-  { name: "Company Profile", path: "/company-profile" },
   { name: "FAQ", path: "/faq" },
   { name: "Contact", path: "/contact" },
 ];
 
-const col = {
-  hidden: { opacity: 0, y: 24 },
+const row = {
+  hidden: { opacity: 0, y: 18 },
   show: (i) => ({ opacity: 1, y: 0, transition: { duration: 0.8, ease: EASE, delay: i * 0.08 } }),
 };
 
@@ -40,62 +35,36 @@ const Footer = () => {
 
   return (
     <footer className="footer-wrapper">
-      <span className="footer-glow" aria-hidden="true" />
       <motion.div className="footer-container" initial="hidden" whileInView="show" viewport={VIEWPORT}>
-        <div className="footer-grid">
-          <motion.div className="footer-col brand-col" variants={col} custom={0}>
-            <Link to="/" className="footer-logo-link" aria-label="MakeOnward — home">
-              <img src={logos.lockup} alt="MakeOnward" className="footer-logo" />
-            </Link>
-            <p className="footer-statement">
-              Creative solutions for modern brands.
-              <br />
-              Design. Develop. Market. Grow.
-            </p>
-            <ul className="footer-contact">
-              {companyInfo?.email && <li><a href={`mailto:${companyInfo.email}`}>{companyInfo.email}</a></li>}
-              {companyInfo?.phone && <li>{companyInfo.phone}</li>}
-              {companyInfo?.address && <li>{companyInfo.address}</li>}
-            </ul>
-          </motion.div>
+        <motion.div className="footer-top" variants={row} custom={0}>
+          <Link to="/" className="footer-logo-link" aria-label="MakeOnward — home">
+            <img src={logos.lockup} alt="MakeOnward" className="footer-logo" />
+          </Link>
+          <nav className="footer-links" aria-label="Footer">
+            {links.map((l) => (
+              <Link key={l.path} to={l.path}>{l.name}</Link>
+            ))}
+          </nav>
+          <div className="footer-socials">
+            {socials.map(({ label, Icon, href }) => (
+              <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label}>
+                <Icon />
+              </a>
+            ))}
+          </div>
+        </motion.div>
 
-          <motion.div className="footer-col" variants={col} custom={1}>
-            <h4 className="footer-col-title">Quick Links</h4>
-            <ul className="footer-links">
-              {quickLinks.map((l) => (
-                <li key={l.path}><Link to={l.path}>{l.name}</Link></li>
-              ))}
-            </ul>
-          </motion.div>
-
-          <motion.div className="footer-col" variants={col} custom={2}>
-            <h4 className="footer-col-title">Services</h4>
-            <ul className="footer-links">
-              {SERVICE_PAGES.map((s) => (
-                <li key={s.slug}><Link to={`/services/${s.slug}`}>{s.name}</Link></li>
-              ))}
-            </ul>
-          </motion.div>
-
-          <motion.div className="footer-col" variants={col} custom={3}>
-            <h4 className="footer-col-title">Follow Us</h4>
-            <div className="footer-socials">
-              {socials.map(({ label, Icon, href }) => (
-                <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label}>
-                  <Icon />
-                </a>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-
-        <div className="footer-bottom">
+        <motion.div className="footer-bottom" variants={row} custom={1}>
           <p>© {new Date().getFullYear()} MakeOnward. All rights reserved.</p>
-          <div className="footer-legal">
+          <p className="footer-contact">
+            {companyInfo?.email && <a href={`mailto:${companyInfo.email}`}>{companyInfo.email}</a>}
+            {companyInfo?.phone && <a href={`tel:${companyInfo.phone.replace(/[^+\d]/g, "")}`}>{companyInfo.phone}</a>}
+          </p>
+          <p className="footer-legal">
             <Link to="/about">Privacy Policy</Link>
             <Link to="/about">Terms &amp; Conditions</Link>
-          </div>
-        </div>
+          </p>
+        </motion.div>
       </motion.div>
     </footer>
   );

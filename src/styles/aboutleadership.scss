@@ -307,3 +307,19 @@
 @include reduced-motion {
   .ld-card::before { animation: none; }
 }
+
+// ---------------- Phones: the same ring, above the details ----------------
+@include down($bp-lg) {
+  .ld-stage { padding-top: 84px; padding-bottom: 1.25rem; }
+  .ld-head { gap: 0.75rem; .st-title { font-size: clamp(1.6rem, 7vw, 2.6rem); } }
+  .ld-index { max-width: 100%; overflow-x: auto; scrollbar-width: none; &__item { padding: 7px 11px; font-size: 0.74rem; white-space: nowrap; } }
+  .ld-body { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: 0.5rem; }
+  .ld-scene { order: -1; min-height: 0; perspective: 1200px; }
+  .ld-slot { --h: clamp(180px, 32svh, 320px); width: calc(var(--h) * 0.74); height: var(--h); margin: calc(var(--h) * -0.5) 0 0 calc(var(--h) * -0.37); }
+  .ld-floor { width: 70%; height: 60px; bottom: 0; }
+  .ld-ghost { font-size: 30vw; bottom: auto; top: 24%; }
+  .ld-details { gap: 0.55rem; max-width: none; min-height: 36svh; align-content: start; }
+  .ld-name { font-size: clamp(1.9rem, 8.6vw, 3.2rem); }
+  .ld-bio { font-size: 0.9rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .ld-socials a { width: 36px; height: 36px; }
+}

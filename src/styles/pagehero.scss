@@ -1,0 +1,690 @@
+@use './abstracts' as *;
+
+// Heroes of the inner pages (components/hero/PageHero.jsx). Plain page colour, one type voice, one idea
+// per page. Slanted shapes and buttons repeat the angle of the MakeOnward mark.
+
+:root {
+  --hero-sans: 'Geist', 'Poppins', system-ui, sans-serif;
+  --hero-mono: 'Geist Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+}
+
+.ph {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  min-height: 100vh;
+  min-height: 100svh;
+  background: $black;
+  font-family: var(--hero-sans);
+
+  &__inner {
+    @include container;
+    position: relative;
+    min-height: inherit;
+    padding-block: 112px clamp(1.5rem, 5svh, 3.5rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(1.75rem, 4vw, 4rem);
+
+    @include down($bp-lg) {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto minmax(0, 1fr);
+      padding-top: 100px;
+    }
+  }
+
+  &__copy { max-width: 660px; }
+
+  &__title {
+    margin: 0 0 clamp(0.9rem, 2.4svh, 1.5rem);
+    font-family: var(--hero-sans);
+    font-size: clamp(2.3rem, min(4.9vw, 9svh), 5rem);
+    font-weight: 600;
+    line-height: 1.03;
+    letter-spacing: -0.045em;
+    color: $white;
+    .h1-kicker {
+      font-family: var(--hero-mono);
+      font-size: clamp(0.64rem, 0.8vw, 0.75rem);
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      color: $chrome-2;
+    }
+  }
+
+  &__lead {
+    max-width: 48ch;
+    font-size: clamp(0.94rem, 1.15vw, 1.08rem);
+    line-height: 1.6;
+    color: $chrome-2;
+  }
+  &__actions { display: flex; flex-wrap: wrap; gap: clamp(10px, 1vw, 16px); margin-top: clamp(1.25rem, 3.6svh, 2.25rem); padding-left: 9px; }
+  &__note { margin-top: 1.25rem; font-size: 0.82rem; color: $chrome-3; }
+}
+
+// Buttons cut like the two strokes of the mark: the face is slanted, the words are not
+.st-slant {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  height: clamp(50px, 6.6svh, 60px);
+  padding: 0 clamp(22px, 2.4vw, 38px);
+  font-family: var(--hero-sans);
+  font-size: 0.98rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--btn-fg);
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 12px;
+    transform: skewX(-18deg);
+  }
+  &::before { background: var(--btn-bg); box-shadow: 0 14px 34px -12px var(--btn-glow); }
+  // A second face wipes up on hover
+  &::after {
+    background: $white;
+    clip-path: inset(100% 0 0 0 round 12px);
+    transition: clip-path $dur-base $ease-out;
+  }
+  span, svg { transition: color $dur-fast $ease-out, transform $dur-base $ease-out; }
+  svg { flex-shrink: 0; font-size: 1.15rem; }
+
+  &--line {
+    color: $white;
+    &::before { background: transparent; border: 1.5px solid $white-24; box-shadow: none; }
+    &::after { background: var(--btn-bg); }
+  }
+  @include hover-device {
+    &:hover { color: $black; }
+    &--line:hover { color: var(--btn-fg); }
+    &:hover::after { clip-path: inset(0 0 0 0 round 12px); }
+    &:hover svg { transform: translateX(6px); }
+  }
+  &:focus-visible { outline: 2px solid $accent; outline-offset: 8px; border-radius: 12px; }
+  @include down(400px) { gap: 8px; padding-inline: 17px; font-size: 0.9rem; }
+}
+
+// ---- Services: spiral tower (ServicesHero.jsx) --------------------------------------------------
+.tower {
+  position: relative;
+  font-family: var(--hero-sans);
+
+  &__stage {
+    @include container;
+    position: relative;
+    height: 100vh;
+    height: 100svh;
+    @media (max-height: 559px) { height: auto; min-height: 100svh; }
+    overflow: clip;
+    padding-block: 108px clamp(1.5rem, 5svh, 3.5rem);
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 2rem;
+    @include down($bp-lg) { grid-template: auto minmax(0, 1fr) / minmax(0, 1fr); gap: 0.5rem; padding-top: 88px; }
+  }
+
+  &__copy {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    @include down($bp-lg) { justify-content: flex-start; }
+  }
+  &__title {
+    max-width: 16ch;
+    font-size: clamp(1.3rem, 2vw, 1.9rem);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    color: $white;
+    .h1-kicker { max-width: none; font-family: var(--hero-mono); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.1em; color: $chrome-2; margin-bottom: 0.6rem; white-space: nowrap; }
+    @include down($bp-lg) { max-width: none; .h1-kicker { white-space: normal; } }
+  }
+
+  &__now {
+    small { display: flex; align-items: center; gap: 10px; margin-top: 0.9rem; font-family: var(--hero-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: $chrome-3; }
+    button { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; color: inherit; font-size: 11px; &:focus-visible { outline: 2px solid $accent; outline-offset: 2px; } }
+  }
+  &__odo {
+    display: flex;
+    font-size: clamp(5rem, min(13vw, 25svh), 13rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.06em;
+    color: $white;
+    @include down($bp-lg) { font-size: clamp(4rem, 12svh, 7rem); }
+  }
+  &__digit {
+    display: block;
+    height: 1em;
+    overflow: hidden;
+    padding-right: 0.06em;
+    > span { display: block; transition: transform 0.75s $ease-out; }
+    i { display: block; height: 1em; font-style: normal; font-variant-numeric: tabular-nums; }
+  }
+  &__clip {
+    position: relative;
+    display: block;
+    min-height: 1.3em;
+    margin-top: 0.4rem;
+    font-size: clamp(1.15rem, 1.9vw, 1.75rem);
+    b { display: block; font-weight: 600; letter-spacing: -0.03em; color: $white; white-space: nowrap; }
+  }
+  &__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+  &__scene {
+    --card: clamp(170px, min(24vw, 42svh), 400px);
+    --r: calc(var(--card) * 1.245); // (half a card) / tan(22deg): neighbours meet edge to edge
+    position: relative;
+    perspective: 1300px;
+    touch-action: pan-y;
+    user-select: none;
+    @include hover-device { cursor: grab; &:active { cursor: grabbing; } }
+    @include down($bp-lg) { --card: clamp(120px, min(38vw, 24svh), 260px); }
+  }
+  &__spin {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--card);
+    aspect-ratio: 1 / 0.82;
+    margin: calc(var(--card) * -0.41) 0 0 calc(var(--card) * -0.5);
+    transform-style: preserve-3d;
+    transform: translateZ(calc(var(--r) * -1));
+  }
+  &__card {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 14px;
+    background: $ink-2;
+    border: 2px solid color-mix(in srgb, var(--fg) 62%, var(--bg));
+    transition: border-color 0.5s $ease-out;
+    &.is-current { border-color: var(--btn-bg); }
+    img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+    img.is-art { width: 62%; height: 78%; object-fit: contain; }
+    &:focus-visible { outline: 3px solid $accent; outline-offset: 4px; }
+  }
+  &__shade { position: absolute; inset: 0; background: $black; pointer-events: none; }
+}
+
+// Dust behind a hero (HeroDust.jsx)
+.hero-dust { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+// ---- Portfolio: card drawer (PortfolioHero.jsx) -------------------------------------------------
+// On the plain page colour, like every other hero.
+.drawer-hero {
+  --ink: var(--fg);
+  --ink-2: var(--fg-2);
+  --ink-soft: var(--fg-4);
+  height: 100vh;
+  height: 100svh;
+  min-height: 460px;
+  position: relative;
+  padding-top: 92px;
+  background: $black;
+  @include down($bp-lg) { padding-top: 72px; }
+
+  &__panel {
+    position: relative;
+    isolation: isolate;
+    container-type: size;
+    height: 100%;
+    overflow: hidden;
+    color: var(--ink);
+  }
+  &__title {
+    position: absolute;
+    z-index: 30;
+    left: $gutter;
+    top: 4cqh;
+    font-family: var(--hero-sans);
+    font-size: clamp(2rem, min(5cqw, 9.2cqh), 5rem);
+    font-weight: 600;
+    line-height: 1.03;
+    letter-spacing: -0.045em;
+    color: var(--ink);
+    pointer-events: none;
+    > span:last-child { display: block; color: var(--ink-soft); }
+    @include down($bp-md) { left: 18px; top: 26px; }
+  }
+  &__sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  &__lead {
+    position: absolute;
+    z-index: 30;
+    right: $gutter;
+    top: 5.4cqh;
+    width: min(27cqw, 360px);
+    font-family: var(--hero-sans);
+    font-size: clamp(0.84rem, 1.15cqw, 1rem);
+    line-height: 1.6;
+    color: var(--ink-2);
+    pointer-events: none;
+    b { font-weight: 600; color: var(--ink); }
+    @include down($bp-md) { left: 18px; right: 18px; top: calc(26px + 5.2rem); width: auto; max-width: 34ch; }
+  }
+}
+
+.drawer {
+  --bar: clamp(56px, 10.5cqh, 88px);
+  --h: min(48cqh, 64cqw);
+  --w: calc(var(--h) * 0.8);
+  --from: 11cqw;
+  --to: calc(97cqw - var(--w) * 0.98);
+  position: absolute;
+  inset: 0 0 var(--bar);
+  perspective: 112cqw;
+  perspective-origin: 50% 24%; // the camera looks down on the drawer
+  clip-path: inset(-100vh -100vw 0); // nothing shows below the front edge
+  touch-action: pan-y;
+  cursor: pointer;
+  // narrow panels: smaller cards, a flatter camera, a fan across the whole width
+  @include down($bp-lg) { --h: min(40cqh, 58cqw); --from: 4cqw; --to: calc(96cqw - var(--w)); perspective: 230cqw; }
+
+  &__slot {
+    position: absolute;
+    // filed cards sink into the drawer
+    bottom: calc(var(--h) * -0.42);
+    width: var(--w);
+    height: var(--h);
+    // each card is drawn in the drawer's own perspective
+    transform-style: preserve-3d;
+    pointer-events: none;
+  }
+  &__card {
+    position: absolute;
+    inset: 0;
+    display: block;
+    transform-origin: 0 50%;
+    border-radius: 12px;
+    pointer-events: none;
+    will-change: transform;
+    &:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+  }
+  &__face {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    background: $ink-2;
+    box-shadow: -14px 6px 34px -10px alpha($shadow-tint, 0.6);
+    img {
+      position: absolute;
+      left: 0;
+      top: -12%;
+      width: 100%;
+      height: 126%;
+      max-width: none;
+      object-fit: cover;
+    }
+  }
+  &__tab {
+    position: absolute;
+    left: 9%;
+    bottom: calc(100% + 2px);
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-family: var(--hero-mono);
+    font-size: clamp(0.62rem, 0.85cqw, 0.76rem);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--ink-2);
+    background: $ink;
+  }
+
+  // the drawer's front edge
+  &__fade {
+    --bar: clamp(56px, 10.5cqh, 88px);
+    position: absolute;
+    z-index: 20;
+    inset: auto 0 var(--bar);
+    height: 9cqh;
+    background: linear-gradient(to top, $black 4%, transparent);
+    pointer-events: none;
+  }
+  &__bar {
+    position: absolute;
+    z-index: 40;
+    inset: auto 0 0;
+    height: clamp(56px, 10.5cqh, 88px);
+    padding-inline: $gutter;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    border-top: 1px solid $white-12;
+    @include down($bp-md) { padding-inline: 18px; }
+  }
+  &__name {
+    min-width: 0;
+    font-family: var(--hero-sans);
+    white-space: nowrap;
+    b { font-size: clamp(1.15rem, 1.9cqw, 1.75rem); font-weight: 600; letter-spacing: -0.03em; color: var(--ink); }
+    small { margin-left: 10px; font-family: var(--hero-mono); font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); }
+    > span { display: inline-block; }
+  }
+  &__hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--hero-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--ink-2);
+    button { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; color: var(--ink-2); font-size: 12px; &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; } }
+    @include down($bp-sm) { > span { display: none; } }
+  }
+}
+
+// ---- About: morph frames (AboutHero.jsx, MorphFrames.jsx) ---------------------------------------
+.morph {
+  position: relative;
+  isolation: isolate;
+  height: 100vh;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  font-family: var(--hero-sans);
+  background: $black;
+  // the ordinary pointer only: the site-wide circle steps aside here
+  :root:has(&:hover) .pdc-cursor { visibility: hidden; }
+
+  // everything is placed in percentages of the space under the navbar
+  &__frames { position: absolute; inset: 78px 0 0; }
+  &__frame {
+    position: absolute;
+    display: block;
+    border-radius: 24%;
+    &:disabled { cursor: default; }
+    &:hover, &:focus-visible { z-index: 2; }
+    &:focus-visible { outline: 2px solid $accent; outline-offset: 6px; }
+    &--a { left: 4%; top: 6%; width: 32.5%; height: 90%; }
+    &--b { left: 42.5%; top: 59%; width: 23.5%; height: 52%; }
+    &--c { left: 72%; top: 41%; width: 21%; height: 54%; }
+    &--d { left: 85%; top: 5%; width: 11.5%; height: 27%; }
+  }
+  &__shape { position: absolute; inset: 0; display: block; background: $ink-2; will-change: transform, clip-path; }
+  &__pic {
+    position: absolute;
+    inset: 0;
+    display: block;
+    > img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
+  }
+  &__mark {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: var(--btn-bg);
+    img { width: 52%; filter: brightness(0); }
+  }
+  // who it is, once the frame has settled (always on touch screens)
+  &__label {
+    position: absolute;
+    inset: auto 0 0;
+    display: grid;
+    justify-items: center;
+    padding: 20% 12% 11%;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    text-align: center;
+    color: #f7f5ef;
+    background: linear-gradient(to top, rgba(11, 11, 12, 0.85), transparent);
+    opacity: 0;
+    transition: opacity 0.35s $ease-out;
+    b { font-size: 1rem; font-weight: 600; letter-spacing: -0.02em; }
+  }
+  &__frame:hover &__label, &__frame:focus-visible &__label, .is-touch &__label { opacity: 1; }
+  &__frame--b &__label { bottom: 16%; padding-bottom: 8%; }
+
+  &__copy {
+    position: absolute;
+    z-index: 3;
+    left: 42.5%;
+    top: calc(78px + 4.5svh);
+    width: min(41%, 640px);
+    pointer-events: none;
+    .ph__actions { pointer-events: auto; margin-top: clamp(1rem, 2.8svh, 1.75rem); }
+  }
+  &__title {
+    font-size: clamp(2rem, min(3.7vw, 6.6svh), 4rem);
+    font-weight: 600;
+    line-height: 1.03;
+    letter-spacing: -0.045em;
+    color: $white;
+    .h1-kicker { max-width: none; margin-bottom: 0.9rem; font-family: var(--hero-mono); font-size: 0.7rem; font-weight: 400; line-height: 1.3; letter-spacing: 0.1em; color: $chrome-2; }
+  }
+  &__soft { display: block; color: $chrome-3; }
+  &__lead { max-width: 52ch; margin-top: clamp(0.7rem, 2svh, 1.2rem); font-size: clamp(0.86rem, 1.05vw, 1rem); line-height: 1.55; color: $chrome; }
+
+  @include down($bp-lg) {
+    &__copy { left: $gutter; right: $gutter; top: 88px; width: auto; max-width: 640px; }
+    &__title .h1-kicker { white-space: normal; }
+    &__frame {
+      &--a { left: 4%; top: 48%; width: 46%; height: 50%; }
+      &--b { left: 57%; top: 78%; width: 36%; height: 30%; }
+      &--c { left: 54%; top: 46%; width: 42%; height: 30%; }
+      &--d { display: none; }
+    }
+    &__label { padding-bottom: 20%; b { font-size: 0.85rem; } > span { display: none; } }
+    &__frame--a &__label { padding-bottom: 34%; }
+    &__frame--b &__label { bottom: 22%; }
+  }
+  // short landscape screens: no room for the second row
+  @media (max-height: 640px) { &__frame--b { display: none; } }
+}
+
+// ---- Process: the stairs ------------------------------------------------------------------------
+.ph--stairs .ph__inner {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto;
+  align-items: start;
+  align-content: start;
+  padding-top: clamp(112px, 17svh, 170px);
+  @include down($bp-lg) { padding-top: 100px; }
+}
+.ph-stairs {
+  list-style: none;
+  position: absolute;
+  z-index: -1;
+  inset: auto 0 0;
+  padding-inline: $gutter;
+  height: min(78svh, 720px);
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: end;
+  gap: clamp(6px, 0.9vw, 14px);
+
+  li { height: calc(9% + (91% * (var(--s) / (var(--n) - 1)) * (var(--s) / (var(--n) - 1)))); }
+  button {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    color: $chrome-2;
+    &:focus-visible { outline: none; }
+    &:focus-visible .ph-stairs__bar { outline: 3px solid $accent; outline-offset: 2px; }
+  }
+  &__label {
+    display: flex;
+    gap: 8px;
+    padding: 0 0 10px 4px;
+    font-size: clamp(0.78rem, 0.95vw, 0.95rem);
+    font-weight: 500;
+    white-space: nowrap;
+    b { font-family: var(--hero-mono); font-weight: 400; color: $chrome-3; }
+  }
+  &__bar {
+    flex: 1;
+    width: 100%;
+    border-radius: 12px 12px 0 0;
+    background: $ink-2;
+    border: 1px solid $white-12;
+    border-bottom: 0;
+    transform-origin: 50% 100%;
+    transition: background $dur-base $ease-out, border-color $dur-base $ease-out;
+  }
+  li:last-child .ph-stairs__bar { background: var(--btn-bg); border-color: transparent; }
+  li:last-child .ph-stairs__label { color: $white; }
+  @include hover-device {
+    button:hover { color: $white; }
+    button:hover .ph-stairs__bar { background: var(--btn-bg); border-color: transparent; }
+  }
+
+  // Phones and tablets: the stairs lie on their side under the copy
+  @include down($bp-lg) {
+    position: static;
+    padding: 0;
+    height: auto;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 7px;
+    li { height: auto; }
+    button { flex-direction: row; align-items: center; gap: 12px; height: clamp(30px, 4.4svh, 44px); }
+    &__label { flex: 0 0 118px; padding: 0; }
+    &__bar {
+      flex: 0 0 auto;
+      width: calc((100% - 130px) * (0.14 + 0.86 * var(--s) / (var(--n) - 1)));
+      height: 100%;
+      border-radius: 8px;
+      border-bottom: 1px solid $white-12;
+      transform: none !important; // grows sideways here, so the vertical entrance is off
+    }
+  }
+}
+
+// ---- Pricing: swing tags (PricingHero.jsx, PriceTags.jsx) ---------------------------------------
+.ph--tags {
+  .ph__inner { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); }
+  .ph__title { font-size: clamp(2.2rem, min(3.95vw, 9svh), 4.6rem); @include down($bp-lg) { font-size: clamp(2.3rem, min(7vw, 9svh), 4rem); } }
+  .hero-dust { z-index: -1; left: 50%; width: 100vw; translate: -50% 0; }
+  @include down($bp-lg) { .ph__inner { grid-template-columns: minmax(0, 1fr); padding-bottom: 0; } }
+}
+.tags {
+  // hung from the top edge of the screen
+  --short: max(96px, 15.5svh);
+  --long: max(338px, 57svh);
+  --tag-w: min(230px, calc(100cqw * 1.66 / (var(--n) + 1)));
+  --tag-h: clamp(210px, 40svh, 440px);
+  container-type: inline-size;
+  position: absolute;
+  inset: 0 $gutter 0 auto;
+  width: 54%;
+  pointer-events: none;
+
+  &__drop {
+    position: absolute;
+    top: 0;
+    left: calc((100% - var(--tag-w)) * var(--i) / max(1, var(--n) - 1));
+    width: var(--tag-w);
+    z-index: 1;
+    &.is-long { --short: var(--long); z-index: 0; } // its string passes behind the short ones
+  }
+  &__hang { position: relative; transform-origin: 50% 0; will-change: transform; }
+  &__string { display: block; width: 1.5px; height: var(--short); margin-inline: auto; background: color-mix(in srgb, var(--fg) 45%, var(--bg)); }
+
+  &__tag {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: var(--tag-h);
+    margin-top: -22px; // the string ends in the hole
+    padding: 52px clamp(10px, 8cqw, 18px) 18px;
+    text-align: left;
+    color: $white;
+    pointer-events: auto;
+    // a tag: cut corners at the top
+    clip-path: polygon(24% 0, 76% 0, 100% 15%, 100% 100%, 0 100%, 0 15%);
+    background: color-mix(in srgb, var(--fg) 26%, var(--bg));
+    transition: background 0.45s, color 0.45s;
+    > * { position: relative; }
+    // the face, inside a 2px edge
+    &::before { content: ''; position: absolute; inset: 2px; clip-path: inherit; background: var(--surface); transition: background 0.45s; }
+    // the hole, where the string ends
+    &::after { content: ''; position: absolute; left: 50%; top: 14px; width: 16px; height: 16px; margin-left: -8px; border-radius: 50%; background: var(--bg); border: 2px solid color-mix(in srgb, var(--fg) 45%, var(--bg)); }
+    > svg { position: absolute; right: 14px; bottom: 16px; color: var(--accent); opacity: 0; translate: -6px 0; transition: opacity 0.3s, translate 0.3s; }
+    &.is-lit { background: var(--btn-bg); color: var(--btn-fg); }
+    &.is-lit::before { background: var(--btn-bg); }
+    &.is-lit > svg { color: var(--btn-fg); opacity: 1; translate: 0 0; }
+    &:focus-visible { outline: none; text-decoration: underline; }
+  }
+  &__title { font-size: clamp(0.78rem, 1.25vw, 1.12rem); font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; overflow-wrap: anywhere; hyphens: manual; }
+  &__price {
+    small { display: block; font-family: var(--hero-mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.72; }
+    b { display: block; margin-top: 3px; font-size: clamp(1.05rem, 2.1vw, 1.95rem); font-weight: 600; line-height: 1.05; letter-spacing: -0.045em; font-variant-numeric: tabular-nums; }
+  }
+
+  @include down($bp-lg) {
+    --short: 26px;
+    --long: 150px;
+    --tag-h: 130px;
+    --tag-w: min(230px, calc(100cqw * 1.86 / (var(--n) + 1)));
+    position: relative;
+    inset: auto;
+    align-self: stretch;
+    width: 100%;
+    min-height: 276px;
+    border-top: 1.5px solid color-mix(in srgb, var(--fg) 45%, var(--bg)); // the rail
+    &__tag { padding: 36px 9px 10px; > svg { display: none; } }
+    &__title { font-size: clamp(0.7rem, 3cqw, 1rem); letter-spacing: -0.03em; overflow-wrap: normal; }
+    &__price b { font-size: clamp(0.95rem, 4.2cqw, 1.5rem); }
+  }
+}
+
+// ---- Contact: the sentence that types itself ----------------------------------------------------
+.ph--type {
+  min-height: 78vh;
+  min-height: 78svh;
+  .ph__inner { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; align-content: end; padding-bottom: clamp(2rem, 7svh, 5rem); }
+  .ph__copy { max-width: none; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); align-items: end; gap: 1rem clamp(2rem, 5vw, 5rem); }
+  .ph__title { margin: 0; font-size: clamp(2.3rem, min(6.4vw, 12svh), 6.6rem); }
+  @include down($bp-lg) { .ph__copy { grid-template-columns: minmax(0, 1fr); } }
+}
+.ph-typed {
+  display: block;
+  min-height: 1.15em;
+  padding-top: clamp(0.5rem, 2svh, 1.25rem);
+  border-top: 1px solid $white-12;
+  font-size: clamp(1.7rem, min(5vw, 9svh), 4.8rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  color: $accent;
+  i {
+    display: inline-block;
+    width: 0.07em;
+    height: 0.82em;
+    margin-left: 0.08em;
+    vertical-align: -0.08em;
+    background: currentColor;
+    transform: skewX(-9deg);
+    animation: ph-caret 1.1s steps(1) 12;
+  }
+}
+@keyframes ph-caret { 50% { opacity: 0; } }
+
+// ---- Reading pages: the mark as a hairline ------------------------------------------------------
+.mark-stroke {
+  position: absolute;
+  pointer-events: none;
+  overflow: visible;
+  path { stroke: $white-24; stroke-width: 0.4; }
+  path:last-of-type { stroke: $accent; }
+}
