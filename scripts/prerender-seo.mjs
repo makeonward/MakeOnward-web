@@ -409,7 +409,9 @@ const twitterHandle = (BRAND.socials.twitter || "").match(/(?:x|twitter)\.com\/(
 
 const headTags = (page, ld) => {
   const url = absoluteUrl(page.path);
-  const image = absoluteUrl(OG_IMAGE);
+  // a case study is shared with its own picture, cut to the size of a share card
+  const shot = page.project?.image || "";
+  const image = shot.includes("res.cloudinary.com") ? shot.replace("/image/upload/", "/image/upload/f_jpg,q_auto,c_fill,g_north,w_1200,h_630/") : absoluteUrl(OG_IMAGE);
   return [
     `<title>${esc(page.title)}</title>`,
     `<meta name="description" content="${esc(page.description)}" />`,
@@ -424,12 +426,14 @@ const headTags = (page, ld) => {
     `<meta property="og:image" content="${image}" />`,
     `<meta property="og:image:width" content="1200" />`,
     `<meta property="og:image:height" content="630" />`,
-    `<meta property="og:image:alt" content="${esc(SITE_NAME)} logo" />`,
+    `<meta property="og:image:alt" content="${esc(shot ? `${page.project.title} website` : `${SITE_NAME} logo`)}" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
     twitterHandle && `<meta name="twitter:site" content="@${esc(twitterHandle)}" />`,
     `<meta name="twitter:title" content="${esc(page.title)}" />`,
     `<meta name="twitter:description" content="${esc(page.description)}" />`,
     `<meta name="twitter:image" content="${image}" />`,
+    // the home page's first picture
+    page.path === "/" && `<link rel="preload" as="image" fetchpriority="high" imagesrcset="/assets/mockups/home-websites-500.webp 500w, /assets/mockups/home-websites-1000.webp 1000w" imagesizes="(max-width: 1023px) 46vw, 24vw" />`,
     ld && `<script type="application/ld+json">${ld}</script>`,
   ].filter(Boolean).map((t) => `    ${t}`).join("\n");
 };

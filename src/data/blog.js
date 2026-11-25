@@ -70,6 +70,7 @@ export const POSTS = [
   {
     slug: "what-is-generative-engine-optimization",
     title: "What Is GEO? A Practical Guide to Generative Engine Optimisation",
+    metaTitle: "What Is GEO? Generative Engine Optimisation Guide", // fits in a search result
     description:
       "A practical introduction to GEO (generative engine optimisation): how AI tools find information, a checklist for your website, what to avoid and how to measure.",
     date: "2026-11-01",
@@ -125,6 +126,7 @@ export const POSTS = [
   {
     slug: "wordpress-vs-custom-website",
     title: "WordPress vs Custom Website: Which Should Your Business Choose?",
+    metaTitle: "WordPress vs Custom Website: Which Should You Choose?",
     description:
       "WordPress or a custom-built website? A plain comparison of editing, design freedom, features, performance and maintenance, and how to choose for your business.",
     date: "2026-11-01",
@@ -187,6 +189,7 @@ export const POSTS = [
   {
     slug: "how-to-plan-a-website-project",
     title: "How to Plan a Website Project: 7 Steps From First Call to Launch",
+    metaTitle: "How to Plan a Website Project in 7 Steps | MakeOnward",
     description:
       "A step-by-step guide to planning a website or app project: discovery, strategy, design, development, testing, launch and growth, and what each step delivers.",
     date: "2026-11-01",

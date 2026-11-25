@@ -14,12 +14,13 @@ import { useCms } from "../context/CmsContext";
 import { useIsDesktop, useScenes } from "../animations/hooks";
 import { getLenis } from "../animations/lenis";
 import { EASE, EASE_IN_OUT } from "../animations/variants";
+import { PROJECT_FALLBACK } from "../data/mockups";
 import { TeamSkeleton } from "./Skeleton";
 import Reveal from "./motion/Reveal";
 import MaskText from "./motion/MaskText";
 import "../styles/aboutleadership.scss";
 
-const FALLBACK = "/rishi.jpg";
+const FALLBACK = PROJECT_FALLBACK;
 const STEP = 32; // degrees between portraits on the arc
 const RADIUS = { wide: 560, phone: 400 }; // arc radius in px
 const pad = (n) => String(n).padStart(2, "0");

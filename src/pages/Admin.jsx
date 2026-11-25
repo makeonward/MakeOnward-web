@@ -320,7 +320,7 @@ const Admin = () => {
       category: "Web Application",
       type: "MERN Web Application",
       description: "",
-      image: "/portfolio.jpg",
+      image: "/assets/mockups/project-1400.webp",
       client: "",
       year: new Date().getFullYear().toString(),
       tags: "React, UI/UX, Scalable",
@@ -407,7 +407,7 @@ const Admin = () => {
       role: "Co-Founder & Technical Lead",
       isFounder: true,
       bio: "",
-      image: "/rishi.jpg",
+      image: "/assets/mockups/project-1400.webp",
       linkedin: "https://linkedin.com",
       twitter: "https://x.com",
       github: "https://github.com",
@@ -788,10 +788,10 @@ const Admin = () => {
                   <motion.div key={project.id} layout transition={{ duration: 0.35 }} className="admin-card glass-panel">
                     <div className="card-thumb-wrap">
                       <img
-                        src={project.image || "/portfolio.jpg"}
+                        src={project.image || "/assets/mockups/project-1400.webp"}
                         alt={project.title}
                         className="card-thumb"
-                        onError={(e) => { e.target.src = "/portfolio.jpg"; }}
+                        onError={(e) => { e.target.src = "/assets/mockups/project-1400.webp"; }}
                       />
                       {project.featured && (
                         <span className="card-badge featured">Featured</span>
@@ -900,10 +900,10 @@ const Admin = () => {
                   <div key={member.id} className="admin-member-card glass-panel">
                     <div className="member-avatar-wrap">
                       <img
-                        src={member.image || "/rishi.jpg"}
+                        src={member.image || "/assets/mockups/project-1400.webp"}
                         alt={member.name}
                         className="member-avatar"
-                        onError={(e) => { e.target.src = "/rishi.jpg"; }}
+                        onError={(e) => { e.target.src = "/assets/mockups/project-1400.webp"; }}
                       />
                       {member.isFounder && (
                         <span className={`member-badge founder ${member.role && member.role.toLowerCase().includes('co-founder') ? 'co-founder' : ''}`}>
@@ -1316,7 +1316,7 @@ const Admin = () => {
                       <div className="image-input-dual">
                         <input
                           type="text"
-                          placeholder="/portfolio.jpg or https://images..."
+                          placeholder="https://…"
                           value={projectForm.image}
                           onChange={(e) => setProjectForm({ ...projectForm, image: e.target.value })}
                         />
@@ -1451,7 +1451,7 @@ const Admin = () => {
                       <div className="image-input-dual">
                         <input
                           type="text"
-                          placeholder="/rishi.jpg, /vivek.jpg, /ashish.jpg or URL"
+                          placeholder="https://…"
                           value={teamForm.image}
                           onChange={(e) => setTeamForm({ ...teamForm, image: e.target.value })}
                         />

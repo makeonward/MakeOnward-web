@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { startLenis, stopLenis } from "../../animations/lenis";
 import { usePrefersReducedMotion } from "../../animations/hooks";
 
@@ -10,12 +9,7 @@ const SmoothScroll = () => {
   useEffect(() => {
     if (reduce) return undefined;
     startLenis();
-    const refresh = () => ScrollTrigger.refresh();
-    window.addEventListener("load", refresh);
-    return () => {
-      window.removeEventListener("load", refresh);
-      stopLenis();
-    };
+    return stopLenis;
   }, [reduce]);
 
   return null;

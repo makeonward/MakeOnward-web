@@ -50,7 +50,7 @@ const Cover = ({ book, page }) => {
     <div className={`bp bp-cover bp--${white ? "white" : "onyx"}`}>
       <Strokes className="bp-cover__strokes" />
       <div className="bp-cover__top">
-        <img src={`/brand/lockup-${white ? "light" : "dark"}.png`} alt="MakeOnward" draggable={false} />
+        <img src={`/brand/lockup-${white ? "light" : "dark"}.webp`} alt="MakeOnward" draggable={false} />
         <span>{page.year || new Date().getFullYear()}</span>
       </div>
       <div className="bp-cover__foot">
@@ -70,7 +70,7 @@ const BackCover = ({ book, page }) => {
       <Strokes className="bp-cover__strokes" />
       <p className="bp-cover__line">{page.title || page.tagline || companyInfo?.tagline}</p>
       <div className="bp-cover__end">
-        <img src={`/brand/lockup-${white ? "light" : "dark"}.png`} alt="MakeOnward" draggable={false} />
+        <img src={`/brand/lockup-${white ? "light" : "dark"}.webp`} alt="MakeOnward" draggable={false} />
         <a href={siteUrl(website)} target="_blank" rel="noreferrer">{website}</a>
       </div>
     </div>

@@ -97,7 +97,7 @@ const MAIN_PAGES = [
   },
   {
     path: "/brochure",
-    title: "Brochure | MakeOnward",
+    title: "Brochure: Websites, Apps & Marketing | MakeOnward",
     description:
       "The MakeOnward brochure: our website development, app development, social media and growth services in a page-turning book.",
     h1: "Brochure",
@@ -170,7 +170,7 @@ const CONTENT_PAGES = [
   ...POSTS.map((p) => ({
     path: `/blog/${p.slug}`, kind: "post", slug: p.slug, description: p.description,
     // brand suffix only when it still fits in a search result
-    title: `${p.title} | MakeOnward`.length <= 65 ? `${p.title} | MakeOnward` : p.title,
+    title: p.metaTitle || (`${p.title} | MakeOnward`.length <= 60 ? `${p.title} | MakeOnward` : p.title),
     kicker: p.kicker, h1: p.title, lead: p.lead, crumb: p.title, parent: BLOG_CRUMB,
   })),
 ];

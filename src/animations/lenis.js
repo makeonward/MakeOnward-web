@@ -1,13 +1,8 @@
 import Lenis from "lenis";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
-
-// One smooth-scroll instance for the whole app. Lenis drives GSAP's ticker so
-// ScrollTrigger and Framer Motion's useScroll (native scroll events) stay in sync.
+// One smooth-scroll instance for the whole app. Framer Motion's useScroll follows its native scroll events.
 let instance = null;
-let tickerFn = null;
+let frame = 0;
 
 export const getLenis = () => instance;
 
@@ -20,19 +15,19 @@ export const startLenis = () => {
     wheelMultiplier: 0.95,
     touchMultiplier: 1.4,
   });
-  instance.on("scroll", ScrollTrigger.update);
-  tickerFn = (time) => instance && instance.raf(time * 1000);
-  gsap.ticker.add(tickerFn);
-  gsap.ticker.lagSmoothing(0);
+  const tick = (time) => {
+    instance?.raf(time);
+    frame = requestAnimationFrame(tick);
+  };
+  frame = requestAnimationFrame(tick);
   return instance;
 };
 
 export const stopLenis = () => {
   if (!instance) return;
-  gsap.ticker.remove(tickerFn);
+  cancelAnimationFrame(frame);
   instance.destroy();
   instance = null;
-  tickerFn = null;
 };
 
 export const lockScroll = () => instance && instance.stop();

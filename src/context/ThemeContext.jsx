@@ -69,7 +69,7 @@ export const useTheme = () => {
 // The orange mark works on both.
 const MARK = { mark: "/brand/mark-400.png", hero: "/brand/mark-1200.webp", ring: "/brand/mark-400.png" };
 const LOGOS = {
-  light: { lockup: "/brand/lockup-light.png", ...MARK },
-  dark: { lockup: "/brand/lockup-dark.png", ...MARK },
+  light: { lockup: "/brand/lockup-light.webp", ...MARK },
+  dark: { lockup: "/brand/lockup-dark.webp", ...MARK },
 };
 export const useLogos = () => LOGOS[useTheme().theme];
