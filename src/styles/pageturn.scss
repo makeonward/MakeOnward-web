@@ -1,0 +1,40 @@
+@use './abstracts' as *;
+
+// Between two pages (components/PageTurn.jsx)
+.page-turn {
+  position: fixed;
+  inset: 0;
+  z-index: $z-curtain;
+  overflow: hidden;
+  pointer-events: none;
+
+  // Wide enough for its slanted ends to clear the screen on any shape of it
+  &__blade {
+    position: absolute;
+    inset: 0 calc(-18vh - 4vw);
+    background: var(--bg);
+    will-change: transform;
+    &--lead { background: #ff6a00; }
+  }
+  &__center {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: clamp(18px, 3vh, 30px);
+  }
+  &__mark { width: clamp(110px, 13vw, 190px); height: auto; overflow: visible; fill: #ff6a00; }
+  &__name {
+    display: block;
+    overflow: hidden;
+    padding-block: 0.1em;
+    font-family: 'Geist', 'Poppins', system-ui, sans-serif;
+    font-size: clamp(1.3rem, 2vw, 1.9rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    color: var(--fg);
+    > span { display: block; }
+  }
+}
