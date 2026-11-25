@@ -23,7 +23,7 @@
   &--fill { position: absolute; inset: 0; border-radius: inherit; }
 }
 // doubled: outranks the page stylesheets, which load later
-img[data-sk], .st-reelrail__item.sk { @include shimmer; }
+img[data-sk], .st-reelrail__face.sk { @include shimmer; }
 
 .sk-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .sk-stack {

@@ -3,7 +3,7 @@ import { useCms } from "../../context/CmsContext";
 import { SERVICE_ICONS } from "../../sections/Story/icons";
 import { cldUrl } from "../../sections/Story/cloudinary";
 import { PHASES, pad } from "../../sections/ProcessStory/data";
-import { bookMockup } from "../../data/mockups";
+import { serviceMockup } from "../../data/mockups";
 import "../../styles/bookpages.scss";
 
 // What is printed on one side of a sheet. Sizes inside a page use container units (cqw), so a page reads the
@@ -134,7 +134,7 @@ const CapabilitiesPage = ({ page, number }) => (
     <ul className="bp-caps">
       {page.services.map((s) => (
         <li key={s.title}>
-          <img src={bookMockup(s.visual)} alt="" draggable={false} decoding="async" />
+          <img src={serviceMockup(s.visual).src} alt="" draggable={false} decoding="async" />
           <div>
             <h3>{s.title}</h3>
             <p>{s.offer}</p>
@@ -247,7 +247,7 @@ const ServicesPage = ({ page, number }) => {
   const groups = page.categories
     .map((cat) => ({ cat, items: services.filter((s) => s.category === cat) }))
     .filter((g) => g.items.length > 0);
-  const picture = groups[0]?.items[0] && bookMockup(groups[0].items[0].visual);
+  const picture = groups[0]?.items[0] && serviceMockup(groups[0].items[0].visual).src;
   return (
     <Page kicker={page.kicker} number={number}>
       {picture && <img className="bp-svc__shot" src={picture} alt="" draggable={false} decoding="async" />}

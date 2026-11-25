@@ -4,9 +4,11 @@ import { cldUrl } from "./cloudinary";
 
 const DRIFT = 30; // px per second
 
-// Endless strip of the projects: drifts on its own while `running`, can be dragged or thrown, and a click
+// Endless strip of the projects, cut at the angle of the mark. The one in the middle stands up in full light
+// with its name, its neighbours step back. Drifts on its own while `running`, can be dragged or thrown, and a click
 // opens the project.
 const HeroRail = ({ projects, running, onOpen }) => {
+  const rail = useRef(null);
   const set = useRef(null);
   const x = useMotionValue(0);
   const drag = useRef(null);
@@ -22,13 +24,37 @@ const HeroRail = ({ projects, running, onOpen }) => {
     if (w) x.set(wrap(-w, 0, x.get() + dx));
   };
 
+  // How near the middle each card is (0 -> 1), as --k; only written when it changes
+  const light = () => {
+    const el = rail.current;
+    const w = set.current?.offsetWidth;
+    if (!el || !w) return;
+    const mid = el.clientWidth / 2;
+    [...el.firstElementChild.children].forEach((group, c) => {
+      const left = c * w + x.get();
+      [...group.children].forEach((card) => {
+        const d = Math.abs(left + card.offsetLeft - group.offsetLeft + card.offsetWidth / 2 - mid) / (card.offsetWidth * 1.35);
+        const k = Math.max(0, 1 - d);
+        const v = (k * k * (3 - 2 * k)).toFixed(2);
+        if (card.dataset.k !== v) {
+          card.dataset.k = v;
+          card.style.setProperty("--k", v);
+        }
+      });
+    });
+  };
+
   useAnimationFrame((_, delta) => {
-    if (drag.current) return;
+    if (drag.current) {
+      light();
+      return;
+    }
     const dt = Math.min(delta, 60) / 1000;
     velocity.current *= Math.exp(-2.6 * dt);
     if (Math.abs(velocity.current) < 6) velocity.current = 0;
     const v = velocity.current || (running && !held.current ? -DRIFT : 0);
     if (v) shift(v * dt);
+    light();
   });
 
   useEffect(() => {
@@ -64,6 +90,7 @@ const HeroRail = ({ projects, running, onOpen }) => {
   return (
     <div
       className="st-reelrail"
+      ref={rail}
       data-hero-cursor="Drag"
       onPointerDown={(e) => {
         velocity.current = 0;
@@ -86,7 +113,7 @@ const HeroRail = ({ projects, running, onOpen }) => {
       <motion.div className="st-reelrail__track" style={{ x }}>
         {Array.from({ length: copies }, (_, c) => (
           <div className="st-reelrail__set" key={c} ref={c === 0 ? set : undefined} aria-hidden={c > 0 || undefined}>
-            {!projects.length && Array.from({ length: 8 }, (_, i) => <span className="st-reelrail__item sk" key={i} />)}
+            {!projects.length && Array.from({ length: 8 }, (_, i) => <span className="st-reelrail__item" key={i}><span className="st-reelrail__face sk" /></span>)}
             {projects.map((p) => (
               <button
                 type="button"
@@ -96,7 +123,10 @@ const HeroRail = ({ projects, running, onOpen }) => {
                 aria-label={`View project: ${p.title}`}
                 onClick={() => !moved.current && onOpen(p)}
               >
-                <img src={cldUrl(p.image, 480)} alt="" loading="lazy" decoding="async" draggable="false" />
+                <span className="st-reelrail__face">
+                  <img src={cldUrl(p.image, 600)} alt="" loading="lazy" decoding="async" draggable="false" />
+                  <span className="st-reelrail__name" aria-hidden="true">{p.title}</span>
+                </span>
               </button>
             ))}
           </div>

@@ -289,17 +289,46 @@
   &__track { display: flex; width: max-content; will-change: transform; }
   &__set { display: flex; flex-shrink: 0; }
   &__item {
+    --k: 0;
     flex-shrink: 0;
     height: clamp(50px, 15.5svh, 150px);
-    aspect-ratio: 16 / 10;
-    margin-right: clamp(8px, 0.8vw, 12px);
-    border-radius: clamp(8px, 0.8vw, 12px);
-    overflow: hidden;
-    background: $ink-2;
+    aspect-ratio: 1.42;
+    margin-right: -4px;
     cursor: inherit;
     &:focus-visible { outline: 3px solid $accent; outline-offset: -3px; }
     @include down($bp-lg) { height: clamp(46px, 9svh, 110px); }
-    img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+  }
+  // cut like the mark; the picture inside stays upright
+  &__face {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 2px solid color-mix(in srgb, var(--btn-bg) calc(var(--k) * 100%), color-mix(in srgb, var(--fg) 18%, var(--bg)));
+    background: $ink-2;
+    transform: skewX(-14deg) scale(calc(0.8 + var(--k) * 0.16));
+    img { position: absolute; left: -14%; top: 0; width: 128%; height: 100%; max-width: none; object-fit: cover; object-position: 50% 0; transform: skewX(14deg); pointer-events: none; }
+    &::after { content: ''; position: absolute; inset: 0; background: $black; opacity: calc(0.62 - var(--k) * 0.62); }
+  }
+  &__name {
+    position: absolute;
+    z-index: 1;
+    left: 12px;
+    bottom: 10px;
+    padding: 5px 11px;
+    border-radius: 6px;
+    font-family: var(--hero-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    color: var(--btn-fg);
+    background: var(--btn-bg);
+    transform: skewX(14deg);
+    opacity: calc(var(--k) * 2 - 1);
+    @include down($bp-md) { font-size: 0.66rem; padding: 3px 8px; left: 8px; bottom: 7px; }
   }
 }
 
