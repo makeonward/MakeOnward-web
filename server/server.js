@@ -23,7 +23,7 @@ dotenv.config({ path: path.join(__dirname, "../.env") });
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Behind a host's reverse proxy (Render, Netlify/Vercel rewrites) the socket address is the proxy's,
+// Behind a host's reverse proxy (Render, Vercel rewrites) the socket address is the proxy's,
 // so without this every visitor shares one IP: one rate-limit bucket for the whole site.
 // 1 = trust the single proxy in front of this server; override with TRUST_PROXY_HOPS if the chain differs.
 app.set("trust proxy", Number(process.env.TRUST_PROXY_HOPS ?? 1));
@@ -50,23 +50,17 @@ app.use(
   })
 );
 
-// 4. CORS Policy
+// 4. CORS Policy: the site itself, and local development. CORS_ORIGINS adds others (comma separated).
+// The site calls /api on its own domain (vercel.json passes it on), so browsers rarely need this.
+const EXTRA_ORIGINS = (process.env.CORS_ORIGINS || "").split(",").map((o) => o.trim()).filter(Boolean);
+const allowedOrigin = (origin) =>
+  /^https:\/\/(www\.)?makeonward\.com$/.test(origin) ||
+  EXTRA_ORIGINS.includes(origin) ||
+  (process.env.NODE_ENV !== "production" && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin));
+
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, server-to-server)
-      if (!origin) return callback(null, true);
-      if (
-        origin.includes("localhost") ||
-        origin.includes("127.0.0.1") ||
-        origin.endsWith(".netlify.app") ||
-        /^https:\/\/(www\.)?makeonward\.com$/.test(origin) ||
-        origin.includes("pixiedigitalcreatives.com")
-      ) {
-        return callback(null, true);
-      }
-      return callback(null, true); // Permissive in dev/staging
-    },
+    origin: (origin, callback) => callback(null, !origin || allowedOrigin(origin)),
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,

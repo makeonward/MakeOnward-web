@@ -1,0 +1,41 @@
+# The back end (server/) on Render, at webapi.makeonward.com. The front end is on Vercel (vercel.json).
+# Values marked sync: false are typed in on Render, never stored here.
+services:
+  - type: web
+    name: makeonward-api
+    runtime: node
+    plan: starter # the free plan sleeps when idle
+    buildCommand: npm ci --omit=dev
+    startCommand: npm run start:server
+    healthCheckPath: /api/health
+    domains:
+      - webapi.makeonward.com
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_FROM
+        sync: false
+      - key: CONTACT_RECEIVE_EMAIL
+        sync: false
